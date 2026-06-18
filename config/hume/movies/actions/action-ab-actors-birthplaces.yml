@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: movies-ab-actors-birthplaces
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'movies-ab-actors-birthplaces'
+  query: |
+    MATCH (n:Person)-[:ACTED_IN]->(movie:Movie)
+    WHERE movie.title = $movie
+    AND n.bornPosition IS NOT NULL
+    RETURN n
+  scope: UTILITY
+  returnType: GRAPH
+  inputParameters:
+    - name: movie
+      label: Movie
+      type: STRING
+      required: true
+  canvasOptions:
+    viewMode: MAP

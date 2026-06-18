@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) Graph Aware Limited - All Rights Reserved
+  ~ This file is part of GraphAware Hume
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited
+  ~ Proprietary and confidential
+  -->
+
+<Configuration status="info">
+    <Properties>
+        <Property name="audit_log_path">${sys:hume.security.audit.log.path:-/tmp/hume-audit}</Property>
+        <Property name="appender">console_${sys:hume.logging.format:-plain}</Property>
+        <Property name="pattern">%highlight{[%-5level]}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %d{dd-MM-yyyy HH:mm:ss.SSS} %style{[%-20thread]}{blue} %style{[%-40c{1}]}{yellow} - %m%n</Property>
+        <Property name="pattern_audit">%highlight{[%-5level]}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %d{dd-MM-yyyy HH:mm:ss.SSS} %style{[%-20thread]}{blue} %style{[%-40c{1}]}{yellow} - %m%n</Property>
+        <Property name="shortened_class_name_length">${sys:hume.logging.shortenedClassNameLength}</Property>
+        <Property name="hume.logging.maxDepth">${sys:hume.logging.maxDepth}</Property>
+        <Property name="hume.logging.maxLength">${sys:hume.logging.maxLength}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console_plain" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}" />
+        </Console>
+        <Console name="console_json" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json" />
+        </Console>
+        <Console name="console_audit" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_audit}"/>
+        </Console>
+
+        <!-- <RollingFile name="file_audit" fileName="${audit_log_path}/audit.log"
+                     filePattern="${audit_log_path}/audit-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="${pattern_audit}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingFile> -->
+    </Appenders>
+
+    <Loggers>
+        <Root level="info" additivity="true">
+            <AppenderRef ref="${appender}" />
+        </Root>
+
+        <Logger name="hume.audit" level="info" additivity="false">
+            <AppenderRef ref="console_audit" />
+            <!-- <AppenderRef ref="file_audit" /> -->
+        </Logger>
+    </Loggers>
+
+</Configuration>

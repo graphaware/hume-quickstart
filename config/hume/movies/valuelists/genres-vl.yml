@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ValueList
+metadata:
+  name: genres-vl
+  knowledge-graph: movies-kg
+spec:
+  label: Genres
+  type: STRING
+  seedUri: 'file://genres-vl.csv'

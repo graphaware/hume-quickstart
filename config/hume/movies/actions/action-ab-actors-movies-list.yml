@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: ab-actors-movies-list
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: "Show actor's movies"
+  query: |
+    MATCH (n:Person)-[:ACTED_IN]->(movie)
+    WHERE n.name = $name
+    RETURN movie.title AS title
+  scope: UTILITY
+  returnType: TABLE
+  inputParameters:
+    - name: name
+      label: Name
+      type: STRING
+      required: true

@@ -1,0 +1,6 @@
+.DS_Store
+.env
+*.sql
+
+# Ensure that .gitignore itself is not ignored
+!.gitignore

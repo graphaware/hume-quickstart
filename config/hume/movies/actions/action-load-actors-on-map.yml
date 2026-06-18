@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: movies-show-actors-map
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'Show Actors On Map'
+  query: |
+    MATCH (n:Person)
+    WHERE n.bornPosition IS NOT NULL
+    RETURN n
+  scope: GLOBAL
+  returnType: GRAPH
+  canvasOptions:
+    viewMode: MAP

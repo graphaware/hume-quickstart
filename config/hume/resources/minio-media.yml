@@ -1,0 +1,19 @@
+# Minio resource connected to the bucket used by Hume Media
+apiVersion: v1
+kind: EcosystemResource
+metadata:
+  name: minio-media
+spec:
+  access: []
+  fqn: Hume.Orchestra.Resource.Minio
+  parameters:
+    - name: host
+      value: http://minio:9000
+    - name: region
+      value: us-east-1
+    - name: bucket
+      value: hume-media
+    - name: access_key_id
+      value: minio
+    - name: access_key_secret
+      value: password

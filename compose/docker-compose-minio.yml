@@ -1,0 +1,53 @@
+volumes:
+  minio:
+services:
+  minio:
+    image: docker.graphaware.com/mirror/minio/minio:release-2024-12
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=hellopassword
+    volumes:
+      - minio:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9001/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+  minio-mc:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set local http://minio:9000 minio hellopassword &&
+      echo '{ 
+          \"Version\": \"2012-10-17\", 
+          \"Statement\": [
+              { 
+                  \"Effect\": \"Allow\", 
+                  \"Action\": [
+                      \"s3:GetObject\", 
+                      \"s3:PutObject\", 
+                      \"s3:DeleteObject\", 
+                      \"s3:ListBucket\" 
+                  ], 
+                  \"Resource\": [
+                      \"arn:aws:s3:::testbucket\", 
+                      \"arn:aws:s3:::testbucket/*\" 
+                  ] 
+              } 
+          ] 
+      }' > /tmp/testbucket-policy.json &&
+      /usr/bin/mc admin policy create local testbucket-policy /tmp/testbucket-policy.json &&
+      /usr/bin/mc admin user add local testuser testpassword &&
+      /usr/bin/mc admin policy attach local testbucket-policy --user testuser &&
+      /usr/bin/mc mb local/hume-media &&
+      /usr/bin/mc mb local/testbucket;
+      exit 0;
+      "

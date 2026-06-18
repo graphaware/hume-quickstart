@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ContextVariable
+metadata:
+  name: hume-frontend-uri
+spec:
+  scope: INSTANCE
+  key: hume_frontend_uri
+  value: 'http://localhost:8081'

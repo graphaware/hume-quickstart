@@ -1,0 +1,35 @@
+include:
+  - compose/docker-compose-keycloak.yml
+services:
+  neo4j:
+    environment:
+      - NEO4J_dbms_security_authentication__providers=oidc-keycloak,native
+      - NEO4J_dbms_security_authorization__providers=oidc-keycloak,native
+      - NEO4J_dbms_security_oidc_keycloak_display__name=Keycloak
+      - NEO4J_dbms_security_oidc_keycloak_auth__flow=pkce
+      - NEO4J_dbms_security_oidc_keycloak_well__known__discovery__uri=https://keycloak:8443/realms/hume/.well-known/openid-configuration
+      - NEO4J_dbms_security_oidc_keycloak_issuer=http://localhost:8180/realms/hume
+      - NEO4J_dbms_security_oidc_keycloak_client__id=neo4j-sso
+      - NEO4J_dbms_security_oidc_keycloak_claims_client__id=neo4j-sso
+      - NEO4J_dbms_security_oidc_keycloak_claims_audience=neo4j-sso
+      - NEO4J_dbms_security_oidc_keycloak_audience=neo4j-sso
+      - NEO4J_dbms_security_oidc_keycloak_params=client_id=neo4j-sso;response_type=code;scope=openid email roles
+      - NEO4J_dbms_security_oidc_keycloak_config=token_type_principal=id_token;token_type_authentication=id_token
+      - NEO4J_dbms_security_oidc_keycloak_claims_username=preferred_username
+      - NEO4J_dbms_security_oidc_keycloak_claims_groups=roles
+      - NEO4J_dbms_security_logs_oidc_jwt__claims__at__debug__level__enabled=true
+  api:
+    environment:
+      - hume.security.provider=keycloak
+      - keycloak.auth-server-url=http://keycloak:8080
+      - keycloak.realm=hume
+      - keycloak.resource=hume-web
+      - keycloak.enabled=true
+  web:
+    environment:
+      - KEYCLOAK_ENABLED=true
+      - KEYCLOAK_URL=http://localhost:8180
+      - KEYCLOAK_REALM=hume
+      - KEYCLOAK_CLIENT=hume-web
+      - KEYCLOAK_LEGACY=false
+      - KEYCLOAK_SILENT_SSO_ENABLED=true

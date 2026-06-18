@@ -1,0 +1,282 @@
+{
+    "enabled": true,
+    "realm": "hume",
+    "sslRequired": "NONE",
+    "attributes": {
+        "userProfileEnabled": true
+    },
+    "registrationAllowed": true,
+    "registrationEmailAsUsername": false,
+    "verifyEmail": true,
+    "loginWithEmailAllowed": true,
+    "userProfile": {
+        "attributes": [
+            {
+                "name": "username",
+                "displayName": "${username}",
+                "validations": {
+                    "length": {
+                        "min": 1,
+                        "max": 255
+                    },
+                    "username-prohibited-characters": {}
+                }
+            },
+            {
+                "name": "email",
+                "displayName": "${email}",
+                "validations": {
+                    "email": {},
+                    "length": {
+                        "max": 255
+                    }
+                }
+            }
+        ]
+    },
+    "users": [
+        {
+            "username": "admin",
+            "email": "admin@hume.ga",
+            "emailVerified": true,
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "hellopassword"
+                }
+            ],
+            "clientRoles": {
+                "hume-web": [
+                    "ROLE_ADMINISTRATOR",
+                    "ROLE_WORKSPACES_SHARE"
+                ],
+                "neo4j-sso": [
+                    "admin"
+                ]
+            }
+        },
+        {
+            "username": "analyst",
+            "email": "analyst@hume.ga",
+            "emailVerified": true,
+            "firstName": "John",
+            "lastName": "Doe",
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "hellopassword"
+                }
+            ],
+            "clientRoles": {
+                "hume-web": [
+                    "ROLE_ANALYST",
+                    "ROLE_WORKSPACES_SHARE"
+                ],
+                "neo4j-sso": [
+                    "analyst"
+                ]
+            }
+        },
+        {
+            "username": "investigator",
+            "email": "investigator@hume.ga",
+            "emailVerified": true,
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "hellopassword"
+                }
+            ],
+            "clientRoles": {
+                "hume-web": [
+                    "ROLE_INVESTIGATOR",
+                    "ROLE_WORKSPACES_SHARE"
+                ],
+                "neo4j-sso": [
+                    "investigator"
+                ]
+            }
+        }
+    ],
+    "roles": {
+        "realm": [],
+        "client": {
+            "hume-web": [
+                {
+                    "name": "ROLE_USER",
+                    "description": "user role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "ROLE_ADMINISTRATOR",
+                    "description": "administrator role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "ROLE_ANALYST",
+                    "description": "analyst role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "ROLE_INVESTIGATOR",
+                    "description": "investigator role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "ROLE_WORKSPACES_MANAGER",
+                    "description": "workspaces manager role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "ROLE_WORKSPACES_SHARE",
+                    "description": "share workspace role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "SPINE_ANALYST",
+                    "description": "spine analyst role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "SPINE_OFFICER",
+                    "description": "spine officer role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                }
+            ],
+            "neo4j-sso": [
+                {
+                    "name": "admin",
+                    "description": "neo4j admin role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "analyst",
+                    "description": "neo4j analyst role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                },
+                {
+                    "name": "investigator",
+                    "description": "neo4j investigator role",
+                    "composite": false,
+                    "clientRole": true,
+                    "attributes": {}
+                }
+            ]
+        }
+    },
+    "clients": [
+        {
+            "clientId": "hume-web",
+            "name": "hume-web",
+            "description": "Hume Web public client",
+            "enabled": true,
+            "publicClient": true,
+            "consentRequired": false,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": true,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": false,
+            "frontchannelLogout": false,
+            "protocol": "openid-connect",
+            "clientAuthenticatorType": "client-secret",
+            "secret": "q3sjAeJAyLzP3W4v",
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ],
+            "attributes": {
+                "post.logout.redirect.uris": "*",
+                "access.token.lifespan": 60
+            },
+            "protocolMappers": [
+                {
+                    "name": "nonce",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-nonce-backwards-compatible-mapper",
+                    "consentRequired": false,
+                    "config": {}
+                },
+                {
+                    "name": "client roles",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-client-role-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "introspection.token.claim": "true",
+                        "multivalued": "true",
+                        "userinfo.token.claim": "false",
+                        "user.attribute": "foo",
+                        "id.token.claim": "false",
+                        "lightweight.claim": "false",
+                        "access.token.claim": "true",
+                        "claim.name": "roles",
+                        "jsonType.label": "String",
+                        "usermodel.clientRoleMapping.clientId": "neo4j-sso"
+                    }
+                }
+            ]
+        },
+        {
+            "clientId": "neo4j-sso",
+            "name": "neo4j-sso",
+            "description": "Neo4j SSO client",
+            "enabled": true,
+            "publicClient": true,
+            "consentRequired": false,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": false,
+            "frontchannelLogout": false,
+            "authorizationServicesEnabled": false,
+            "protocol": "openid-connect",
+            "clientAuthenticatorType": "client-secret",
+            "redirectUris": ["http://localhost:17474/*"],
+            "webOrigins": ["http://localhost:17474"],
+            "protocolMappers": [
+                {
+                    "name": "client roles",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-client-role-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "introspection.token.claim": "true",
+                        "multivalued": "true",
+                        "userinfo.token.claim": "true",
+                        "id.token.claim": "true",
+                        "lightweight.claim": "false",
+                        "access.token.claim": "true",
+                        "claim.name": "roles",
+                        "jsonType.label": "String",
+                        "usermodel.clientRoleMapping.clientId": "neo4j-sso"
+                    }
+                }
+            ]
+        }
+    ]
+}

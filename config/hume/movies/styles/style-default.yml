@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Style
+metadata:
+  name: style-default
+  knowledge-graph: movies-kg
+spec:
+  isDefault: true
+  label: 'Default Style'
+  classes:
+    Person:
+      caption:
+        - __className
+        - name
+      rules:
+        - label: icon and color based on existence of attribute
+          type: CLASS_ICON_COLOR
+          config:
+            attributeName: name
+            attributeCategory: SCHEMA
+            operator: EQUALS
+            attributeValue: 'Tom Cruise'
+            icon: mdi-account
+            color: '#D50000'
+        - label: badge based on year after
+          type: CLASS_BADGE
+          config:
+            attributeName: born
+            attributeCategory: SCHEMA
+            operator: GREATER_THAN
+            attributeValue: 1975
+            position: nw
+            color: '#6685ff'
+            animated: true
+            icon: mdi-decagram
+    Movie:
+      caption:
+        - __className
+        - title
+      rules:
+        - label: donut based on degree for acted_in
+          type: CLASS_DONUT
+          config:
+            attributeName: DEGREE
+            attributeCategory: NETWORK
+            domainType: ABSOLUTE
+            relationships:
+              - Person-ACTED_IN->Movie
+            domainMax: 10
+            color: '#6685ff'
+    Genre:
+      caption:
+        - __#label#__
+        - name
+
+
+

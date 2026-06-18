@@ -1,0 +1,15 @@
+{
+    "blocked_events": [
+      "os.system",
+      "subprocess.Popen",
+      "subprocess.call",
+      "subprocess.run",
+      "open",
+      "open.read",
+      "os.open",
+      "os.listdir",
+      "shutil",
+      "thread.start_new_thread"
+    ],
+    "blocked_dirs": ["/etc"]
+  }

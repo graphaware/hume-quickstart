@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: EcosystemResource
+metadata:
+  name: local-fs-media
+spec:
+  fqn: Hume.Orchestra.Resource.FileSystem.Local
+  parameters:
+    - name: path
+      value: '/data/hume_media/ready'

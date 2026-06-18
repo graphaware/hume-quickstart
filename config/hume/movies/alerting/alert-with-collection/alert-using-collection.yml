@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: AlertingAlert
+metadata:
+  name: alert-using-collection
+  knowledge-graph: movies-kg
+  includeIf:
+    activeProfilesContainsAny:
+      - alerting
+spec:
+  label: 'Alert using collection'
+  pattern: 'pattern-with-params-2'
+  parameters: []
+  collection: 'actors-named-tom'
+  options:
+    clearPreviousExecutionStates: false
+    sendEventsOnFirstExecution: true
+  notification:
+    type: 'IMMEDIATE'
+  notificationChannel:
+    type: 'EMAIL'
+    parameters:
+      emailAddresses:
+        - 'alerts@graphaware.io'
+  disableBeforeUpdate: true
+  enableAfterUpdate: true

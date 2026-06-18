@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: EcosystemResource
+metadata:
+  name: eventstore
+  includeIf:
+    activeProfileContainsAll:
+      - mde
+spec:
+  access:
+    - role: ANALYST
+      permissionGroup: RESOURCE_USE
+    - role: DRONE_TEAM
+      permissionGroup: RESOURCE_USE
+  fqn: Hume.Orchestra.Resource.HumeEventStore
+  parameters:
+    - name: host
+      value: eventstore
+    - name: port
+      value: 9090
+    - name: username
+      value: hume
+    - name: password
+      value: megaSecretPwd

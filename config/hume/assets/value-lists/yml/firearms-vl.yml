@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ValueList
+metadata:
+  name: firearms-vl
+  knowledge-graph: movies-kg
+spec:
+  label: Firearms
+  type: STRING
+  seedUri: 'file://firearms-vl.csv'

@@ -1,0 +1,14 @@
+kind: EcosystemResource
+metadata:
+  name: neo4j-movies-sso
+spec:
+  fqn: "#Hume.Orchestra.Resource.Neo4jSSO"
+  parameters:
+  - name: database
+    value: movies
+  - name: host
+    value: neo4j
+  - name: port
+    value: 7687
+  - name: read_only
+    value: true

@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: ab-test-input-parameters
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'ab-test-input-parameters'
+  query: |
+    RETURN //
+  scope: UTILITY
+  returnType: TABLE
+  inputParameters:
+    - name: name
+      label: Name
+      type: STRING
+    - name: number
+      label: Number
+      type: INTEGER
+    - name: float
+      label: Float
+      type: FLOAT
+    - name: boolean
+      label: Boolean
+      type: BOOLEAN
+    - name: date
+      label: Date
+      type: DATE
+    - name: singleSelect
+      label: Single Select
+      type: SELECT
+      selectOptions:
+        - label: ONE
+          value: one
+        - label: TWO
+          value: two
+        - label: THREE
+          value: three
+        - label: FOUR
+          value: four
+        - label: FIVE
+          value: five
+        - label: SIX
+          value: six
+        - label: SEVEN
+          value: seven
+        - label: EIGHT
+          value: eight
+        - label: NINE
+          value: nine
+        - label: TEN
+          value: ten
+        - label: ELEVEN
+          value: eleven
+    - name: multiSelect
+      label: Multi Select
+      type: SELECT
+      multiselect: true
+      selectOptions:
+        - label: ONE
+          value: one
+        - label: TWO
+          value: two
+        - label: THREE
+          value: three
+        - label: FOUR
+          value: four
+        - label: FIVE
+          value: five
+        - label: SIX
+          value: six
+        - label: SEVEN
+          value: seven
+        - label: EIGHT
+          value: eight
+        - label: NINE
+          value: nine
+        - label: TEN
+          value: ten
+        - label: ELEVEN
+          value: eleven
+    - name: asyncSingle
+      label: Async Single
+      type: SELECT_ASYNC
+      query:
+        MATCH (n:NotExistForSure)
+        RETURN n.id AS id, n.value AS value
+    - name: asyncMulti
+      label: Async Multi
+      type: SELECT_ASYNC
+      multiselect: true
+      query:
+        MATCH (n:NotExistForSure)
+        RETURN n.id AS id, n.value AS value
+    - name: textArea
+      label: TEXTAREA
+      type: TEXT_AREA
+    - name: stringList
+      label: String List
+      type: STRING
+      multiselect: true
+    - name: numberList
+      label: Number List
+      type: INTEGER
+      multiselect: true

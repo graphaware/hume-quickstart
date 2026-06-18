@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: AlertingPattern
+metadata:
+  name: pattern-with-param
+  knowledge-graph: movies-kg
+  includeIf:
+    activeProfilesContainsAny:
+      - alerting
+spec:
+  label: 'Pattern with Parameters'
+  query: 'file://find-persons-by-name.cypher'
+  parameters:
+    - name: name
+      type: STRING
+  conditions: ['NEW_RECORDS', 'DIFFERENT_RECORDS', 'DELETED_RECORDS']
+  schedule:
+    repetitionType: 'FIXED'
+    frequency: '30'
+    frequencyUnit: 'SECONDS'
+  perspective: main-perspective
+  resource: neo4j-movies

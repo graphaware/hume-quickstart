@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: movies-show-matrix-actors-table
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'Show Matrix Actors As Table'
+  query: |
+    MATCH path=(n:Movie {title: 'The Matrix'})<-[:ACTED_IN]-(p:Person)
+    RETURN p.name AS name, p.born AS birthYear
+    LIMIT 20
+  scope: GLOBAL
+  returnType: TABLE

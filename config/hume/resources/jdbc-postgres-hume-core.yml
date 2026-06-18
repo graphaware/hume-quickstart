@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: EcosystemResource
+metadata:
+  name: jdbc-postgres-hume-core
+spec:
+  fqn: Hume.Orchestra.Resource.JDBC
+  parameters:
+    - name: jdbcUrl
+      value: jdbc:postgresql://postgres:5432/hume
+    - name: user
+      value: hume
+    - name: password
+      value: pgsqls3cr3t
+    - name: autoCommit
+      value: true

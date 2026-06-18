@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: AlertingAlert
+metadata:
+  name: actor-change-subscription
+  knowledge-graph: movies-kg
+  includeIf:
+    activeProfilesContainsAny:
+      - alerting
+spec:
+  label: 'Subscribe to Person Changes'
+  pattern: 'all-persons-pattern'
+  parameters: []
+  options:
+    clearPreviousExecutionStates: false
+    sendEventsOnFirstExecution: true
+  notification:
+    type: 'IMMEDIATE'
+  notificationChannel:
+    type: 'EMAIL'
+    parameters:
+      emailAddresses:
+        - 'alerts@graphaware.io'

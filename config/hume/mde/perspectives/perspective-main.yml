@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Perspective
+metadata:
+  name: main-perspective
+  knowledge-graph: mde-kg
+spec:
+  label: Main Perspective
+  default: true
+  access:
+    - role: ANALYST
+      permissionGroup: PERSPECTIVE_USE
+    - role: INVESTIGATOR
+      permissionGroup: PERSPECTIVE_USE
+  resourceName: neo4j-mde
+  synced: true
+  editing:
+    classes:
+      allEditableByDefault: true
+      allAttributesEditableByDefault: true
+      allAttributesRequiredByDefault: true
+      nonEditableFqns:
+        - '*$$id'
+    relationships:
+      allEditableByDefault: true
+      allAttributesEditableByDefault: true
+      allAttributesRequiredByDefault: true
+      nonEditableFqns:
+        - '*$$id'
+      

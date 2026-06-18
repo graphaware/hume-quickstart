@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ValueList
+metadata:
+  name: anpr-camera-names-vl
+  knowledge-graph: movies-kg
+spec:
+  label: CameraNames
+  type: STRING
+  seedUri: 'file://anpr-camera-names-vl.csv'

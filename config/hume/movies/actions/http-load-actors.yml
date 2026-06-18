@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: load-actors-http
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'Load Actors with Http action'
+  scope: GLOBAL
+  returnType: GRAPH
+  actionType: API
+  endpoint: load-actors
+  httpApiResource: movies-http-api
+  defaultValuesResolver:
+    type: API
+    params:
+      endpoint: search-actor-default-resolver
+  inputParameters:
+    - name: name
+      label: Name
+      type: SELECT_ASYNC
+      multiselect: false
+      required: true
+      resolver:
+        type: API
+        params:
+          endpoint: name-async-select-resolver

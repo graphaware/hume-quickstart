@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: movies-show-matrix-actors
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'Show Matrix Actors'
+  query: 'file://all-matrix-actors.cypher'
+  scope: GLOBAL
+  returnType: GRAPH

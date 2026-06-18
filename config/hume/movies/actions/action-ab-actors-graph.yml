@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: movies-ab-actors-graph
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'Show Actors as Graph'
+  query: |
+    MATCH path=(movie:Movie)<-[r:ACTED_IN]-(p:Person)
+    WHERE movie.title = $movie
+    RETURN p, r, movie
+  scope: UTILITY
+  returnType: GRAPH
+  inputParameters:
+    - name: movie
+      label: Movie
+      type: STRING
+      required: true

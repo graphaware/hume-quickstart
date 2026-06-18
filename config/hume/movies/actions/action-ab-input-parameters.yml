@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: movies-ab-input-parameters
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'ab-movies-input-parameters'
+  query: |
+    RETURN //
+  scope: UTILITY
+  returnType: TABLE
+  inputParameters:
+    - name: movie
+      label: Movie
+      type: SELECT_ASYNC
+      required: true
+      query:
+        MATCH (movie:Movie)
+        WHERE lower(movie.title) CONTAINS lower($movie)
+        WITH movie, 8 * size(
+          [x IN split(lower(movie.title), '') WHERE x STARTS WITH $movie]
+          ) + (100 - char_length(movie.title)) AS score
+        ORDER BY score DESC
+        RETURN movie.title AS id, movie.title AS value

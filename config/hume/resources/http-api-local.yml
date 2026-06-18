@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: EcosystemResource
+metadata:
+  name: movies-http-api
+spec:
+  fqn: Hume.Orchestra.Resource.HttpApi
+  parameters:
+    - name: base_url
+      value: http://orchestra:8666
+    - name: request_headers
+      value:
+        Authorization: $$ORCHESTRA_WEBHOOK_AUTH_HEADER
+    - name: endpoints
+      value:
+        load-actors: /movies/actors/load
+        search-actor-default-resolver: /movies/actors/search/resolver
+        name-async-select-resolver: /movies/actors/name/resolver

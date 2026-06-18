@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Perspective
+metadata:
+  name: main-perspective
+  knowledge-graph: movies-kg
+spec:
+  label: Main Perspective
+  default: true
+  access:
+    - role: ANALYST
+      permissionGroup: PERSPECTIVE_USE
+    - role: INVESTIGATOR
+      permissionGroup: PERSPECTIVE_USE
+  resourceName: neo4j-movies-sso
+  synced: true
+  attributeConfigs:
+    - fqn: Movie$$genre
+      valueList: Genres
+      inputTransformer: UPPER_CASE
+    - fqn: Movie$$id
+      filterable: false
+    - fqn: Person$$id
+      inputTransformer: LOWER_CASE
+  visibility:
+    actions:
+      - tag@all
+      

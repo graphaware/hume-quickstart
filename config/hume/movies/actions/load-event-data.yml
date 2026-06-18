@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: load-event-data
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'Load Event Data'
+  query: |
+    MATCH (n) WHERE id(n) IN $_event.nodeIds
+    MATCH path=(n)-[:ACTED_IN]->(movie)<-[:ACTED_IN]-(otherActor)
+    RETURN path, id(n) AS __highlightNode__
+  scope: EVENT
+  returnType: GRAPH

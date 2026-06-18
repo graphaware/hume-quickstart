@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: AlertingAlert
+metadata:
+  name: alert-with-parameters
+  knowledge-graph: movies-kg
+  includeIf:
+    activeProfilesContainsAny:
+      - alerting
+spec:
+  label: 'Alert with parameters'
+  pattern: 'pattern-with-param'
+  parameters:
+    - name: Tom Hanks
+    - name: Tom Cruise
+  options:
+    clearPreviousExecutionStates: false
+    sendEventsOnFirstExecution: true
+  notification:
+    type: 'IMMEDIATE'
+  notificationChannel:
+    type: 'EMAIL'
+    parameters:
+      emailAddresses:
+        - 'alerts@graphaware.io'
+  disableBeforeUpdate: true
+  enableAfterUpdate: true

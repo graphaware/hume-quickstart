@@ -1,0 +1,32 @@
+<!--
+$name: STRING " "
+-->
+<hc-action-board title="$name - $number">
+    <hc-row>
+      <hc-col size=2>
+                <hc-action-board-input-params
+                  id="input-params"
+                  action="ab-test-input-parameters"
+                />
+      </hc-col>
+      <hc-col size=7>
+        <hc-widget-table
+            id="table"
+          action="ab-test-table"
+          action-params="*"
+          on-row-click="setParam($name, __row__.name);
+          setParam($number, __row__.number);
+          setParam($singleSelect, __row__.singleSelect);
+          setParam($multiSelect, __row__.multiSelect);
+          setParam($asyncSingle, __row__.asyncSingle);
+          setParam($asyncMulti, __row__.asyncMulti);
+          setParam($float, __row__.float);
+          setParam($boolean, __row__.boolean);
+          setParam($date, __row__.date);
+          setParam($textArea, __row__.textArea);
+          setParam($stringList, __row__.stringList);
+          setParam($numberList, __row__.numberList);
+          "
+        />
+      </hc-col>
+  </hc-action-board>

@@ -1,0 +1,271 @@
+apiVersion: v1
+kind: Style
+metadata:
+  name: style-cli
+  knowledge-graph: movies-kg
+spec:
+  isDefault: false
+  label: 'CLI Style'
+  classes:
+    __global__:
+      caption:
+        - __#label#__
+        - rating
+      captionMaxLength: 16
+      rules:
+        - label: icon and color based on attribute equality
+          type: CLASS_ICON_COLOR
+          config:
+            attributeName: name
+            attributeCategory: SCHEMA
+            operator: EQUALS
+            attributeValue: 'Keanu Reeves'
+            icon: mdi-account-alert
+            color: '#00A91C'
+        - label: icon and color based on degree relative to visualisation
+          type: CLASS_ICON_COLOR
+          config:
+            attributeName: DEGREE
+            attributeCategory: NETWORK
+            domainType: RELATIVE_TO_VISUALISATION
+            relationships:
+              - Person-ACTED_IN->Movie
+            operator: GREATER_THAN
+            attributeValue: 1
+            icon: mdi-account
+            color: '#454545'
+        - label: donut style based on attribute value
+          type: CLASS_DONUT
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            domainMax: 10
+            color: '#E66F0E'
+        - label: donut style based on degree absolute
+          type: CLASS_DONUT
+          config:
+            attributeName: DEGREE
+            attributeCategory: NETWORK
+            domainType: ABSOLUTE
+            relationships:
+              - Person-ACTED_IN->Movie
+            domainMax: 10
+            color: '#E66F0E'
+        - label: badge based on rating attribute value
+          type: CLASS_BADGE
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            operator: GREATER_THAN_EQUALS
+            attributeValue: 1
+            position: nw
+            color: '#FD4496'
+            animated: true
+        - label: badge with degree distribution value
+          type: CLASS_BADGE
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            operator: GREATER_THAN_EQUALS
+            attributeValue: 1
+            position: se
+            color: '#FD4496'
+            textAttribute: DEGREE
+            textAttributeCategory: NETWORK
+        - label: node size based on degree
+          type: CLASS_SIZE
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            domainType: RELATIVE_TO_VISUALISATION
+            domainMin: 0
+            domainMax: 100
+            scaleMin: 1
+            scaleMax: 4
+    Person:
+      caption:
+        - __#label#__
+        - name
+        - born
+      rules:
+        - label: icon and color based on attribute equality
+          type: CLASS_ICON_COLOR
+          config:
+            attributeName: name
+            attributeCategory: SCHEMA
+            operator: EQUALS
+            attributeValue: 'Keanu Reeves'
+            icon: mdi-account-alert
+            color: '#00A91C'
+        - label: icon and color based on degree relative to visualisation
+          type: CLASS_ICON_COLOR
+          config:
+            attributeName: DEGREE
+            attributeCategory: NETWORK
+            domainType: RELATIVE_TO_VISUALISATION
+            relationships:
+              - Person-ACTED_IN->Movie
+            operator: GREATER_THAN
+            attributeValue: 1
+            icon: mdi-account
+            color: '#454545'
+        - label: donut style based on attribute value
+          type: CLASS_DONUT
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            domainMax: 10
+            color: '#E66F0E'
+        - label: donut style based on degree absolute
+          type: CLASS_DONUT
+          config:
+            attributeName: DEGREE
+            attributeCategory: NETWORK
+            domainType: ABSOLUTE
+            relationships:
+              - Person-ACTED_IN->Movie
+            domainMax: 10
+            color: '#E66F0E'
+        - label: badge based on rating attribute value
+          type: CLASS_BADGE
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            operator: GREATER_THAN_EQUALS
+            attributeValue: 1
+            position: nw
+            color: '#FD4496'
+            animated: true
+        - label: badge with degree distribution value
+          type: CLASS_BADGE
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            operator: GREATER_THAN_EQUALS
+            attributeValue: 1
+            position: se
+            color: '#FD4496'
+            textAttribute: DEGREE
+            textAttributeCategory: NETWORK
+        - label: node size based on degree
+          type: CLASS_SIZE
+          config:
+            attributeName: rating
+            attributeCategory: SCHEMA
+            domainType: RELATIVE_TO_VISUALISATION
+            domainMin: 0
+            domainMax: 100
+            scaleMin: 1
+            scaleMax: 4
+    Genre:
+      caption:
+        - __#label#__
+        - name
+  relationships:
+    __global__:
+      caption:
+        - __#label#__
+        - score
+      captionMaxLength: 16
+      rules:
+        - label: relationship width based on attribute value
+          type: RELATIONSHIP_WIDTH
+          config:
+            attributeName: score
+            domainType: RELATIVE_TO_VISUALISATION
+            scaleType: LINEAR
+            linkSizeMin: 1
+            linkSizeMax: 5
+        - label: relationship line style based on attribute value
+          type: RELATIONSHIP_LINE_STYLE
+          config:
+            attributeName: roles
+            operator: HAS_LENGTH
+            attributeValue: 3
+            lineStyle: dashed
+            animated: true
+        - label: relationship badge style based on attribute value
+          type: RELATIONSHIP_BADGE
+          config:
+            attributeName: score
+            operator: GREATER_THAN
+            attributeValue: 150
+            color: '#E41D3D'
+            animated: true
+        - label: relationship badge style with icon
+          type: RELATIONSHIP_BADGE
+          config:
+            attributeName: roles
+            operator: HAS_LENGTH
+            attributeValue: 6
+            color: '#00A91C'
+            icon: warning
+        - label: relationship badge style with text
+          type: RELATIONSHIP_BADGE
+          config:
+            attributeName: score
+            operator: GREATER_THAN
+            attributeValue: 200
+            color: '#00A91C'
+            textAttribute: score
+        - label: relationship color based on attribute value
+          type: RELATIONSHIP_COLOR
+          config:
+            attributeName: roles
+            operator: INCLUDES
+            attributeValue:
+              - 'Captain Molyneux'
+            color: '#D72D79'
+    Person-ACTED_IN->Movie:
+      caption:
+        - __#label#__
+        - roles
+      rules:
+        - label: relationship width based on attribute value
+          type: RELATIONSHIP_WIDTH
+          config:
+            attributeName: score
+            domainType: RELATIVE_TO_VISUALISATION
+            scaleType: LINEAR
+            linkSizeMin: 1
+            linkSizeMax: 5
+        - label: relationship line style based on attribute value
+          type: RELATIONSHIP_LINE_STYLE
+          config:
+            attributeName: roles
+            operator: HAS_LENGTH
+            attributeValue: 3
+            lineStyle: dashed
+            animated: true
+        - label: relationship badge style based on attribute value
+          type: RELATIONSHIP_BADGE
+          config:
+            attributeName: score
+            operator: GREATER_THAN
+            attributeValue: 150
+            color: '#E41D3D'
+            animated: true
+        - label: relationship badge style with icon
+          type: RELATIONSHIP_BADGE
+          config:
+            attributeName: roles
+            operator: HAS_LENGTH
+            attributeValue: 6
+            color: '#00A91C'
+            icon: warning
+        - label: relationship badge style with text
+          type: RELATIONSHIP_BADGE
+          config:
+            attributeName: score
+            operator: GREATER_THAN
+            attributeValue: 200
+            color: '#00A91C'
+            textAttribute: score
+        - label: relationship color based on attribute value
+          type: RELATIONSHIP_COLOR
+          config:
+            attributeName: roles
+            operator: INCLUDES
+            attributeValue:
+              - 'Captain Molyneux'
+            color: '#D72D79'

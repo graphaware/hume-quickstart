@@ -1,0 +1,41 @@
+<!--
+$movie: SELECT_ASYNC {"id": "The Matrix", "value": "The Matrix"}
+-->
+<hc-action-board title="$movie.value">
+  <hc-action-board-input-params 
+    id="input-params" 
+    action="movies-ab-input-parameters"
+    size="0"
+    height="fit-content"
+  />
+  <hc-row>
+    <hc-col>
+      <hc-widget-graph 
+        id="movies-show-actors-graph" 
+        title="Actors Graph" 
+        action="movies-ab-actors-graph"
+      />
+    </hc-col>
+    <hc-col>
+      <hc-widget-table 
+        id="movies-show-actors-table" 
+        title="Actors Table" 
+        action="movies-ab-actors-table"
+      />
+      <hc-widget-graph 
+        id="movies-show-actors-birth-places" 
+        title="Actors Birthplaces" 
+        action="movies-ab-actors-birthplaces"
+      />
+    </hc-col>
+    <hc-col>
+      <hc-widget-html 
+        id="movies-show-wikipedia" 
+        title="Movie Wikipedia Page" 
+        action="movies-wikipedia-search"
+      />
+    </hc-col>
+  </hc-row>
+
+  <!-- Add the following component option to only run a widget on demand : manual-refresh-only="true" -->
+</hc-action-board>

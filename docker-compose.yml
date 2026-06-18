@@ -1,0 +1,240 @@
+x-keystore-env: &keystore-env
+  hume.security.encryption.engine: keystore
+  hume.security.encryption.keystore.file: /opt/hume-keystore
+  hume.security.encryption.keystore.password: changeit
+  hume.security.encryption.keystore.secret.alias: secret
+
+x-eventstore-env: &eventstore-env
+  hume.eventstore.hostname: eventstore
+  hume.eventstore.port: "9090"
+  hume.eventstore.username: hume
+  hume.eventstore.password: megaSecretPwd
+
+include:
+  - compose/docker-compose-postgres.yml
+
+volumes:
+  hume_neo4j_data:
+
+services:
+  web:
+    image: docker.graphaware.com/hume-core/hume-web:${HUME_VERSION}
+    environment:
+      - HUME_API_URL=${HUME_ADVERTISED_ADDRESS}:${HUME_API_PORT:-8080}
+      - HUME_MEDIA_API_URL=http://localhost:8008/v1
+    ports:
+      - "${HUME_FRONT_PORT:-8081}:8081"
+  api:
+    image: docker.graphaware.com/hume-core/hume-api:${HUME_VERSION}
+    ports:
+      - 8080:8080
+    environment:
+      <<: [*keystore-env, *eventstore-env]
+      spring.datasource.url: jdbc:postgresql://postgres:5432/${HUME_DB_USER:-hume}
+      spring.datasource.username: ${HUME_DB_USER:-hume}
+      spring.datasource.password: ${HUME_DB_PASSWORD:-pgsqls3cr3t}
+      hume.orchestra.uri: http://orchestra:8100
+      hume.licence.key: ${HUME_LICENCE_KEY}
+      hume.api.enabled: "true"
+      hume.api.initial-key.create: "true"
+      hume.api.initial-key.name: admin-api-key
+      hume.api.initial-key.token: ${API_KEY_SECRET}
+      hume.api.initial-key.roles: ROLE_ADMINISTRATOR,ROLE_WORKSPACES_MANAGER
+      management.endpoints.web.exposure.include: health,prometheus
+      hume.security.audit.enabled: "true"
+      hume.security.audit.log.path: /audit/api
+      hume.security.native.jwt.key: ${HUME_SECURITY_NATIVE_JWT_STRING}
+      hume.media.enabled: "true"
+      hume.media.uri: http://media:8008
+      hume.media.uri-fe: http://localhost:8009/v1
+      hume.eventstore.schema.changes.enabled: "true"
+    volumes:
+      - "./config/keystore/hume-keystore:/opt/hume-keystore"
+      - "./data/audit-logs:/audit"
+      - "./config/api/conf:/conf"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      orchestra:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "sh", "-c", "exec 3<>/dev/tcp/localhost/8080 && echo 'UP' || exit 1"]
+      interval: 2s
+      retries: 100
+      start_period: 25s
+      timeout: 3s
+  orchestra:
+    image: docker.graphaware.com/hume-core/hume-orchestra:${HUME_VERSION}
+    ports:
+      - 8100:8100
+      - 7001:7001 # metrics
+      - 8666:8666 # webhook
+    environment:
+      <<: *keystore-env
+      spring.datasource.url: jdbc:postgresql://postgres-orchestra:5435/orchestra
+      spring.datasource.username: orchestra
+      spring.datasource.password: pgsqls3cr3t
+      orchestra.startup.workflows.autoload: "true"
+      hume.security.audit.log.path: /audit/orchestra
+      hume.logging.config.location: /conf/server-logs-config.xml
+      management.endpoints.web.exposure.include: health,prometheus
+      orchestra.scripting.python.security.enabled: ${ORCHESTRA_SECURITY_ENABLED:-false}
+      orchestra.scripting.python.security.config: /security/security.json
+    volumes:
+      - "./config/keystore/hume-keystore:/opt/hume-keystore"
+      - "./config/orchestra/conf:/conf"
+      - "./config/orchestra/plugins:/plugins"
+      - "./config/orchestra/security:/security"
+      - "./data/orchestra:/data"
+    depends_on:
+      postgres-orchestra:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "sh", "-c", "exec 3<>/dev/tcp/localhost/8100 && echo 'UP' || exit 1"]
+      interval: 2s
+      retries: 100
+      start_period: 10s
+      timeout: 3s
+  eventstore:
+    image: docker.graphaware.com/hume-core/hume-eventstore:${HUME_VERSION}
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgres-eventstore:5440/eventstore
+      - spring.datasource.username=eventstore
+      - spring.datasource.password=password123
+      - management.endpoints.web.exposure.include=health,prometheus
+    depends_on:
+      postgres-eventstore:
+        condition: service_healthy
+    ports:
+      - 8700:8080
+      - 9700:9090
+    healthcheck:
+      test: ["CMD", "sh", "-c", "exec 3<>/dev/tcp/localhost/8080 && echo 'UP' || exit 1"]
+      interval: 2s
+      retries: 100
+      start_period: 10s
+      timeout: 3s
+  media:
+    image: docker.graphaware.com/hume-core/hume-media:${HUME_VERSION}
+    environment:
+      <<: *eventstore-env
+      spring.datasource.url: jdbc:postgresql://postgres-media/media
+      spring.datasource.username: media
+      spring.datasource.password: media
+      hume.security.provider: native
+      hume.security.native.jwt.key: ${HUME_SECURITY_NATIVE_JWT_STRING}
+      hume.security.api-key.enabled: "true"
+      hume.security.api-key-download.value: ${MEDIA_DOWNLOAD_KEY}
+      management.endpoints.web.exposure.include: health,prometheus
+      management.server.port: "7001"
+      hume.security.uri: http://api:9080
+      # hume.media.access-control.permissions.authorities-mapping.ROLE_MEDIA_MANAGER: BATCH_CLEANUP,UPLOAD_FILES_NO_RBAC,DOWNLOAD_FILES_NO_RBAC,CREATE_FILES_IN_ROOT_FOLDER,CREATE_FOLDERS_IN_ROOT_FOLDER
+
+      # File upload configuration
+      hume.media.upload.initial_file_status: READY # possible values READY|UPLOADED
+      hume.media.upload.max-file-size: 20000MB
+      hume.media.upload.max-field-size: 10MB
+      hume.feature.files.enabled: "true"
+
+      # Local storage configuration
+      hume.media.storage.providers.local.enabled: "true"
+      hume.media.storage.providers.local.path.uploaded: /media/ready
+      hume.media.storage.providers.local.path.ready: /media/ready
+      hume.media.notifications.event-store.enabled: "true"
+    ports:
+      - 8008:8008
+      - 7010:7001 # prometheus
+    volumes:
+      - "./data/media/files:/media"
+    depends_on:
+      postgres-media:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "sh", "-c", "exec 3<>/dev/tcp/localhost/8008 && echo 'UP' || exit 1"]
+      interval: 2s
+      retries: 100
+      start_period: 10s
+      timeout: 3s
+  media-reverse-proxy:
+    image: docker.graphaware.com/mirror/nginx:1-alpine-slim
+    ports:
+      - 8009:80
+    volumes:
+      - ./config/media-reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      media:
+        condition: service_healthy
+  neo4j:
+    image: neo4j:${NEO4J_VERSION}
+    ports:
+      - 17474:7474
+      - 17687:7687
+      - 17473:7473
+    environment:
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_AUTH=neo4j/${NEO4J_PASSWORD}
+      - NEO4J_server_memory_heap_max__size=${NEO4J_MEMORY:-2G}
+      - NEO4J_server_memory_heap_initial__size=${NEO4J_MEMORY:-2G}
+      - NEO4J_db_logs_query_enabled=INFO
+      - NEO4J_db_logs_query_max__parameter__length=5000
+      - NEO4J_server_metrics_enabled=true
+      - NEO4J_server_metrics_csv_enabled=false
+      - NEO4J_server_metrics_prometheus_enabled=true
+      - NEO4J_server_metrics_prometheus_endpoint=0.0.0.0:2004
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_databases_seed__from__uri__providers=FileSeedProvider,URLConnectionSeedProvider,CloudSeedProvider
+      - NEO4J_DEBUG=true
+      # SSL - bolt
+      - NEO4J_dbms_ssl_policy_bolt_enabled=true
+      - NEO4J_dbms_ssl_policy_bolt_base__directory=/var/lib/neo4j/certificates/bolt
+      - NEO4J_dbms_ssl_policy_bolt_private__key=private.key
+      - NEO4J_dbms_ssl_policy_bolt_public__certificate=public.crt
+      - NEO4J_dbms_ssl_policy_bolt_client__auth=NONE
+      - NEO4J_dbms_connector_bolt_tls__level=OPTIONAL
+      # SSL - https
+      - NEO4J_dbms_ssl_policy_https_enabled=true
+      - NEO4J_dbms_ssl_policy_https_base__directory=/var/lib/neo4j/certificates/https
+      - NEO4J_dbms_ssl_policy_https_private__key=private.key
+      - NEO4J_dbms_ssl_policy_https_public__certificate=public.crt
+      - NEO4J_dbms_ssl_policy_https_client__auth=NONE
+      - NEO4J_dbms_connector_https_enabled=true
+      # Keystore
+      - NEO4J_dbms_security_keystore_path=/var/lib/neo4j/conf/neo4j-keystore
+      - NEO4J_dbms_security_keystore_password=password
+      - NEO4J_dbms_security_key_name=neo4j
+      # Bolt
+      - NEO4J_server_bolt_advertised__address=:17687
+    volumes:
+      - "./config/neo4j/logging/server-logs.xml:/var/lib/neo4j/conf/server-logs.xml"
+      - "./config/neo4j/keystore/neo4j-keystore:/var/lib/neo4j/conf/neo4j-keystore"
+      - "./config/neo4j/ssl/bolt:/var/lib/neo4j/certificates/bolt"
+      - "./config/neo4j/ssl/https:/var/lib/neo4j/certificates/https"
+      - "./config/neo4j/truststore/cacerts:/opt/java/openjdk/lib/security/cacerts"
+      - "hume_neo4j_data:/data"
+      - "./data/neo4j/import:/import"
+      - "./data/neo4j/backups:/backups"
+  neo4j-config-cli:
+    image: docker.graphaware.com/mirror/neo4j-config-cli:${NEO4J_CLI_VERSION}
+    environment:
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - NEO4J_URI=bolt://neo4j:7687
+      - IMPORT_PATH=/config
+    volumes:
+      - "./config/neo4j/seed:/config"
+  hume-config-cli:
+    image: docker.graphaware.com/hume-core/hume-config-cli:${HUME_VERSION}
+    environment:
+      - hume.admin.api.key=${API_KEY_SECRET}
+      - hume.url=http://api:8080
+      - import.path=/config
+      - hume.config.mode=import
+    volumes:
+      - "./config/hume:/config"
+    depends_on:
+      orchestra:
+        condition: service_healthy
+      media:
+        condition: service_healthy
+      api:
+        condition: service_healthy

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: AlertingPattern
+metadata:
+  name: all-persons-pattern-daily
+  knowledge-graph: movies-kg
+  includeIf:
+    activeProfilesContainsAny:
+      - alerting
+spec:
+  label: 'All Persons Pattern - Daily'
+  query: |
+    MATCH (n:Person)
+    RETURN id(n) AS key, n AS data
+  conditions: ['NEW_RECORDS', 'DIFFERENT_RECORDS', 'DELETED_RECORDS']
+  schedule:
+    repetitionType: 'DAILY'
+    executionTime: '13:30'
+    timeZone: 'UTC'
+  perspective: main-perspective
+  resource: neo4j-movies

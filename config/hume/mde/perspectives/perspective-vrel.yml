@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Perspective
+metadata:
+  name: vrel-perspective
+  knowledge-graph: mde-kg
+spec:
+  label: Main Perspective
+  access:
+    - role: ANALYST
+      permissionGroup: PERSPECTIVE_USE
+    - role: INVESTIGATOR
+      permissionGroup: PERSPECTIVE_USE
+  resourceName: neo4j-mde
+  visibility:
+    classes:
+      defaultVisibility: visible
+      hide: []
+    relationships:
+      defaultVisibility: visible
+      hide: []
+  synced: false
+      

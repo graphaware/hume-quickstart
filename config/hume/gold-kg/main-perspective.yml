@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Perspective
+metadata:
+  name: main-perspective
+  knowledge-graph: gold-kg
+spec:
+  label: Main Perspective
+  resourceName: neo4j-gold-kg
+  synced: true
+  access: []
+      

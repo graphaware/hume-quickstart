@@ -1,0 +1,37 @@
+services:
+  maestro:
+    image: docker.graphaware.com/internal/hume-maestro:${MAESTRO_VERSION:-${HUME_VERSION}}
+    ports:
+      - 8090:8090
+    environment:
+      - maestro.ollama.base-url=http://host.docker.internal:11434
+      - maestro.log-llm-requests-responses=true
+      # change the ollama model if needed
+      # - maestro.ollama.model-name=deepseek-r1:8b
+      #
+      # OpenAI configuration
+      # set your OpenAi key in your .env file under OPENAI_API_KEY variable
+      # - maestro.model.provider=openai
+      # - maestro.openai.api-key=${OPENAI_API_KEY}
+      #
+      # Azure OpenAI configuration
+      # set your OpenAi key in your .env file under AZURE_OPENAI_KEY variable
+      # - maestro.model.provider=azure-openai
+      # - maestro.azure-openai.deployment.name=gpt-4o-mini
+      # - maestro.azure-openai.endpoint=https://openai-ga-aus.openai.azure.com
+      # - maestro.azure-openai.api-key=${AZURE_OPENAI_KEY}
+  
+  # overrides
+  api:
+    environment:
+      - hume.feature.maestro.enabled=true
+      - hume.maestro.agent.one.key=main
+      - hume.maestro.agent.one.name=h1-mini
+      - hume.maestro.agent.one.uri=http://maestro:8090/chat
+      - hume.maestro.agent.orc.key=orchestra-1
+      - hume.maestro.agent.orc.name=orchestra-1
+      - hume.maestro.agent.orc.uri=http://orchestra:8666/maestro1
+      - hume.maestro.agent.orc.auth.header=Authorization
+      - hume.maestro.agent.orc.send-sso-token=true
+      - "hume.maestro.agent.orc.auth.key=Basic b3JjaGVzdHJhOm9yY2hlc3RyYQ=="
+      - hume.maestro.default.agent=main

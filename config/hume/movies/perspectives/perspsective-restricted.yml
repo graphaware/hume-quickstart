@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Perspective
+metadata:
+  name: restricted-perspective
+  knowledge-graph: movies-kg
+spec:
+  autostart: false
+  skipUpdateIfRunning: false
+  startWorkflowAfterImport: false
+  label: Restricted Perspective
+  access:
+    - role: INVESTIGATOR
+      permissionGroup: PERSPECTIVE_USE
+  visibility:
+    classes:
+      defaultVisibility: hidden
+      show:
+        - Movie
+        - Movie$$*
+        - Person
+        - Person$$name
+        - Genre
+        - Genre$$*
+    relationships:
+      defaultVisibility: visible
+      hide:
+        - Person-ACTED_IN->Movie$$roles
+        - Person-PRODUCED->Movie
+    actions:
+      - tag@all
+      - computed-score
+  resourceName: neo4j-movies
+  synced: false

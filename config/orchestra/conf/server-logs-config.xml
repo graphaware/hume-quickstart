@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <Properties>
+        <Property name="audit">${sys:orchestra.security.audit.enabled:-false}</Property>
+        <Property name="audit_log_path">${sys:orchestra.security.audit.log.path:-/tmp/orchestra-audit}</Property>
+        <Property name="appender">console_${sys:orchestra.logging.format:-plain}</Property>
+        <Property name="pattern">%highlight{[%-5level]}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %d{dd-MM-yyyy HH:mm:ss.SSS} %style{[%-20thread]}{blue} %style{[%-40c{1}]}{yellow} - %m%n</Property>
+        <Property name="pattern_camel">%highlight{[%-5level]}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %d{dd-MM-yyyy HH:mm:ss.SSS} %style{[%-20thread]}{blue} %style{[%-40c{1}]}{yellow} [%mdc{camel.contextId}>%mdc{camel.routeId}>%mdc{camel.exchangeId}>%mdc{camel.messageId}] - %m%n</Property>
+        <!-- <Property name="pattern_audit">%highlight{[%-5level]}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %d{dd-MM-yyyy HH:mm:ss.SSS} %style{[%-20thread]}{blue} %style{[%-40c{1}]}{yellow} - %m%n</Property> -->
+        <Property name="pattern_audit">%d{yyyy-MM-dd HH:mm:ss.SSSZ}{GMT+0} %highlight{%-5p}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue} %-5thread %mdc{camel.contextId} %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console_plain" target="SYSTEM_OUT">
+                <PatternLayout pattern="${pattern}" />
+        </Console>
+        <Console name="console_camel_plain" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_camel}" />
+        </Console>
+        <Console name="console_camel_json" taget="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json" />
+        </Console>
+        <Console name="console_json" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json" />
+        </Console>
+        <Console name="console_audit" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_audit}"/>
+        </Console>
+
+        <RollingFile name="file_audit" fileName="${audit_log_path}/hume_core_orchestra_audit.log"
+                     filePattern="${audit_log_path}/audit-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="${pattern_audit}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info" additivity="true">
+            <AppenderRef ref="${appender}" />
+        </Root>
+
+        <Logger name="org.apache.camel" level="info" additivity="false">
+            <AppenderRef ref="console_camel_${appender}" />
+        </Logger>
+
+        <Logger name="orchestra.audit" level="info" additivity="false">
+            <!-- <AppenderRef ref="console_audit" /> -->
+            <AppenderRef ref="file_audit" />
+        </Logger>
+    </Loggers>
+
+</Configuration>

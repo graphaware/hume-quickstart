@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Workflow
+metadata:
+  name: movies-http-api-workflow
+  knowledge-graph: movies-kg
+spec:
+  label: movies-http-api-workflow
+  autostart: true
+  skipUpdateIfRunning: false
+  startWorkflowAfterImport: true
+  restartWorkflowAfterUpdate: true 
+  components:
+    - name: wh-actors-default-resolver
+      type: Webhook
+      resourceName: webhook-local
+      config:
+        path: /movies/actors/search/resolver
+        returnResponse: true
+      to:
+        - neo4j-fetch-default-actors
+    - name: neo4j-fetch-default-actors
+      type: Neo4jWriter
+      resourceName: neo4j-movies
+      config:
+        cypher_query: |
+          MATCH (p:Person)-[:ACTED_IN]->()
+          RETURN elementId(p) AS id, p.name AS value
+          LIMIT 1
+        stream_records: true
+      to:
+        - transform-to-resolver-response
+    - name: transform-to-resolver-response
+      type: Transformer
+      config:
+        transformer_script: |
+          return {'content': {'name': body}}
+      to:
+        - webhook-response-default-resolver
+    - name: webhook-response-default-resolver
+      type: WebhookResponse
+    
+    - name: wh-actors-async-select-resolver
+      type: Webhook
+      resourceName: webhook-local
+      config:
+        path: /movies/actors/name/resolver
+        returnResponse: true
+      to:
+        - neo4j-fetch-actors-matching-async-select-value
+    - name: neo4j-fetch-actors-matching-async-select-value
+      type: Neo4jWriter
+      resourceName: neo4j-movies
+      config:
+        cypher_query: |
+          MATCH (p:Person)-[:ACTED_IN]->()
+          WHERE toLower(p.name) CONTAINS toLower($_data.name)
+          WITH p, count(*) AS break
+          RETURN collect({id: elementId(p), value: p.name}) AS actors
+        stream_records: true
+      to:
+        - transform-to-async-select-response
+    - name: transform-to-async-select-response
+      type: Transformer
+      config:
+        transformer_script: |
+          return {'content': body['actors']}
+      to:
+        - webhook-response-default-resolver
+  
+    - name: wh-actors-load-selection
+      type: Webhook
+      resourceName: webhook-local
+      config:
+        path: /movies/actors/load
+        returnResponse: true
+      to:
+        - neo4j-load-selected-actor
+    - name: neo4j-load-selected-actor
+      type: Neo4jWriter
+      resourceName: neo4j-movies
+      config:
+        cypher_query: |
+          MATCH (p:Person)-[r:ACTED_IN]->(movie)
+          WHERE elementId(p) = $_data.name
+          RETURN p, r, movie
+        stream_records: false
+      to:
+        - transform-to-graph-response
+    - name: transform-to-graph-response
+      type: Transformer
+      config:
+        transformer_script: |
+          from orchestra.utils import graph as g
+
+          nodes = []
+          rels = []
+          for record in body['_records']:
+            person = g.to_managed_node(record['p'])
+            movie = g.to_managed_node(record['movie'])
+            rel = g.to_managed_relationship(record['r'])
+            nodes.append(person)
+            nodes.append(movie)
+            rels.append(rel)
+          
+          return {'content': [{'__nodes__': nodes, '__rels__': rels}]}
+      to:
+        - webhook-response-default-resolver

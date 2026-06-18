@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Action
+metadata:
+  name: movies-ab-actors-table
+  knowledge-graph: movies-kg
+  tags:
+    - all
+spec:
+  label: 'Show Actors As Table'
+  query: |
+    MATCH path=(movie:Movie)<-[r:ACTED_IN]-(p:Person)
+    WHERE movie.title = $movie
+    RETURN 
+      p.name AS name, 
+      r.roles AS roles, 
+      CASE WHEN p.bornIn IS NULL THEN '' ELSE p.bornIn END AS bornIn, 
+      p.born AS birthDate,
+      apoc.text.format(
+        '<a href="%s/knowledgeGraphs/%s/actionboards/%s?inputParameters=%s" target="_blank">View</a>', 
+        [
+          $_context.variables.hume_frontend_uri, 
+          $_context.knowledgeGraph.uuid,
+          $_context.variables.actors_board_id,
+          apoc.text.urlencode('{"name":"' + p.name + '"}')
+        ]
+      ) AS ``
+    LIMIT 20
+  scope: UTILITY
+  returnType: TABLE
+  inputParameters:
+    - name: movie
+      label: Movie
+      type: STRING
+      required: true

@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: GroupingStrategy
+metadata:
+  name: grouping-default
+  knowledge-graph: movies-kg
+spec:
+  active: true
+  label: 'Default Grouping'
+  inclusions:
+    - Person
+  ruleGroups:
+    logicalOperator: 'OR'
+    groups:
+      - logicalOperator: 'OR'
+        rules:
+          - label: group persons with same year of birth
+            attributeName: born
+            operator: SAME_VALUE
+          - label: group persons where name starts with Ke
+            attributeName: name
+            operator: STARTS_WITH
+            attributeValue: 'Ke'
+      - logicalOperator: 'OR'
+        rules:
+          - label: group persons with same class
+            attributeName: '__#label#__'
+            operator: SAME_VALUE

@@ -1,0 +1,178 @@
+apiVersion: v1
+kind: KnowledgeGraph
+metadata:
+  name: movies-kg
+  knowledge-graph: movies-kg
+spec:
+  label: Movies KG
+  access:
+    strict: true
+    rules:
+      - role: INVESTIGATOR
+        permissionGroup: MANAGER
+      - role: ANALYST
+        permissionGroup: EXPLORER
+      - role: ANALYST
+        permissionGroup: ALERTING_VIEW_ALL
+  perspectives:
+    - main-perspective
+    - external-perspective
+  workflows:
+    - workflow-neo4j-basic
+  actions:
+    - movies-show-matrix-actors
+    - computed-score
+    - multiselected-nodes-table
+  settings:
+    - name: visualisationGeospatialEnabled
+      value: true
+    - name: visualisationGroupingEnabled
+      value: true
+    - name: visualisationTemporalEnabled
+      value: true
+    - name: dataRefreshEnabled
+      value: true
+    - name: schemaStatisticsEnabled
+      value: true
+    - name: allowHtmlActionTabularResults
+      value: true
+    - name: contextVariables
+      value:
+        actors_board_id: $ref:action-board:Actors Board
+        movies_resource_id: $ref:resource:neo4j-movies
+        main_perspective_id: $ref:perspective:main-perspective
+        saved_queries_action_board_id_v2: $ref:action-board:Load & Save Queries Action Board V2
+  schema:
+    strict: true
+    classes:
+      - label: Movie
+        color: '#6200EA'
+        icon: mdi-movie
+        dataSources:
+          - Simple data source
+        attributes:
+          - label: id
+            type: STRING
+            position: 0
+            description: |
+              Unique id of the movie in the form of a sanitised version of their title property.
+            searchRelevance: 0
+          - label: title
+            type: STRING
+            full_text: true
+            position: 10
+            searchRelevance: 2
+          - label: tagline
+            type: STRING
+            full_text: true
+            position: 20
+            dataSources:
+              - Simple data source
+          - label: genre
+            type: STRING
+            position: 25
+            searchRelevance: 0
+            description: |
+              This doesn't exist in the database, it is used purely for testing value lists
+          - label: released
+            type: DATE
+            position: 30
+            description: |
+              Year of release date of the movie. In the database it uses the date() type so all values are set on 1st of Jan of their release year.
+            dataSources:
+              - Simple data source
+      - label: Person
+        color: '#26A69A'
+        icon: person
+        attributes:
+          - label: id
+            type: STRING
+            position: 0
+            unique: true
+            searchRelevance: 0
+            description: |
+              Unique id of the person in the form of a sanitised version of their name property.
+            placeholder: |
+              Type the id of the person in full
+          - label: name
+            type: STRING
+            position: 10
+            unique: false
+            searchRelevance: 3
+            full_text: true
+            description: |
+              Name of the person
+          - label: born
+            type: DATE
+            position: 20
+            description: |
+              Year of birthdate of the person. In the database it uses the date() type so all values are set on 1st of Jan of their birth year.
+          - label: bornIn
+            type: STRING
+            position: 30
+            description: |
+              The place of birth of the Person.
+          - label: bornPosition
+            type: GEOSPATIAL
+            position: 40
+      - label: Genre
+        color: '#E66F0E'
+        icon: mdi-tag-text-outline
+        dataSources:
+          - Simple data source
+        attributes:
+          - label: name
+            type: STRING
+            unique: true
+            searchRelevance: 1
+            full_text: false
+            dataSources:
+              - Simple data source
+            description: |
+              The Genre of a Movie
+    relationships:
+      - label: ACTED_IN
+        start: Person
+        end: Movie
+        dataSources:
+          - Simple data source
+        attributes:
+          - label: id
+            type: STRING
+            position: 0
+            unique: true
+            description: |
+              Unique id for the relationship, generated as UUIDv4 in the database.
+            dataSources:
+              - Simple data source
+          - label: roles
+            type: STRING
+            list: 'true'
+            position: 10
+            description: |
+              List of roles played in that particular movie. An actor can play multiple roles in the same movie.
+            dataSources:
+              - Simple data source
+      - label: DIRECTED
+        start: Person
+        end: Movie
+        attributes: []
+      - label: PRODUCED
+        start: Person
+        end: Movie
+        attributes: []
+      - label: REVIEWED
+        start: Person
+        end: Movie
+        dataSources:
+          - Simple data source
+        attributes:
+          - label: summary
+            type: STRING
+            position: 0
+            dataSources:
+              - Simple data source
+      - label: IN_GENRE
+        start: Movie
+        end: Genre
+        attributes: []

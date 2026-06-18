@@ -1,0 +1,50 @@
+imports:
+  - ./resources
+  - ./secrets
+  - ./variables
+  - ./datasources
+  - ./movies
+removeOtherRoles: false
+removeOtherResources: false
+removeOtherPermissionGroups: false
+permissionGroups:
+  - name: ALERTING_VIEW_ALL
+    targetType: KNOWLEDGE_GRAPH
+    permissions:
+      - ALERT_VIEW
+      - ALERT_LIST_VIEW
+      - COLLECTION_VIEW
+      - COLLECTION_LIST_VIEW
+roles:
+  - name: ANALYST
+    acl:
+      read:
+        allowed: true
+        label: AnalystRead
+      write:
+        allowed: true
+        label: AnalystWrite
+      assignableByAnyUser: false
+  - name: SUPERVISOR
+  - name: INVESTIGATOR
+  - name: DRONE_TEAM
+    acl:
+      read:
+        allowed: true
+        label: DroneTeamRead
+      write:
+        allowed: true
+        label: DroneTeamWrite
+      assignableByAnyUser: true
+  - name: SPINE_OFFICER
+    acl:
+      assignableByAnyUser: false
+  - name: SPINE_ANALYST
+    acl:
+      read:
+        allowed: true
+        label: SPINE_ANALYST_R
+      write:
+        allowed: true
+        label: SPINE_ANALYST_W
+      assignableByAnyUser: false
