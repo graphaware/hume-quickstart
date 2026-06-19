@@ -111,6 +111,8 @@ To log into Neo4j Browser using Keycloak SSO, add the following to `/etc/hosts` 
 127.0.0.1 keycloak
 ```
 
+On **Windows**, edit `C:\Windows\System32\drivers\etc\hosts` as Administrator and add the same line.
+
 This is only needed if you want to authenticate to Neo4j Browser via Keycloak locally.
 
 Happy training!

@@ -12,17 +12,9 @@ spec:
         permissionGroup: MANAGER
       - role: ANALYST
         permissionGroup: EXPLORER
-      - role: ANALYST
-        permissionGroup: ALERTING_VIEW_ALL
   perspectives:
     - main-perspective
     - external-perspective
-  workflows:
-    - workflow-neo4j-basic
-  actions:
-    - movies-show-matrix-actors
-    - computed-score
-    - multiselected-nodes-table
   settings:
     - name: visualisationGeospatialEnabled
       value: true
@@ -38,10 +30,8 @@ spec:
       value: true
     - name: contextVariables
       value:
-        actors_board_id: $ref:action-board:Actors Board
         movies_resource_id: $ref:resource:neo4j-movies
         main_perspective_id: $ref:perspective:main-perspective
-        saved_queries_action_board_id_v2: $ref:action-board:Load & Save Queries Action Board V2
   schema:
     strict: true
     classes:
@@ -68,12 +58,6 @@ spec:
             position: 20
             dataSources:
               - Simple data source
-          - label: genre
-            type: STRING
-            position: 25
-            searchRelevance: 0
-            description: |
-              This doesn't exist in the database, it is used purely for testing value lists
           - label: released
             type: DATE
             position: 30

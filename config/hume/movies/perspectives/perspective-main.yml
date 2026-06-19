@@ -14,9 +14,8 @@ spec:
   resourceName: neo4j-movies-sso
   synced: true
   attributeConfigs:
-    - fqn: Movie$$genre
+    - fqn: Genre$$name
       valueList: Genres
-      inputTransformer: UPPER_CASE
     - fqn: Movie$$id
       filterable: false
     - fqn: Person$$id

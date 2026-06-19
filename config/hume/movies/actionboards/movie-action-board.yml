@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ActionBoard
 metadata:
-  name: actors-board
+  name: movie-action-board
   knowledge-graph: movies-kg
 spec:
-  label: 'Actors Board'
-  template: 'file://actors-board-template.html'
+  label: 'Movies Action Board'
+  template: 'file://movie-action-board-template.html'
   scope: GLOBAL
   perspective: main-perspective
   format: 2
