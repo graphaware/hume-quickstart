@@ -223,7 +223,7 @@ services:
     volumes:
       - "./config/neo4j/seed:/config"
   hume-config-cli:
-    image: docker.graphaware.com/hume-core/hume-config-cli:${HUME_VERSION}
+    image: docker.graphaware.com/hume-core/hume-config-cli:3.0.3-uc
     environment:
       - hume.admin.api.key=${API_KEY_SECRET}
       - hume.url=http://api:8080

@@ -3,6 +3,7 @@ imports:
   - ./secrets
   - ./variables
   - ./datasources
+  - ./upload-configs
   - ./movies
 removeOtherRoles: false
 removeOtherResources: false

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: UploadConfiguration
+metadata: {}
+spec:
+  name: "DEFAULT"
+  description: "The default upload configuration"
+  # fileExtensions: []
+  # maxFileSizeInBytes: 20000
+  # archived: false
