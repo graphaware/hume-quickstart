@@ -5,5 +5,5 @@ spec:
   name: "DEFAULT"
   description: "The default upload configuration"
   # fileExtensions: []
-  # maxFileSizeInBytes: 20000
+  # maxFileSizeInBytes: 10485760
   # archived: false
