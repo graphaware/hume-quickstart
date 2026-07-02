@@ -1,6 +1,6 @@
-# Hume Training Playground
+# Hume Quickstart
 
-Local Docker setup for following GraphAware Hume training materials.
+Local Docker setup for running Hume on your laptop — for local development, evaluation, and training.
 
 Runs Hume with Neo4j (Enterprise) and Keycloak (SSO) via Docker Compose.
 
@@ -17,17 +17,17 @@ Runs Hume with Neo4j (Enterprise) and Keycloak (SSO) via Docker Compose.
 **1. Clone the repository**
 
 ```bash
-git clone git@github.com:graphaware/hume-training-playground.git
-cd hume-training-playground
+git clone https://github.com/graphaware/hume-quickstart.git
+cd hume-quickstart
 ```
 
-**3. Log in to the GraphAware Docker registry**
+**2. Log in to the GraphAware Docker registry**
 
 ```bash
 docker login docker.graphaware.com
 ```
 
-**4. Configure your environment**
+**3. Configure your environment**
 
 ```bash
 cp .env.local .env
@@ -96,12 +96,11 @@ The `-v` flag removes named volumes. All data will be lost.
 
 ## Compose profiles
 
-`COMPOSE_FILE` in `.env` controls which services are started:
+`COMPOSE_FILE` in `.env` controls which services are started. The default is:
 
-| Profile | Value |
-|---------|-------|
-| Core + SSO (default) | `docker-compose.yml:docker-compose-sso.yml` |
-| Core + SSO + Alerting | `docker-compose.yml:compose/docker-compose-alerting.yml:docker-compose-sso.yml` |
+```
+COMPOSE_FILE=docker-compose.yml:docker-compose-sso.yml
+```
 
 ## Neo4j Browser SSO (optional)
 
@@ -133,7 +132,7 @@ sudo security add-trusted-cert -d -r trustRoot \
   certs/keycloak.pem
 ```
 
-Run this from the playground root directory. Restart Chrome after running it.
+Run this from the quickstart root directory. Restart Chrome after running it.
 
 **Permanent fix — Windows** (trusted for all profiles):
 
@@ -150,7 +149,7 @@ Happy training!
 
 Avoid modifying the compose files or anything under `config/`. All tuneable settings are exposed through `.env`, which is git-ignored and never overwritten by a pull.
 
-This means you can update to the latest playground version with a plain:
+This means you can update to the latest quickstart version with a plain:
 
 ```bash
 git pull

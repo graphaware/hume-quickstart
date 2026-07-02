@@ -21,7 +21,7 @@ services:
     image: docker.graphaware.com/hume-core/hume-web:${HUME_VERSION}
     environment:
       - HUME_API_URL=${HUME_ADVERTISED_ADDRESS}:${HUME_API_PORT:-8080}
-      - HUME_MEDIA_API_URL=http://localhost:8008/v1
+      - HUME_MEDIA_API_URL=http://localhost:8009/v1
     ports:
       - "${HUME_FRONT_PORT:-8081}:8081"
   api:
@@ -66,9 +66,9 @@ services:
   orchestra:
     image: docker.graphaware.com/hume-core/hume-orchestra:${HUME_VERSION}
     ports:
-      - 8100:8100
-      - 7001:7001 # metrics
-      - 8666:8666 # webhook
+      # Webhook endpoint — external systems call into Orchestra here.
+      # Orchestra itself (8100) is reached by the API over the Docker network and is not published.
+      - 8666:8666
     environment:
       <<: *keystore-env
       spring.datasource.url: jdbc:postgresql://postgres-orchestra:5435/orchestra
@@ -105,9 +105,6 @@ services:
     depends_on:
       postgres-eventstore:
         condition: service_healthy
-    ports:
-      - 8700:8080
-      - 9700:9090
     healthcheck:
       test: ["CMD", "sh", "-c", "exec 3<>/dev/tcp/localhost/8080 && echo 'UP' || exit 1"]
       interval: 2s
@@ -141,9 +138,6 @@ services:
       hume.media.storage.providers.local.path.uploaded: /media/ready
       hume.media.storage.providers.local.path.ready: /media/ready
       hume.media.notifications.event-store.enabled: "true"
-    ports:
-      - 8008:8008
-      - 7010:7001 # prometheus
     volumes:
       - "./data/media/files:/media"
     depends_on:
