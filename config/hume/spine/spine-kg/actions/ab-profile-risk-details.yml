@@ -1,0 +1,59 @@
+kind: Action
+metadata:
+  name: ab-profile-risk-details
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-risk-details
+  query: |-
+    MATCH path = (n:Person WHERE elementId(n) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH collect([n in nodes(path) WHERE n:Person | n.id]) AS paths
+
+    CALL(paths) {
+      UNWIND paths AS path
+      UNWIND path AS id
+      RETURN collect(distinct id) AS ids}
+
+    WITH ids
+    WITH COUNT{
+      MATCH (p:Person)-[:CHARGED_FOR]->(o)
+        WHERE p.id IN ids
+      RETURN distinct o
+      } AS offences,
+
+      COLLECT{
+      MATCH (p:Person)-[:CHARGED_FOR]->(o)
+        WHERE p.id IN ids
+      WITH o.primaryType AS crimeType, count(distinct o) AS crimeFreq
+      ORDER BY crimeFreq DESC
+      RETURN {type: crimeType, freq: crimeFreq}
+      LIMIT 3
+      } AS crimeTypes
+
+    WITH distinct apoc.text.format(
+      '<div style="text-align:center;min-width:180px;"><div style="font-size:16px; font-weight:600; margin-bottom:8px;">%s</div>
+        <div style="color: #D30000;font-size:50px;font-weight:bold;margin-bottom: 0.2em;line-height:1;">%s</div></div>',
+      ["Related Offences", offences]
+    ) AS totalOffences,
+    '<div style="min-width:200px;"><div style="font-size:16px; font-weight:600; margin-bottom:8px;">Top Offences</div>' +
+    '<table class="operators-info">' + apoc.text.join([i in range(0, size(crimeTypes)-1) | apoc.text.format('<tr><td>%s</td><td><b>%s</b></td></tr>', [crimeTypes[i].type, crimeTypes[i].freq])], "")
+    +'</table></div>' AS topOffences
+
+    RETURN apoc.text.format('<div style="display:flex; gap:25px; justify-content:center;align-items: flex-start; font-family: Arial, sans-serif;">%s</div>', [totalOffences + topOffences]) AS html
+  returnType: HTML
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

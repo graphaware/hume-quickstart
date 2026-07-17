@@ -1,0 +1,20 @@
+kind: Action
+metadata:
+  name: reoffending-following-prison-release
+  knowledge-graph: SPINE
+spec:
+  label: Reoffending following prison release
+  description: "The action displays people who, after serving time in prison and being released on parole, have committed a further crime."
+  query: |-
+    MATCH path = (offence:Offence)<-[:CHARGED_FOR]-(pol)-[:RESOLVED_TO]->(eg)<-[:RESOLVED_TO]-(hmps)-[:HAS_CUSTODY_STATUS]->(cs)
+      WHERE cs.paroleDate <= date(offence.occurredAt)
+
+    RETURN path
+  returnType: GRAPH
+  scope: GLOBAL
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

@@ -1,0 +1,64 @@
+kind: Action
+metadata:
+  name: phone-and-email-identifiers
+  knowledge-graph: SPINE
+spec:
+  label: Phone and Email Identifiers
+  description: Displays the Phone Number and Email Address associated with the selected Person. It collects information coming from DFEX and ELR sources.
+  query: |
+    MATCH (q:Person WHERE elementId(q) IN $_selection.nodeElementIds)
+
+    // get the associated phone numbers, either from DFEX or ELR
+    CALL (q) {
+      OPTIONAL MATCH (q)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+      (p:Person {source: "DFEX"})-[:OWNS_DEVICE]->(dev)-[:ASSOCIATED_WITH]->(ph)
+      RETURN distinct ph.phoneNumber AS number
+
+      UNION
+
+      OPTIONAL MATCH (q)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+      (p:Person {source: "ELR"})-[:OWNS_PHONE_NUMBER]->(ph)
+      RETURN distinct ph.phoneNumber AS number
+    }
+
+    WITH q, number
+      ORDER BY number
+    WITH q, collect(distinct number) AS numbers
+    WITH q, [x in numbers WHERE x is not null] AS numbers
+
+    // get the associated email addresses, either from DFEX or ELR
+    CALL (q) {
+      OPTIONAL MATCH (q)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+      (p:Person {source: "DFEX"})-[:OWNS_DEVICE]->(dev)-[:HAS_USER_IDENTIFIER]->(ui)-[:IS_EMAIL_ADDRESS]->(email)
+      RETURN distinct email.address AS address
+
+      UNION
+
+      OPTIONAL MATCH (q)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+      (p:Person {source: "ELR"})-[:OWNS_EMAIL_ADDRESS]->(email)
+      RETURN distinct email.address AS address
+    }
+
+    WITH numbers, address
+      ORDER BY address
+    WITH numbers, collect(distinct address) AS addresses
+    WITH numbers, [x in addresses WHERE x is not null] AS addresses
+
+    WITH {`Phone Numbers`: numbers, `Email Addresses`: addresses} AS info
+    UNWIND ['Phone Numbers', 'Email Addresses'] AS key
+
+    RETURN key AS ` `, apoc.text.join(info[key], "<br>") AS `  `
+  returnType: TABLE
+  scope: LOCAL
+  inclusions:
+    labels:
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

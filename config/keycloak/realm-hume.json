@@ -57,11 +57,11 @@
             }
         },
         {
-            "username": "analyst",
-            "email": "analyst@hume.ga",
+            "username": "tasha.l.moretti",
+            "email": "tasha.l.moretti@acme.corp",
             "emailVerified": true,
-            "firstName": "John",
-            "lastName": "Doe",
+            "firstName": "Tasha",
+            "lastName": "Moretti",
             "enabled": true,
             "credentials": [
                 {
@@ -71,18 +71,22 @@
             ],
             "clientRoles": {
                 "hume-web": [
-                    "ROLE_ANALYST",
+                    "SPINE_ANALYST",
+                    "SPINE_OFFICER",
                     "ROLE_WORKSPACES_SHARE"
                 ],
                 "neo4j-sso": [
-                    "analyst"
+                    "spine_analyst",
+                    "spine_officer"
                 ]
             }
         },
         {
-            "username": "investigator",
-            "email": "investigator@hume.ga",
+            "username": "jordan.r.callahan",
+            "email": "jordan.r.callahan@acme.corp",
             "emailVerified": true,
+            "firstName": "Jordan",
+            "lastName": "Callahan",
             "enabled": true,
             "credentials": [
                 {
@@ -92,11 +96,11 @@
             ],
             "clientRoles": {
                 "hume-web": [
-                    "ROLE_INVESTIGATOR",
+                    "SPINE_ANALYST",
                     "ROLE_WORKSPACES_SHARE"
                 ],
                 "neo4j-sso": [
-                    "investigator"
+                    "spine_analyst"
                 ]
             }
         }
@@ -115,20 +119,6 @@
                 {
                     "name": "ROLE_ADMINISTRATOR",
                     "description": "administrator role",
-                    "composite": false,
-                    "clientRole": true,
-                    "attributes": {}
-                },
-                {
-                    "name": "ROLE_ANALYST",
-                    "description": "analyst role",
-                    "composite": false,
-                    "clientRole": true,
-                    "attributes": {}
-                },
-                {
-                    "name": "ROLE_INVESTIGATOR",
-                    "description": "investigator role",
                     "composite": false,
                     "clientRole": true,
                     "attributes": {}
@@ -171,15 +161,15 @@
                     "attributes": {}
                 },
                 {
-                    "name": "analyst",
-                    "description": "neo4j analyst role",
+                    "name": "spine_analyst",
+                    "description": "spine analyst role",
                     "composite": false,
                     "clientRole": true,
                     "attributes": {}
                 },
                 {
-                    "name": "investigator",
-                    "description": "neo4j investigator role",
+                    "name": "spine_officer",
+                    "description": "spine officer role",
                     "composite": false,
                     "clientRole": true,
                     "attributes": {}

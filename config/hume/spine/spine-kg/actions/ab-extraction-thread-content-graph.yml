@@ -1,0 +1,75 @@
+kind: Action
+metadata:
+  name: ab-extraction-thread-content-graph
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-thread-content-graph
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_MESSAGE]->(m:Message)
+    MATCH messagePath = (m)-[:MESSAGE_BELONGS_TO]->(t)
+      WHERE n.id = $device
+      AND t.id = $threadId
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE m.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE m.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+      AND m.body IS NOT NULL
+
+    WITH n, t, m, messagePath
+
+    OPTIONAL MATCH contactIdentPath = (m)<-[:PARTY_IN_MESSAGE]-(ci:ContactIdentifier)
+    OPTIONAL MATCH phoneNumPath = (ci)-[:IS_PHONE_NUMBER]->(phoneNum)
+    OPTIONAL MATCH contactPath = (ci)<-[:WITH_CONTACT_IDENTIFIER]-(contact)
+    OPTIONAL MATCH userPath = (ci)<-[:HAS_USER_IDENTIFIER]-(n)
+
+    RETURN messagePath, contactIdentPath, phoneNumPath, contactPath, userPath
+  returnType: GRAPH
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  - name: threadId
+    label: Text
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

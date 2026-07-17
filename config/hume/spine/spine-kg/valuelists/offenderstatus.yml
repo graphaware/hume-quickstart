@@ -1,0 +1,34 @@
+kind: ValueList
+metadata:
+  name: OffenderStatus
+  knowledge-graph: SPINE
+spec:
+  label: OffenderStatus
+  type: STRING
+  data:
+  - value: PAROLE
+    label: PAROLE
+  - value: IN CUSTODY
+    label: IN CUSTODY
+  - value: RECEPTION
+    label: RECEPTION
+  - value: NON-HMPS CUSTODY
+    label: NON-HMPS CUSTODY
+  - value: ABSCONDER
+    label: ABSCONDER
+  - value: WORK RELEASE CUSTODY
+    label: WORK RELEASE CUSTODY
+  - value: WRIT
+    label: WRIT
+  - value: BOND
+    label: BOND
+  - value: TEMP RESIDENT
+    label: TEMP RESIDENT
+  - value: MEDICAL FURLOUGH
+    label: MEDICAL FURLOUGH
+  - value: DETAINER
+    label: DETAINER
+  - value: ESCAPE
+    label: ESCAPE
+  - value: DISCHARGED
+    label: DISCHARGED

@@ -1,0 +1,7 @@
+kind: DataSource
+metadata:
+  name: POL
+spec:
+  name: POL
+  neo4jLabel: POL
+  color: "#1E3894"

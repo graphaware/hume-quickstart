@@ -1,0 +1,26 @@
+kind: ValueList
+metadata:
+  name: Vehicle_colour
+  knowledge-graph: SPINE
+spec:
+  label: Vehicle_colour
+  type: STRING
+  data:
+  - value: DARK GREY
+    label: DARK GREY
+  - value: DARK BLUE
+    label: DARK BLUE
+  - value: BLACK
+    label: BLACK
+  - value: GREEN
+    label: GREEN
+  - value: GREY
+    label: GREY
+  - value: WHITE
+    label: WHITE
+  - value: SILVER
+    label: SILVER
+  - value: RED
+    label: RED
+  - value: BLUE
+    label: BLUE

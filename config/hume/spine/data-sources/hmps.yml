@@ -1,0 +1,7 @@
+kind: DataSource
+metadata:
+  name: HMPS
+spec:
+  name: HMPS
+  neo4jLabel: HMPS
+  color: "#C73426"

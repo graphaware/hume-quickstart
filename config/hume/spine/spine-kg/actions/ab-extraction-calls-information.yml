@@ -1,0 +1,130 @@
+kind: Action
+metadata:
+  name: ab-extraction-calls-information
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-calls-information
+  description: Displays call information aggregated by sender and recipient(s).
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_CALL]->(c:Call)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE c.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE c.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+
+    WITH n, c
+    CALL (n, c) {
+      OPTIONAL MATCH (c)<-[r:PARTY_IN_CALL]-(ci:ContactIdentifier)
+      OPTIONAL MATCH (ci)-[:IS_PHONE_NUMBER]->(phoneNum)
+      OPTIONAL MATCH (ci)<-[:WITH_CONTACT_IDENTIFIER]-(contact)
+
+      WITH distinct c, collect(distinct {
+          PhoneNumber: phoneNum.phoneNumber,
+          Contact: coalesce(contact.name, contact.account),
+          Identifier: coalesce(ci.identifier, ci.name),
+          InteractionType: r.type,
+          PhoneOwner: EXISTS {MATCH (n)-[:HAS_USER_IDENTIFIER]->(ci)}
+          }) AS participants
+      WITH c, [c IN participants where c.InteractionType= "MADE CALL"][0] AS sender, [c IN participants where c.InteractionType= "RECEIVED CALL"] AS recipients
+      RETURN
+        apoc.text.join([
+          item IN
+            [ (CASE WHEN sender.PhoneOwner = true
+                  THEN "Phone Owner"
+                ELSE null END),
+              (CASE WHEN sender.PhoneNumber IS NOT NULL
+                  THEN sender.PhoneNumber
+                ELSE sender.Identifier END),
+              (CASE WHEN sender.Contact IS NOT NULL AND sender.Contact <> coalesce(sender.PhoneNumber, sender.Identifier)
+                  THEN sender.Contact
+                ELSE null END)]
+           WHERE item IS NOT NULL
+         ], " - ") AS Sender,
+         [p in recipients | apoc.text.join([
+          item IN
+            [ (CASE WHEN p.PhoneOwner = true
+                  THEN "Phone Owner"
+                ELSE null END),
+              (CASE WHEN p.PhoneNumber IS NOT NULL
+                  THEN p.PhoneNumber
+                ELSE p.Identifier END),
+              (CASE WHEN p.Contact IS NOT NULL AND p.Contact <> coalesce(p.PhoneNumber, p.Identifier)
+                  THEN p.Contact
+                ELSE null END)]
+           WHERE item IS NOT NULL
+         ], " - ")] AS Recipients
+      }
+
+    WITH coalesce(c.appSource, "-") AS `Source App`, Sender, Recipients, collect(distinct c) AS calls, collect(distinct c.id) AS callIds
+    WITH `Source App`, Sender, Recipients, calls, callIds, apoc.coll.sum([z in calls WHERE z.duration IS NOT NULL |
+          duration.inSeconds(time("00:00:00"), time(z.duration)).seconds
+        ]) AS callTime,
+      apoc.coll.max([c in calls WHERE c.timestamp IS NOT null | apoc.temporal.format( c.timestamp, 'YYYY-MM-dd HH:mm:ss Z')]) AS `Latest Call`,
+      size(calls) as callCount
+
+    WITH `Source App`, coalesce(Sender, "-") AS Sender,
+      (CASE WHEN size(Recipients) > 1
+          THEN "<li>" + apoc.text.join(Recipients, "</li><li>") + "</li>"
+        WHEN size(Recipients) = 1
+          THEN Recipients[0]
+        ELSE "-" END) AS Recipients, calls, callIds, callCount, `Latest Call`, duration({seconds: coalesce(callTime, 0)}) as tT
+    ORDER BY `Latest Call` DESC
+
+    WITH *, tT,
+      CASE WHEN tT.hours > 0           THEN "%dH "   ELSE "" END +
+      CASE WHEN tT.minutesOfHour > 0   THEN "%02dM " ELSE "" END +
+      CASE WHEN tT.secondsOfMinute > 0 THEN "%02dS"  ELSE "" END as timeString,
+
+      [x in [
+        tT.hours,
+        tT.minutesOfHour,
+        tT.secondsOfMinute
+        ] WHERE x > 0
+      ] as timeVals
+    WITH *, apoc.text.format(timeString, timeVals) as callTime
+    WITH *, (CASE WHEN size(callTime) = 0 THEN "00S" ELSE callTime END) AS callTime
+    RETURN Sender, Recipients, `Source App`, callCount AS `Number of Calls`, callIds, `Latest Call`, callTime AS `Call Time`
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

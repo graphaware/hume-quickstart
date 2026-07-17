@@ -1,0 +1,19 @@
+kind: Action
+metadata:
+  name: individuals-at-risk-through-offender-associations
+  knowledge-graph: SPINE
+spec:
+  label: Individuals at risk through offender associations
+  description: |-
+    Displays non-offenders who are connected to offenders through direct social/family relationships or phone-based contacts.
+
+    Risk Score is calculated as the number of distinct offenders associated with each individual.
+  query: "CALL (){\n  MATCH (friend:Person {source: \"ELR\"})-[:KNOWS|FAMILY_MEMBER|PARENT_OF]-(ELRoffender)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-(POLOffender{source: \"POL\"})-[:CHARGED_FOR]->(o)\n    WHERE NOT EXISTS {(friend)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-({source: \"POL\"})-[:CHARGED_FOR]->()}\n\n  RETURN friend.id AS id,\n    friend.fullName AS fullName,\n    o.id AS crimeId,\n    POLOffender.id AS offenderId, POLOffender.fullName AS offenderDetails,\n    \"direct association\" AS type\n\n  UNION\n\n  MATCH (o:Offence)<-[:CHARGED_FOR]-(POLOffender)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-(DFEXPerson)-[:OWNS_DEVICE]-()-[:HAS_CALL|HAS_MESSAGE|HAS_CONTACT]->()-[:WITH_PHONE_NUMBER|PARTY_IN_MESSAGE|PARTY_IN_CALL]-(ph)\n  MATCH (ph)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-({source: \"ELR\"})<-[:OWNS_PHONE_NUMBER]-(friend)\n    WHERE NOT EXISTS {(friend)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-({source: \"POL\"})-[:CHARGED_FOR]->()}\n\n  RETURN friend.id AS id,\n    friend.fullName AS fullName,\n    o.id AS crimeId,\n    POLOffender.id AS offenderId, POLOffender.fullName AS offenderDetails,\n    \"phone contact\" AS type\n}\nWITH distinct id, fullName, offenderId, offenderDetails, collect(distinct type) AS types\nWITH id, fullName, collect(distinct {offenderId: offenderId, offenderDetails: offenderDetails, types: apoc.text.join(types, \",\")}) AS associations\nWITH *, size(associations) AS riskScore\n  ORDER BY riskScore DESC\nLIMIT 20\n\nWITH *,\n  (CASE WHEN riskScore = 0 THEN '#03D200'\n        WHEN riskScore < 2 THEN '#FFDE21'\n        WHEN riskScore < 4 THEN '#FFA900'\n        ELSE '#FF0000' END\n\t) AS riskScore_color\n\nRETURN //id,\n  fullName AS `Name`, apoc.text.format(\n  '<div style=\"\n      background-color:%s;width:40px;height:28px;display:table-cell;vertical-align:middle;text-align:center;font-weight:bold;border-radius:4px;\n  \">%s</div>',\n  [riskScore_color + '80', riskScore]\n) AS `Risk Score`,\n  apoc.text.join([x IN associations | apoc.text.join([x.offenderDetails, \"<i>\" + x.types + \"</i>\"], \" - \")], \"<br>\") AS `Connections with Offenders`"
+  returnType: TABLE
+  scope: GLOBAL
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

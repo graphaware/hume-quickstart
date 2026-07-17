@@ -171,6 +171,10 @@ docker compose up -d
 
 Check the Hume release notes before upgrading for any breaking changes or required migration steps.
 
+## Installing the SPINE demo
+
+See [SPINE.md](SPINE.md) for instructions on downloading and installing the SPINE demo database.
+
 ---
 
 Copyright &copy; 2026 GraphAware Limited. All rights reserved.

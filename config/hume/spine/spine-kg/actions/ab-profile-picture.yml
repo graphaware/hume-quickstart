@@ -1,0 +1,45 @@
+kind: Action
+metadata:
+  name: ab-profile-picture
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-picture
+  query: |-
+    MATCH path = (n:Person WHERE elementId(n) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH collect(distinct [n in nodes(path) WHERE n:Person:HMPS | n]) AS person
+    WITH apoc.coll.flatten(person)[0] AS p
+    WITH (CASE WHEN p.gender = "MALE" THEN
+        (CASE WHEN p.race = "BLACK" THEN "black+man.jpg"
+          WHEN p.race = "WHITE" THEN "white+man.jpg"
+          ELSE "hispanic+man.jpg" END)
+      WHEN p.gender = "FEMALE" THEN
+        (CASE WHEN p.race = "BLACK" THEN "black+woman.jpg"
+          WHEN p.race = "WHITE" THEN "white+woman.jpg"
+          ELSE "hispanic+woman.jpg" END)
+      END) AS pictureName
+
+    WITH [$_context.variables.pictures_bucket_prefix + pictureName] AS pictures
+
+    WITH
+      reduce( picturesHtml = "", pic in pictures | picturesHtml + '<img src="' + pic + '" alt="" border="0" style="height:280px; object-fit:contain; margin:5px;">')
+      AS html
+
+    RETURN '<div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">' + html + '</div>' AS html
+  returnType: HTML
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

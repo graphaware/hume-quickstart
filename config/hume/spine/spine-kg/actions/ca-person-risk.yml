@@ -1,0 +1,17 @@
+kind: Action
+metadata:
+  name: ca-person-risk
+  knowledge-graph: SPINE
+spec:
+  label: CA-person-risk
+  query: "MATCH (n:Person)\n  WHERE elementId(n) = $elementId\n\nWITH n, COUNT{\n  MATCH (n)-[:CHARGED_FOR]->(offence)\n  RETURN distinct offence\n} AS riskScore\n\nRETURN elementId(n) AS id, riskScore AS riskScore "
+  returnType: GRAPH
+  scope: COMPUTED_ATTRIBUTE
+  inclusions:
+    labels:
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

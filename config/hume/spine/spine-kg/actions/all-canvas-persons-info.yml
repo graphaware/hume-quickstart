@@ -1,0 +1,15 @@
+kind: Action
+metadata:
+  name: all-canvas-persons-info
+  knowledge-graph: SPINE
+spec:
+  label: all canvas persons info
+  query: "WITH [x IN $_canvas.nodes WHERE 'Person' = x.class] AS persons\nUNWIND persons AS person\nMATCH (n:Person)\nWHERE elementId(n) = person.elementId\nMATCH (n)-[r:CHARGED_FOR|PARTY_IN|RECEIVED]->(e)\nWITH CASE\n        WHEN 'Arrest' IN labels(e) THEN 'arrest'\n        WHEN 'JudicialSentence' IN labels(e) THEN 'sentencing'\n        WHEN 'Offence' IN labels(e) THEN 'offence'\n        ELSE ''\n        END AS eventType,\nCASE\n        WHEN 'Arrest' IN labels(e) THEN e.occurredAt\n        WHEN 'JudicialSentence' IN labels(e) THEN datetime({year: e.custodyDate.year, month: e.custodyDate.month, day: e.custodyDate.day})\n        WHEN 'Offence' IN labels(e) THEN e.occurredAt\n        ELSE ''\n        END AS eventDate,\ne.caseNumber AS caseId,\nCASE\n        WHEN 'Arrest' IN labels(e) THEN r.ageAtOccurrence\n        WHEN 'JudicialSentence' IN labels(e) THEN e.custodyDate.year - n.birthDate.year\n        WHEN 'Offence' IN labels(e) THEN  e.occurredAt.year - apoc.coll.max(n.birthYears)\n        ELSE ''\n        END AS ageAtOccurrence,\nCASE\n  WHEN 'Offence' IN labels(e) THEN apoc.text.join([e.primaryType, e.secondaryType], ',')\n  WHEN 'JudicialSentence' IN labels(e) THEN apoc.text.join([e.offence, e.sentence], ',')\n  WHEN 'Arrest' IN labels(e) THEN apoc.text.join([apoc.text.join(e.charges, ' - ')], ',')\n  END AS info\n\nORDER BY eventDate ASC\nWITH eventType, toString(eventDate) AS eventDate, caseId, ageAtOccurrence, info\nRETURN eventType, CASE WHEN eventDate ENDS WITH 'UTC]' THEN eventDate ELSE eventDate + '[UTC]' END AS eventDate, caseId, ageAtOccurrence, info "
+  returnType: TABLE
+  scope: GLOBAL
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

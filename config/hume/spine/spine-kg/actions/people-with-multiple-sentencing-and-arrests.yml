@@ -1,0 +1,23 @@
+kind: Action
+metadata:
+  name: people-with-multiple-sentencing-and-arrests
+  knowledge-graph: SPINE
+spec:
+  label: people with multiple sentencing and arrests
+  query: |-
+    MATCH (n:Person {source: "CPD"})
+    WHERE COUNT { (n)-[:PARTY_IN]->() } > 4
+    MATCH (o:Person {source: "IDOC"})
+    WHERE o.firstName = n.firstName AND o.lastName = n.lastName
+    AND o.birthDate.year IN n.birthYears
+    AND COUNT { (o)-[:RECEIVED]->() } > 2
+    RETURN n, o
+    LIMIT 50
+  returnType: GRAPH
+  scope: UTILITY
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

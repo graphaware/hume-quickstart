@@ -1,0 +1,24 @@
+kind: Action
+metadata:
+  name: expand-info-about-ccr-imported-phone-numbers
+  knowledge-graph: SPINE
+spec:
+  label: Expand info about CCR imported phone numbers
+  description: Expand phone numbers on the canvas by retrieving their owners and the associated devices.
+  query: |-
+    MATCH (p:PhoneNumber)
+      WHERE elementId(p) IN $_canvas.nodeElementIds
+    MATCH personPath = (p)<-[:OWNS_PHONE_NUMBER]-(person)
+      ((:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-()) {0, 1}
+      (i:Person)
+    OPTIONAL MATCH phonePath = (i)-[:OWNS_DEVICE]->()
+    RETURN personPath, phonePath
+  returnType: GRAPH
+  scope: GLOBAL
+  inclusions: {}
+  actionType: CYPHER
+  httpApiResource: spine-http-api
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

@@ -1,0 +1,97 @@
+kind: Action
+metadata:
+  name: ab-extraction-phone-number-interacted-with
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-phone-number-interacted-with
+  description: Displays the total number of interactions (messages or calls) associated with a given phone number.
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS NULL THEN NULL ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN NULL ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_CALL|HAS_MESSAGE]->(c)<-[:PARTY_IN_MESSAGE|PARTY_IN_CALL]-(ci:ContactIdentifier)-[:IS_PHONE_NUMBER]->(ph)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE c.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+      AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE c.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+
+    WITH n, ci, ph, collect(c) AS interactions
+    WITH n, ci, ph, [x in interactions WHERE x:Call] AS phoneCalls, [x in interactions WHERE x:Message] AS messages
+
+    CALL (ci, ph) {
+      OPTIONAL MATCH (ci)-[:IS_PHONE_NUMBER]->(ph)<-[:WITH_PHONE_NUMBER]-(contact)
+      WITH distinct ci, collect(distinct {PhoneNumber: ph.phoneNumber, Contact: contact.name, Identifier: coalesce(ci.identifier, ci.name)})[0] AS Contact
+      RETURN
+        apoc.text.join([
+          item IN
+            [(CASE WHEN Contact.PhoneNumber IS NOT NULL THEN Contact.PhoneNumber
+                ELSE Contact.Identifier END),
+              (CASE WHEN Contact.Contact IS NOT NULL AND Contact.Contact <> Contact.PhoneNumber THEN Contact.Contact
+                ELSE null END)]
+           WHERE item IS NOT NULL
+         ], " - ") AS Contact
+      }
+
+    WITH ci.id AS contactIdentifierId, Contact, phoneCalls, messages, apoc.coll.sum([z in phoneCalls WHERE z.duration IS NOT NULL |
+          duration.inSeconds(time("00:00:00"), time(z.duration)).seconds
+        ]) AS callTime
+
+    WITH *, duration({seconds: coalesce(callTime, 0)}) AS tT
+
+    WITH *, tT,
+      CASE WHEN tT.hours > 0           THEN "%dH "   ELSE "" END +
+      CASE WHEN tT.minutesOfHour > 0   THEN "%02dM " ELSE "" END +
+      CASE WHEN tT.secondsOfMinute > 0 THEN "%02dS"  ELSE "" END AS timeString,
+
+      [x in [
+        tT.hours,
+        tT.minutesOfHour,
+        tT.secondsOfMinute
+        ] WHERE x > 0
+      ] as timeVals
+    WITH *, coalesce(apoc.text.format(timeString, timeVals), "-") as callTime
+    RETURN Contact, size(messages) AS messages, size(phoneCalls) AS phoneCalls,
+      (CASE WHEN size(callTime) = 0 THEN "00S" ELSE callTime END) AS callTime,
+      contactIdentifierId
+    ORDER BY messages + phoneCalls DESC
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

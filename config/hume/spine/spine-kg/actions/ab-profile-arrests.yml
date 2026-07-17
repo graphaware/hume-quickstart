@@ -1,0 +1,32 @@
+kind: Action
+metadata:
+  name: ab-profile-arrests
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-arrests
+  query: |-
+    MATCH path = (p:Person WHERE elementId(p) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH [n in nodes(path) WHERE n:Person] as linkedPeople
+    UNWIND linkedPeople AS person
+      MATCH (person)-[:PARTY_IN]->(a:Arrest)
+      RETURN distinct a.custodyBookingNumber AS custodyBookingNumber, a.caseNumber AS caseNumber, a.charges AS charges, a.occurredAt AS occurredAt
+
+      ORDER BY occurredAt
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

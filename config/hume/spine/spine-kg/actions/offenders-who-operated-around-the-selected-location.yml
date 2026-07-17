@@ -1,0 +1,56 @@
+kind: Action
+metadata:
+  name: offenders-who-operated-around-the-selected-location
+  knowledge-graph: SPINE
+spec:
+  label: Offenders who operated around the selected location
+  description: |-
+    Displays Offences committed nearby the selected one and their perpetrators.
+
+    <br>
+
+    **Selection:**
+
+    *   **Offence**: the offence that serves as the center of this analysis.
+
+    <br>
+
+    **Parameters:**
+
+    *   **Radius to consider** (in kms): Select the kilometres representing the radius of the selected area.
+  query: |-
+    MATCH (o:Offence)
+      WHERE elementId(o) IN $_selection.nodeElementIds
+      AND o.location IS NOT NULL
+    WITH o, o.location AS center
+
+    MATCH offences = (q:Offence)-[:CHARGED_FOR]-(offender) //-[:CHARGED_FOR*0..1]-()
+      WHERE q.location is not null
+      AND point.distance(q.location, center)<= $radius * 1000
+
+    WITH o, offences, offender, q
+    ORDER BY q.occurredAt DESC
+    LIMIT 1000
+
+    WITH *
+    OPTIONAL MATCH eg = (offender)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-()
+    RETURN o, offences, eg
+  returnType: GRAPH
+  scope: LOCAL
+  inclusions:
+    labels:
+    - Offence
+  inputParameters:
+  - name: radius
+    label: Radius to consider (in kms)
+    type: FLOAT
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+    viewMode: MAP
+  httpActionIncludeCanvasInPayload: false

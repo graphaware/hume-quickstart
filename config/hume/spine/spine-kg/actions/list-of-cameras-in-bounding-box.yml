@@ -1,0 +1,57 @@
+kind: Action
+metadata:
+  name: list-of-cameras-in-bounding-box
+  knowledge-graph: SPINE
+spec:
+  label: List of cameras in bounding box
+  description: |-
+    Return the ANPR cameras on the canvas. This is useful to request warrant data for specific cameras.
+
+    <br>
+
+    **Parameters:**
+
+    *   **Date From**: start date from which camera events are requested.
+    *   **Date To**: end date for camera events.
+  query: |-
+    WITH
+      point({
+        latitude: $_context.mapBounds.bounds[0][0],
+        longitude: $_context.mapBounds.bounds[0][1]
+        }) AS lowerLeft,
+      point({
+        latitude: $_context.mapBounds.bounds[1][0],
+        longitude: $_context.mapBounds.bounds[1][1]
+        }) AS upperRight
+
+    MATCH (a:ANPRCamera)
+    WHERE point.withinBBox(a.location, lowerLeft, upperRight)
+
+    RETURN a.name AS `Camera Id`, a.locationDescription AS `Camera Location`, $dateFrom AS `Date From`, $dateTo AS `Date To`
+  returnType: TABLE
+  scope: MAP_CURSOR
+  inclusions: {}
+  inputParameters:
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  defaultValuesResolver:
+    type: CYPHER
+    params:
+      query: "MATCH (o:Offence)\n  WHERE elementId(o) IN $_canvas.nodeElementIds\n  AND NOT EXISTS ( (o)-[:CHARGED_FOR]-() )\n\nRETURN min(date(o.occurredAt))-duration({days:1}) AS dateFrom, max(date(o.occurredAt)) AS dateTo "
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

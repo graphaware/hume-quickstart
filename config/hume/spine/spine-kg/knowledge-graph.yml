@@ -1,0 +1,3323 @@
+kind: KnowledgeGraph
+metadata:
+  name: SPINE
+  knowledge-graph: SPINE
+spec:
+  label: SPINE
+  strictness:
+    schema: true
+    perspectives: true
+    actions: true
+    patterns: false
+    alerts: false
+    collections: false
+    styles: false
+    grouping: true
+  access:
+    strict: false
+    rules:
+    - role: SPINE_ANALYST
+      permissionGroup: EXPLORER
+    - role: SPINE_OFFICER
+      permissionGroup: EXPLORER
+  schema:
+    strict: true
+    identity:
+      identityAttribute: id
+      classIdentityTemplate: ID.$schema_label.$uuid
+      relationshipIdentityTemplate: ID.$schema_label.$uuid
+    classes:
+    - label: ANPRHit
+      color: "#757575"
+      icon: mdi-camera-enhance-outline
+      canvasPosition:
+        x: -818
+        "y": -912
+      dataSources:
+      - ANPR
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - ANPR
+        list: false
+      - label: cameraId
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - ANPR
+        list: false
+      - label: cameraLocation
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - ANPR
+        list: false
+      - label: position
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - ANPR
+        list: false
+      - label: occurredAt
+        type: DATE
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - ANPR
+        list: false
+      - label: direction
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - ANPR
+        list: false
+      - label: alertFlag
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - ANPR
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - ANPR
+        list: false
+    - label: Call
+      color: "#50b131"
+      icon: call
+      canvasPosition:
+        x: 16
+        "y": -690
+      description: "Represents a Call entry originating from a communication application such as Signal, FaceTime, WhatsApp, and others."
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: status
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: timestamp
+        type: DATE
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: duration
+        type: INTEGER
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: countryCode
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: videoCall
+        type: BOOLEAN
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+      - label: networkName
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: serviceIdentifier
+        type: STRING
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: extractSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 12
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 13
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 14
+        dataSources:
+        - DFEX
+        list: false
+      - label: cellTowerPosition
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 15
+        list: false
+      - label: cellTowerId
+        type: STRING
+        full_text: false
+        unique: false
+        position: 16
+        list: false
+    - label: CellTower
+      color: "#FF580A"
+      icon: mdi-transmission-tower
+      canvasPosition:
+        x: -221
+        "y": 278
+      description: "Represents a cell tower, resolved using MCC, MNC, LAC, and CID identifiers."
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: CID
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: MNC
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: MCC
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: position
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: LAC
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+    - label: Contact
+      color: "#2491FF"
+      icon: mdi-contacts
+      canvasPosition:
+        x: 337
+        "y": -153
+      description: Represents an entry in the device's phone **Contact** list.
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: name
+        type: STRING
+        full_text: true
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: account
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: interactionStatuses
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: timeCreated
+        type: DATE
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: timeModified
+        type: DATE
+        full_text: false
+        unique: false
+        position: 10
+        dataSources:
+        - DFEX
+        list: false
+      - label: webAddress
+        type: STRING
+        full_text: false
+        unique: false
+        position: 18
+        dataSources:
+        - DFEX
+        list: false
+      - label: streetAddress
+        type: STRING
+        full_text: false
+        unique: false
+        position: 19
+        dataSources:
+        - DFEX
+        list: false
+      - label: city
+        type: STRING
+        full_text: false
+        unique: false
+        position: 20
+        dataSources:
+        - DFEX
+        list: false
+      - label: zipCode
+        type: STRING
+        full_text: false
+        unique: false
+        position: 21
+        dataSources:
+        - DFEX
+        list: false
+      - label: country
+        type: STRING
+        full_text: false
+        unique: false
+        position: 22
+        dataSources:
+        - DFEX
+        list: false
+      - label: state
+        type: STRING
+        full_text: false
+        unique: false
+        position: 23
+        dataSources:
+        - DFEX
+        list: false
+      - label: organization
+        type: STRING
+        full_text: false
+        unique: false
+        position: 24
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 25
+        dataSources:
+        - DFEX
+        list: false
+    - label: ContactIdentifier
+      color: "#E41D3D"
+      icon: mdi-identifier
+      canvasPosition:
+        x: 360
+        "y": -689
+      description: |-
+        Represents an identifier associated with a contact within a specific application (e.g. an Instagram or Telegram user ID).
+
+        A contact can be linked to multiple identifiers, each representing the identifier used by a different application.
+
+        When the identifier is a phone number or an email address, a **PhoneNumber** or **EmailAddress** entity is created and linked to it.
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: identifier
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: category
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: name
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+      - label: isPhoneOwner
+        type: BOOLEAN
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+    - label: CorrectionalFacility
+      color: "#776017"
+      icon: mdi-office-building-marker-outline
+      canvasPosition:
+        x: -492
+        "y": 112
+      dataSources:
+      - HMPS
+      attributes:
+      - label: name
+        type: STRING
+        full_text: true
+        unique: false
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 2
+        dataSources:
+        - HMPS
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - HMPS
+        list: false
+    - label: CustodyStatus
+      color: "#074B69"
+      icon: mdi-badge-account-horizontal
+      canvasPosition:
+        x: -662
+        "y": -116
+      dataSources:
+      - HMPS
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - HMPS
+        list: false
+      - label: offenderStatus
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          *   **PAROLE** – The person has been released to community supervision (parole/Mandatory Supervised Release) and remains in HMPS’s legal custody until final discharge.
+          *   **IN CUSTODY** – The person is currently confined under HMPS control (e.g., in a state prison/center) rather than in the community.
+          *   **RECEPTION** – Newly admitted (or returned) and in the Reception & Classification process before permanent placement.
+          *   **WORK RELEASE CUSTODY** – The person is housed at an Adult Transition Center (ATC) and allowed to work in the community under strict supervision; they are still in HMPS custody.
+          *   **ABSCONDER** – Typically a parolee who has willfully evaded supervision/whereabouts unknown; a warrant may be issued and HMPS can seek extradition.
+          *   **NON-HMPS CUSTODY** – The person is not physically in an HMPS facility but is held by another authority (e.g., county jail, another state, or federal) while HMPS still lists them.
+          *   **BOND** – Indicates the person is/was held on court-ordered bond (usually in county custody pretrial).
+          *   **WRIT** – Temporarily “out to court” under a writ of habeas corpus (e.g., _ad prosequendum_ or _ad testificandum_) to appear or testify, then returned to the holding authority.
+          *   **TEMP RESIDENT** – Used for short-term/temporary placement at a facility (e.g., pending transfer, classification, or court movement). HMPS doesn’t publish a formal public definition; this is the common operational meaning. (Inferred from HMPS usage patterns and movement statuses.)
+          *   **MEDICAL FURLOUGH** – A temporary leave from secure custody for limited medical purposes, authorized under HMPS rules.
+          *   **ESCAPE** – The person has unlawfully left custody/supervision; they are considered a fugitive until apprehended.
+          *   **DETAINER** – Another jurisdiction has lodged a legal “hold” for pending charges or proceedings; it can prevent release until that matter is resolved (governed by the Agreement on Detainers).
+          *   **DISCHARGED** – The person has completed their custodial sentence (including any applicable parole period) and is no longer subject to prison or probation supervision; they are fully released and free from sentence obligations.
+        position: 3
+        dataSources:
+        - HMPS
+        list: false
+      - label: admissionDate
+        type: DATE
+        full_text: false
+        unique: false
+        description: The official date an individual was received into custody or began serving their sentence.
+        position: 6
+        dataSources:
+        - HMPS
+        list: false
+      - label: paroleDate
+        type: DATE
+        full_text: false
+        unique: false
+        description: The confirmed or scheduled date on which the inmate is expected to be released on parole.
+        position: 7
+        dataSources:
+        - HMPS
+        list: false
+      - label: projectedParoleDate
+        type: DATE
+        full_text: false
+        unique: false
+        description: "The estimated date when the inmate becomes eligible for parole consideration or supervised release, pending approval."
+        position: 8
+        dataSources:
+        - HMPS
+        list: false
+      - label: projectedDischargeDate
+        type: DATE
+        full_text: false
+        unique: false
+        description: "The estimated date when the inmate’s sentence will be fully completed, ending all custody and supervision obligations."
+        position: 9
+        dataSources:
+        - HMPS
+        list: false
+      - label: currentFacility
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          The name of the facility where the individual is currently detained.
+
+          This property is populated only when the individual’s status is one of the following: "IN CUSTODY", "RECEPTION", "TEMP RESIDENT", "BOND" or "DETAINER".
+        position: 14
+        dataSources:
+        - HMPS
+        list: false
+    - label: DeviceExtraction
+      color: "#936F38"
+      icon: perm_device_info
+      canvasPosition:
+        x: 22
+        "y": -3
+      dataSources:
+      - DFEX
+      attributes:
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 15
+        dataSources:
+        - DFEX
+        list: false
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 16
+        dataSources:
+        - DFEX
+        list: false
+      - label: name
+        type: STRING
+        full_text: false
+        unique: false
+        position: 21
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 22
+        dataSources:
+        - DFEX
+        list: false
+    - label: EmailAddress
+      color: "#00A871"
+      icon: mdi-email
+      canvasPosition:
+        x: 359
+        "y": -926
+      description: |-
+        Represents an email address.
+
+        In DFEX source, this represents a ContactIdentifier explicitly marked as EmailAddress in the phone extraction.
+      dataSources:
+      - DFEX
+      - ELR
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: identifier
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: name
+        type: STRING
+        full_text: true
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: address
+        type: STRING
+        full_text: true
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: egId
+        type: STRING
+        full_text: false
+        unique: false
+        description: Computed attribute used for grouping purposes. This attribute is shared between the EntityGroup and the entities it contains.
+        position: 8
+        list: false
+    - label: EntityGroup
+      color: "#CF4900"
+      icon: mdi-vector-link
+      canvasPosition:
+        x: -396
+        "y": -410
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        list: false
+      - label: egId
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        list: false
+      - label: entityGroupType
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        list: false
+    - label: Event
+      color: "#5C410A"
+      icon: mdi-handcuffs
+      canvasPosition:
+        x: -1140
+        "y": -406
+      dataSources:
+      - POL
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      - label: Arrest
+        type: NODE_LABEL
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - POL
+        list: false
+      - label: occurredAt
+        type: DATE
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - POL
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - POL
+        list: false
+      - label: caseNumber
+        type: STRING
+        full_text: true
+        unique: false
+        position: 10
+        dataSources:
+        - POL
+        list: false
+    - label: File
+      color: "#00A398"
+      icon: mdi-file-outline
+      canvasPosition:
+        x: 633
+        "y": 61
+      description: "Represents a File attached to a message (e.g. video, photo, audio, document)."
+      dataSources:
+      - DFEX
+      attributes:
+      - label: title
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: url
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: filePath
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+      - label: contentType
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: pathOnDevice
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: fileName
+        type: STRING
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 10
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 11
+        dataSources:
+        - DFEX
+        list: false
+    - label: Journey
+      color: "#8a94f4"
+      icon: mdi-abugida-thai
+      canvasPosition:
+        x: 138
+        "y": 286
+      description: "Represents a journey recorded by a Maps, Fitness, or Messaging application."
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: name
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: account
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+      - label: startTime
+        type: DATE
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: endTime
+        type: DATE
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: position
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: elevation
+        type: STRING
+        full_text: false
+        unique: false
+        position: 11
+        dataSources:
+        - DFEX
+        list: false
+      - label: timestamp
+        type: DATE
+        full_text: false
+        unique: false
+        position: 12
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        full_text: false
+        unique: false
+        position: 13
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 14
+        dataSources:
+        - DFEX
+        list: false
+    - label: JudicialSentence
+      color: "#0B4B3F"
+      icon: mdi-hammer
+      canvasPosition:
+        x: -493
+        "y": -172
+      dataSources:
+      - HMPS
+      attributes:
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          *   **POL**: London Police Department
+          *   **HMPS**: His Majesty's Prison Service
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 2
+        dataSources:
+        - HMPS
+        list: false
+      - label: offence
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - HMPS
+        list: false
+      - label: sentence
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - HMPS
+        list: false
+      - label: custodyDate
+        type: DATE
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - HMPS
+        list: false
+    - label: LicencePlate
+      color: "#C2850C"
+      icon: mdi-car-2-plus
+      canvasPosition:
+        x: -551
+        "y": -912
+      dataSources:
+      - POL
+      - ANPR
+      attributes:
+      - label: id
+        type: STRING
+        full_text: true
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        - ANPR
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - POL
+        - ANPR
+        list: false
+    - label: Location
+      color: "#00A91C"
+      icon: edit_location
+      canvasPosition:
+        x: -875
+        "y": -680
+      dataSources:
+      - POL
+      - ELR
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: streetName
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: zip
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: city
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: state
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: streetNumber
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: position
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      - label: name
+        type: STRING
+        full_text: true
+        unique: false
+        position: 9
+        list: false
+    - label: LocationEvent
+      color: "#154C21"
+      icon: location_searching
+      canvasPosition:
+        x: 372
+        "y": 289
+      description: |-
+        Represents an **event associated with a specific location and timestamp**.
+
+        Resolution is not required, as each instance represents a distinct event.
+
+        \- When linked to a **Journey**, it represents either the start/end point or the full route.
+
+        \- When linked to a **WirelessNetwork**, it represents the time of interaction with the network.
+
+        \- When linked to a **CellTower**, it represents a single interaction, likely the first one recorded.
+
+        \- When linked to a **File**, it represents a portion of the file's metadata.
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: timestamp
+        type: DATE
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: category
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: name
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+      - label: description
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: address
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: position
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 11
+        dataSources:
+        - DFEX
+        list: false
+      - label: account
+        type: STRING
+        full_text: false
+        unique: false
+        position: 12
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 13
+        dataSources:
+        - DFEX
+        list: false
+    - label: MarkScarTattoo
+      color: "#F45D79"
+      icon: mdi-account-box-multiple-outline
+      canvasPosition:
+        x: -705
+        "y": -678
+      dataSources:
+      - HMPS
+      attributes:
+      - label: featureType
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      - label: bodyLocation
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - HMPS
+        list: false
+      - label: description
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - HMPS
+        list: false
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 4
+        dataSources:
+        - HMPS
+        list: false
+      - label: bodyPosition
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - HMPS
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - HMPS
+        list: false
+    - label: Message
+      color: "#279AC4"
+      icon: mdi-android-messages
+      canvasPosition:
+        x: 731
+        "y": -147
+      description: |-
+        Represents a message entry originating from an instant messaging application (e.g. native Messages, Snapchat, WhatsApp) or an email client.
+
+        The label **InstantMessage** or **Email** is used to represent its type.
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: body
+        type: STRING
+        full_text: false
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: timestamp
+        type: DATE
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: subject
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: account
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: folder
+        type: STRING
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: extractSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 10
+        dataSources:
+        - DFEX
+        list: false
+      - label: dateDelivered
+        type: DATE
+        full_text: false
+        unique: false
+        position: 11
+        dataSources:
+        - DFEX
+        list: false
+      - label: dateRead
+        type: DATE
+        full_text: false
+        unique: false
+        position: 12
+        dataSources:
+        - DFEX
+        list: false
+      - label: snippet
+        type: STRING
+        full_text: false
+        unique: false
+        position: 13
+        dataSources:
+        - DFEX
+        list: false
+      - label: sourceApplication
+        type: STRING
+        full_text: false
+        unique: false
+        position: 14
+        dataSources:
+        - DFEX
+        list: false
+      - label: status
+        type: STRING
+        full_text: false
+        unique: false
+        position: 15
+        dataSources:
+        - DFEX
+        list: false
+      - label: InstantMessage
+        type: NODE_LABEL
+        full_text: false
+        unique: false
+        position: 16
+        dataSources:
+        - DFEX
+        list: false
+      - label: Email
+        type: NODE_LABEL
+        full_text: false
+        unique: false
+        position: 17
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 18
+        dataSources:
+        - DFEX
+        list: false
+    - label: Offence
+      color: "#82061D"
+      icon: mdi-knife
+      canvasPosition:
+        x: -952
+        "y": -222
+      dataSources:
+      - POL
+      attributes:
+      - label: primaryType
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - POL
+        list: false
+      - label: secondaryType
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - POL
+        list: false
+      - label: occurredAt
+        type: DATE
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - POL
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - POL
+        list: false
+      - label: locationDescription
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - POL
+        list: false
+      - label: location
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - POL
+        list: false
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 10
+        dataSources:
+        - POL
+        list: false
+      - label: caseNumber
+        type: STRING
+        full_text: true
+        unique: false
+        position: 11
+        dataSources:
+        - POL
+        list: false
+    - label: Person
+      color: "#0076D6"
+      icon: mdi-account
+      canvasPosition:
+        x: -713
+        "y": -408
+      dataSources:
+      - DFEX
+      - HMPS
+      - POL
+      - ELR
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        - HMPS
+        - POL
+        - ELR
+        list: false
+      - label: race
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - HMPS
+        - POL
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          *   **POL**: London Police Department
+          *   **HMPS**: His Majesty's Prison Service
+          *   **DFEX**: Digital Forensic Extraction
+        position: 3
+        dataSources:
+        - DFEX
+        - HMPS
+        - POL
+        - ELR
+        list: false
+      - label: firstName
+        type: STRING
+        full_text: true
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        - HMPS
+        - POL
+        - ELR
+        list: false
+      - label: lastName
+        type: STRING
+        full_text: true
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        - HMPS
+        - POL
+        - ELR
+        list: false
+      - label: gender
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        - HMPS
+        - POL
+        - ELR
+        list: false
+      - label: birthYears
+        type: INTEGER
+        full_text: false
+        unique: false
+        description: Range of two years representing the possible years of birth for the person.
+        position: 9
+        dataSources:
+        - POL
+        list: true
+      - label: birthDate
+        type: DATE
+        full_text: false
+        unique: false
+        position: 11
+        dataSources:
+        - HMPS
+        - ELR
+        list: false
+      - label: middleName
+        type: STRING
+        full_text: false
+        unique: false
+        position: 12
+        dataSources:
+        - HMPS
+        - POL
+        list: false
+      - label: fullName
+        type: STRING
+        full_text: true
+        unique: false
+        description: "Extra property concatenating firstName, middleName and lastName attributes. Helps with search."
+        position: 13
+        dataSources:
+        - DFEX
+        - HMPS
+        - POL
+        - ELR
+        list: false
+      - label: eyeColour
+        type: STRING
+        full_text: false
+        unique: false
+        position: 14
+        dataSources:
+        - HMPS
+        list: false
+      - label: hairColour
+        type: STRING
+        full_text: false
+        unique: false
+        position: 16
+        dataSources:
+        - HMPS
+        list: false
+      - label: weight
+        type: FLOAT
+        full_text: false
+        unique: false
+        position: 17
+        dataSources:
+        - HMPS
+        list: false
+      - label: height
+        type: FLOAT
+        full_text: false
+        unique: false
+        position: 18
+        dataSources:
+        - HMPS
+        list: false
+      - label: offenderStatus
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          *   **PAROLE** – The person has been released to community supervision (parole/Mandatory Supervised Release) and remains in HMPS’s legal custody until final discharge.
+          *   **IN CUSTODY** – The person is currently confined under HMPS control (e.g., in a state prison/center) rather than in the community.
+          *   **RECEPTION** – Newly admitted (or returned) and in the Reception & Classification process before permanent placement.
+          *   **WORK RELEASE CUSTODY** – The person is housed at an Adult Transition Center (ATC) and allowed to work in the community under strict supervision; they are still in HMPS custody.
+          *   **ABSCONDER** – Typically a parolee who has willfully evaded supervision/whereabouts unknown; a warrant may be issued and HMPS can seek extradition.
+          *   **NON-HMPS CUSTODY** – The person is not physically in an HMPS facility but is held by another authority (e.g., county jail, another state, or federal) while HMPS still lists them.
+          *   **BOND** – Indicates the person is/was held on court-ordered bond (usually in county custody pretrial).
+          *   **WRIT** – Temporarily “out to court” under a writ of habeas corpus (e.g., _ad prosequendum_ or _ad testificandum_) to appear or testify, then returned to the holding authority.
+          *   **TEMP RESIDENT** – Used for short-term/temporary placement at a facility (e.g., pending transfer, classification, or court movement). HMPS doesn’t publish a formal public definition; this is the common operational meaning. (Inferred from HMPS usage patterns and movement statuses.)
+          *   **MEDICAL FURLOUGH** – A temporary leave from secure custody for limited medical purposes, authorized under HMPS rules.
+          *   **ESCAPE** – The person has unlawfully left custody/supervision; they are considered a fugitive until apprehended.
+          *   **DETAINER** – Another jurisdiction has lodged a legal “hold” for pending charges or proceedings; it can prevent release until that matter is resolved (governed by the Agreement on Detainers).
+          *   **DISCHARGED** – The person has completed their custodial sentence (including any applicable parole period) and is no longer subject to prison or probation supervision; they are fully released and free from sentence obligations.
+        position: 19
+        dataSources:
+        - HMPS
+        list: false
+      - label: riskScore
+        type: INTEGER
+        full_text: false
+        unique: false
+        description: "Computed attribute used in the style, it counts the number of Offences committed by each Person."
+        position: 28
+        dataSources:
+        - POL
+        list: false
+      - label: currentFacility
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          The name of the facility where the individual is currently detained.
+
+          This property is populated only when the individual’s status is one of the following: "IN CUSTODY", "RECEPTION", "TEMP RESIDENT", "BOND" or "DETAINER".
+        position: 29
+        dataSources:
+        - HMPS
+        list: false
+      - label: existsPicture
+        type: BOOLEAN
+        full_text: false
+        unique: false
+        description: |-
+          Computed boolean attribute used for styling purposes (badge display).
+
+          The value is set to true when a picture is associated with the person.
+        position: 30
+        dataSources:
+        - HMPS
+        - POL
+        list: false
+      - label: hmpsNumber
+        type: STRING
+        full_text: true
+        unique: false
+        description: Identifier of the Person used in the HMPS data source.
+        position: 32
+        dataSources:
+        - HMPS
+        list: false
+      - label: egId
+        type: STRING
+        full_text: false
+        unique: false
+        description: Computed attribute used for grouping purposes. This attribute is shared between the EntityGroup and the entities it contains.
+        position: 33
+        list: false
+      - label: nameAndBirthDate
+        type: STRING
+        full_text: true
+        unique: false
+        description: "Composite attribute containing fullName and birthDate (or birthYears), created to ease searches via the search bar."
+        position: 34
+        list: false
+    - label: PhoneNumber
+      color: "#37474F"
+      icon: mdi-cellphone-android
+      canvasPosition:
+        x: 11
+        "y": -409
+      description: |-
+        Represents a phone number.
+
+        In DFEX source, this can be either an entry explicitly marked as a phone number in the phone extraction, or a **ContactIdentifier** validated as a phone number by the phonenumbers Python library.
+      dataSources:
+      - DFEX
+      - ELR
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: phoneNumber
+        type: STRING
+        full_text: true
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: phoneNumberOriginal
+        type: STRING
+        full_text: true
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: isValidFormat
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 11
+        dataSources:
+        - DFEX
+        list: false
+      - label: nationalNumber
+        type: INTEGER
+        full_text: false
+        unique: false
+        position: 12
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: countryCode
+        type: INTEGER
+        full_text: false
+        unique: false
+        position: 13
+        dataSources:
+        - DFEX
+        - ELR
+        list: false
+      - label: egId
+        type: STRING
+        full_text: false
+        unique: false
+        description: Computed attribute used for grouping purposes. This attribute is shared between the EntityGroup and the entities it contains.
+        position: 14
+        list: false
+    - label: Report
+      color: "#783CB9"
+      icon: mdi-clipboard-file-outline
+      canvasPosition:
+        x: -946
+        "y": -568
+      dataSources:
+      - POL
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - POL
+        list: false
+      - label: ChargeRelease
+        type: NODE_LABEL
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - POL
+        list: false
+      - label: name
+        type: STRING
+        full_text: true
+        unique: false
+        position: 5
+        dataSources:
+        - POL
+        list: false
+      - label: narrative
+        type: LARGE_TEXT
+        full_text: true
+        unique: false
+        position: 6
+        dataSources:
+        - POL
+        list: false
+    - label: SIMCard
+      color: "#00A91C"
+      icon: mdi-sim-outline
+      canvasPosition:
+        x: -116
+        "y": -219
+      description: "Represents a SIM card, resolved using IMSI, ICCID, and MSISDN identifiers."
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: IMSI
+        type: STRING
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: ICCID
+        type: STRING
+        full_text: false
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: MSISDN
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+    - label: Thread
+      color: "#D85BEF"
+      icon: mdi-comment-text-multiple
+      canvasPosition:
+        x: 658
+        "y": -467
+      description: Represents a conversation thread as aggregated by the source application.
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - DFEX
+        list: false
+      - label: serviceIdentifier
+        type: STRING
+        full_text: false
+        unique: false
+        position: 7
+        dataSources:
+        - DFEX
+        list: false
+      - label: startTime
+        type: DATE
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: lastActivity
+        type: DATE
+        full_text: false
+        unique: false
+        position: 10
+        dataSources:
+        - DFEX
+        list: false
+      - label: deviceId
+        type: STRING
+        full_text: false
+        unique: false
+        description: |-
+          Id of the device from which the item in the schema originates.
+
+          This property is useful for tracking items coming from a specific device and is shared across all entities in the schema, except for WirelessNetwork and CellTower, which are not device-specific and are not extracted per device.
+        position: 11
+        dataSources:
+        - DFEX
+        list: false
+    - label: Vehicle
+      color: "#D85BEF"
+      icon: mdi-car-outline
+      canvasPosition:
+        x: -555
+        "y": -681
+      dataSources:
+      - POL
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      - label: make
+        type: STRING
+        full_text: true
+        unique: false
+        position: 3
+        dataSources:
+        - POL
+        list: false
+      - label: model
+        type: STRING
+        full_text: true
+        unique: false
+        position: 4
+        dataSources:
+        - POL
+        list: false
+      - label: colour
+        type: STRING
+        full_text: false
+        unique: false
+        position: 5
+        dataSources:
+        - POL
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 6
+        dataSources:
+        - POL
+        list: false
+    - label: WirelessNetwork
+      color: "#5C410A"
+      icon: mdi-access-point-network
+      canvasPosition:
+        x: -43
+        "y": 286
+      description: "Represents a wireless network, resolved using its BSSID and SSID."
+      dataSources:
+      - DFEX
+      attributes:
+      - label: id
+        type: STRING
+        full_text: false
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: position
+        type: GEOSPATIAL
+        full_text: false
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: securityMode
+        type: STRING
+        full_text: false
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      - label: BSSId
+        type: STRING
+        full_text: false
+        unique: false
+        position: 8
+        dataSources:
+        - DFEX
+        list: false
+      - label: SSId
+        type: STRING
+        full_text: false
+        unique: false
+        position: 9
+        dataSources:
+        - DFEX
+        list: false
+      - label: password
+        type: STRING
+        full_text: false
+        unique: false
+        position: 12
+        dataSources:
+        - DFEX
+        list: false
+      - label: source
+        type: STRING
+        full_text: false
+        unique: false
+        position: 13
+        dataSources:
+        - DFEX
+        list: false
+    relationships:
+    - label: ASSOCIATED_WITH
+      start: DeviceExtraction
+      end: PhoneNumber
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: AT_CELL_TOWER
+      start: LocationEvent
+      end: CellTower
+      offset: -98.585396
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: AT_NETWORK
+      start: LocationEvent
+      end: WirelessNetwork
+      offset: -49.22252
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: CAPTURED
+      start: ANPRHit
+      end: LicencePlate
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - ANPR
+        list: false
+      - label: confidencePct
+        type: INTEGER
+        unique: false
+        position: 2
+        dataSources:
+        - ANPR
+        list: false
+      - label: pncStatus
+        type: STRING
+        unique: false
+        position: 3
+        dataSources:
+        - ANPR
+        list: false
+      dataSources:
+      - ANPR
+    - label: CHARGED_FOR
+      start: Person
+      end: Offence
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: CONNECTED_TO
+      start: DeviceExtraction
+      end: WirelessNetwork
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: lastAutoConnection
+        type: DATE
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      - label: lastConnection
+        type: DATE
+        unique: false
+        position: 3
+        dataSources:
+        - DFEX
+        list: false
+      - label: networkSource
+        type: STRING
+        unique: false
+        position: 4
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: CURRENT_FACILITY
+      start: CustodyStatus
+      end: CorrectionalFacility
+      offset: -15.0
+      attributes:
+      - label: dateFrom
+        type: DATE
+        unique: false
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      - label: dateTo
+        type: DATE
+        unique: false
+        position: 2
+        dataSources:
+        - HMPS
+        list: false
+      - label: offenderStatus
+        type: STRING
+        unique: false
+        description: |-
+          *   **PAROLE** – The person has been released to community supervision (parole/Mandatory Supervised Release) and remains in HMPS’s legal custody until final discharge.
+          *   **IN CUSTODY** – The person is currently confined under HMPS control (e.g., in a state prison/center) rather than in the community.
+          *   **RECEPTION** – Newly admitted (or returned) and in the Reception & Classification process before permanent placement.
+          *   **WORK RELEASE CUSTODY** – The person is housed at an Adult Transition Center (ATC) and allowed to work in the community under strict supervision; they are still in HMPS custody.
+          *   **ABSCONDER** – Typically a parolee who has willfully evaded supervision/whereabouts unknown; a warrant may be issued and HMPS can seek extradition.
+          *   **NON-HMPS CUSTODY** – The person is not physically in an HMPS facility but is held by another authority (e.g., county jail, another state, or federal) while HMPS still lists them.
+          *   **BOND** – Indicates the person is/was held on court-ordered bond (usually in county custody pretrial).
+          *   **WRIT** – Temporarily “out to court” under a writ of habeas corpus (e.g., _ad prosequendum_ or _ad testificandum_) to appear or testify, then returned to the holding authority.
+          *   **TEMP RESIDENT** – Used for short-term/temporary placement at a facility (e.g., pending transfer, classification, or court movement). HMPS doesn’t publish a formal public definition; this is the common operational meaning. (Inferred from HMPS usage patterns and movement statuses.)
+          *   **MEDICAL FURLOUGH** – A temporary leave from secure custody for limited medical purposes, authorized under HMPS rules.
+          *   **ESCAPE** – The person has unlawfully left custody/supervision; they are considered a fugitive until apprehended.
+          *   **DETAINER** – Another jurisdiction has lodged a legal “hold” for pending charges or proceedings; it can prevent release until that matter is resolved (governed by the Agreement on Detainers).
+          *   **DISCHARGED** – The person has completed their custodial sentence (including any applicable parole period) and is no longer subject to prison or probation supervision; they are fully released and free from sentence obligations.
+        position: 3
+        dataSources:
+        - HMPS
+        list: false
+      - label: id
+        type: STRING
+        unique: true
+        position: 4
+        dataSources:
+        - HMPS
+        list: false
+      dataSources:
+      - HMPS
+    - label: FAMILY_MEMBER
+      start: Person
+      end: Person
+      offset: 55.1
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      dataSources:
+      - POL
+      - ELR
+    - label: FOR_OFFENCE
+      start: Event
+      end: Offence
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: HAS_ADDRESS
+      start: Person
+      end: Location
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        - ELR
+        list: false
+      dataSources:
+      - POL
+      - ELR
+    - label: HAS_ATTACHMENT
+      start: Message
+      end: File
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_CALL
+      start: DeviceExtraction
+      end: Call
+      offset: -228.81924
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_CONTACT
+      start: DeviceExtraction
+      end: Contact
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_CUSTODY_STATUS
+      start: Person
+      end: CustodyStatus
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      dataSources:
+      - HMPS
+    - label: HAS_EVENT
+      start: Report
+      end: Event
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: HAS_FILE
+      start: DeviceExtraction
+      end: File
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_LOCATION_EVENT
+      start: DeviceExtraction
+      end: LocationEvent
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_MARK_SCAR_TATTOO
+      start: Person
+      end: MarkScarTattoo
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      dataSources:
+      - HMPS
+    - label: HAS_MESSAGE
+      start: DeviceExtraction
+      end: Message
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_OFFENCE
+      start: Report
+      end: Offence
+      offset: 39.64594
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: HAS_PHONE_NUMBER
+      start: SIMCard
+      end: PhoneNumber
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_SIM
+      start: DeviceExtraction
+      end: SIMCard
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_SUBNET
+      start: WirelessNetwork
+      end: WirelessNetwork
+      offset: 35.1
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: HAS_USER_IDENTIFIER
+      start: DeviceExtraction
+      end: ContactIdentifier
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: INCLUDES_JOURNEY
+      start: DeviceExtraction
+      end: Journey
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: IN_FILE
+      start: LocationEvent
+      end: File
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: IN_JOURNEY
+      start: LocationEvent
+      end: Journey
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: IS_EMAIL_ADDRESS
+      start: ContactIdentifier
+      end: EmailAddress
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: IS_PHONE_NUMBER
+      start: ContactIdentifier
+      end: PhoneNumber
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: KNOWS
+      start: Person
+      end: Person
+      offset: 75.1
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - ELR
+        list: false
+      - label: type
+        type: STRING
+        unique: false
+        position: 2
+        dataSources:
+        - ELR
+        list: false
+      dataSources:
+      - ELR
+    - label: LICENCED_TO
+      start: Vehicle
+      end: LicencePlate
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: MENTIONS
+      start: Report
+      end: Person
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: MESSAGE_BELONGS_TO
+      start: Message
+      end: Thread
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: NEXT
+      start: Call
+      end: Call
+      offset: 54.604275
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        list: false
+    - label: OWNS_DEVICE
+      start: Person
+      end: DeviceExtraction
+      offset: 15.960052
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: extractionDate
+        type: DATE
+        unique: false
+        position: 2
+        list: false
+      dataSources:
+      - DFEX
+    - label: OWNS_EMAIL_ADDRESS
+      start: Person
+      end: EmailAddress
+      offset: -177.15234
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - ELR
+        list: false
+      dataSources:
+      - ELR
+    - label: OWNS_PHONE_NUMBER
+      start: Person
+      end: PhoneNumber
+      offset: 70.31291
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - ELR
+        list: false
+      dataSources:
+      - ELR
+    - label: OWNS_VEHICLE
+      start: Person
+      end: Vehicle
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: PARENT_OF
+      start: Person
+      end: Person
+      offset: 35.1
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - ELR
+        list: false
+      dataSources:
+      - ELR
+    - label: PARTY_IN
+      start: Person
+      end: Event
+      offset: 0.0
+      attributes:
+      - label: ageAtOccurrence
+        type: INTEGER
+        unique: false
+        position: 1
+        dataSources:
+        - POL
+        list: false
+      - label: id
+        type: STRING
+        unique: true
+        position: 2
+        dataSources:
+        - POL
+        list: false
+      dataSources:
+      - POL
+    - label: PARTY_IN_CALL
+      start: PhoneNumber
+      end: Call
+      offset: 0.0
+      attributes:
+      - label: type
+        type: STRING
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: id
+        type: STRING
+        unique: true
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_CALL
+      start: Contact
+      end: Call
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_CALL
+      start: ContactIdentifier
+      end: Call
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_MESSAGE
+      start: ContactIdentifier
+      end: Message
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_MESSAGE
+      start: PhoneNumber
+      end: Message
+      offset: 0.0
+      attributes:
+      - label: type
+        type: STRING
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: id
+        type: STRING
+        unique: true
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_MESSAGE
+      start: Contact
+      end: Message
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_MESSAGE
+      start: EmailAddress
+      end: Message
+      offset: -253.87549
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      - label: type
+        type: STRING
+        unique: false
+        position: 2
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_THREAD
+      start: Contact
+      end: Thread
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_THREAD
+      start: ContactIdentifier
+      end: Thread
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: PARTY_IN_THREAD
+      start: PhoneNumber
+      end: Thread
+      offset: -89.64586
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: RECEIVED
+      start: Person
+      end: JudicialSentence
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      dataSources:
+      - HMPS
+    - label: RELATED_TO_FACILITY
+      start: CustodyStatus
+      end: CorrectionalFacility
+      offset: 15.0
+      attributes:
+      - label: dateFrom
+        type: DATE
+        unique: false
+        position: 1
+        dataSources:
+        - HMPS
+        list: false
+      - label: dateTo
+        type: DATE
+        unique: false
+        position: 2
+        dataSources:
+        - HMPS
+        list: false
+      - label: offenderStatus
+        type: STRING
+        unique: false
+        description: |-
+          *   **PAROLE** – The person has been released to community supervision (parole/Mandatory Supervised Release) and remains in HMPS’s legal custody until final discharge.
+          *   **IN CUSTODY** – The person is currently confined under HMPS control (e.g., in a state prison/center) rather than in the community.
+          *   **RECEPTION** – Newly admitted (or returned) and in the Reception & Classification process before permanent placement.
+          *   **WORK RELEASE CUSTODY** – The person is housed at an Adult Transition Center (ATC) and allowed to work in the community under strict supervision; they are still in HMPS custody.
+          *   **ABSCONDER** – Typically a parolee who has willfully evaded supervision/whereabouts unknown; a warrant may be issued and HMPS can seek extradition.
+          *   **NON-HMPS CUSTODY** – The person is not physically in an HMPS facility but is held by another authority (e.g., county jail, another state, or federal) while HMPS still lists them.
+          *   **BOND** – Indicates the person is/was held on court-ordered bond (usually in county custody pretrial).
+          *   **WRIT** – Temporarily “out to court” under a writ of habeas corpus (e.g., _ad prosequendum_ or _ad testificandum_) to appear or testify, then returned to the holding authority.
+          *   **TEMP RESIDENT** – Used for short-term/temporary placement at a facility (e.g., pending transfer, classification, or court movement). HMPS doesn’t publish a formal public definition; this is the common operational meaning. (Inferred from HMPS usage patterns and movement statuses.)
+          *   **MEDICAL FURLOUGH** – A temporary leave from secure custody for limited medical purposes, authorized under HMPS rules.
+          *   **ESCAPE** – The person has unlawfully left custody/supervision; they are considered a fugitive until apprehended.
+          *   **DETAINER** – Another jurisdiction has lodged a legal “hold” for pending charges or proceedings; it can prevent release until that matter is resolved (governed by the Agreement on Detainers).
+          *   **DISCHARGED** – The person has completed their custodial sentence (including any applicable parole period) and is no longer subject to prison or probation supervision; they are fully released and free from sentence obligations.
+        position: 3
+        dataSources:
+        - HMPS
+        list: false
+      - label: id
+        type: STRING
+        unique: true
+        position: 4
+        dataSources:
+        - HMPS
+        list: false
+      dataSources:
+      - HMPS
+    - label: RESOLVED_TO
+      start: PhoneNumber
+      end: EntityGroup
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        list: false
+    - label: RESOLVED_TO
+      start: EmailAddress
+      end: EntityGroup
+      offset: 88.24271
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        list: false
+    - label: RESOLVED_TO
+      start: Person
+      end: EntityGroup
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        list: false
+    - label: SEEN_AT_CELL_TOWER
+      start: DeviceExtraction
+      end: CellTower
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: WITH_CONTACT_IDENTIFIER
+      start: Contact
+      end: ContactIdentifier
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 0
+        dataSources:
+        - DFEX
+        list: false
+      - label: appSource
+        type: STRING
+        unique: false
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: WITH_EMAIL_ADDRESS
+      start: Contact
+      end: EmailAddress
+      offset: 252.25984
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    - label: WITH_PHONE_NUMBER
+      start: Contact
+      end: PhoneNumber
+      offset: 0.0
+      attributes:
+      - label: id
+        type: STRING
+        unique: true
+        position: 1
+        dataSources:
+        - DFEX
+        list: false
+      dataSources:
+      - DFEX
+    entityGroupClassFqn: EntityGroup
+    entityGroupRelationshipFqns:
+    - PhoneNumber-RESOLVED_TO->EntityGroup
+    - EmailAddress-RESOLVED_TO->EntityGroup
+    - Person-RESOLVED_TO->EntityGroup
+  settings:
+  - name: accessControlEnabled
+    value: false
+  - name: actionMaxResultSize
+    value: 1000
+  - name: alertingDelayedMessageTemplate
+    value: "There are new Event(s) for the Alert $alert_name. Since $notification_previous_time, there have been $eventsSize new Event(s). To see the Event(s), log on to Hume."
+  - name: alertingDelayedSubjectTemplate
+    value: New Event(s) for the Alert $alert_name
+  - name: alertingMessageTemplate
+    value: |-
+      A new Event has been triggered for the Alert $alert_name at $event_time.
+      To see the Event, log on to Hume.
+  - name: alertingSharingEnabled
+    value: false
+  - name: alertingSubjectTemplate
+    value: Alert $alert_name has a new Event
+  - name: allowHtmlActionTabularResults
+    value: true
+  - name: copyCypherEnabled
+    value: true
+  - name: dataRefreshEnabled
+    value: true
+  - name: databaseTimezone
+    value: UTC
+  - name: editDeleteOnlyDataCreatedViaHume
+    value: false
+  - name: fixNodesPosition
+    value: true
+  - name: mdeEnabled
+    value: false
+  - name: operationSizeLimit
+    value: 2000
+  - name: query_feedback_enabled
+    value: true
+  - name: schemaStatisticsEnabled
+    value: false
+  - name: smart_entity_resolution_enabled
+    value: true
+  - name: totalSizeLimit
+    value: 5000
+  - name: typeAheadEnabled
+    value: false
+  - name: visualisationActionsInputParametersHistoryEnabled
+    value: true
+  - name: visualisationCleanWarning
+    value: true
+  - name: visualisationDateFormat
+    value: DEFAULT
+  - name: visualisationDoubleClick
+    value: EXPAND_ALL
+  - name: visualisationFineGrainedSearchEnabled
+    value: true
+  - name: visualisationGeospatialEnabled
+    value: true
+  - name: visualisationGroupingEnabled
+    value: true
+  - name: visualisationSearchHistoryEnabled
+    value: true
+  - name: visualisationTemporalEnabled
+    value: true
+  - name: visualisationTimezone
+    value: UTC
+  - name: visualisationUrlLinkOpenIconEnabled
+    value: true

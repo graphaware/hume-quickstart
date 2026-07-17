@@ -1,0 +1,42 @@
+kind: Action
+metadata:
+  name: absconders-and-escapes
+  knowledge-graph: SPINE
+spec:
+  label: Absconders and Escapes
+  description: Returns individuals with offenderStatus Absconder or Escape.
+  query: |-
+    MATCH (p:Person)-[:HAS_CUSTODY_STATUS]->(status)
+      WHERE status.offenderStatus IN ["ABSCONDER", "ESCAPE"]
+
+    WITH p, status
+
+    OPTIONAL MATCH (p)-[:PICTURE]->(pf)
+    WHERE pf.fingerprint IS NOT NULL
+    WITH p.fullName AS fullName, p.birthDate AS birthDate, status.offenderStatus AS Status,
+      coalesce(p.hmpsNumber, p.id) AS Id,
+      (CASE WHEN p.gender = "MALE" THEN
+        (CASE WHEN p.race = "BLACK" THEN "black+man.jpg"
+          WHEN p.race = "WHITE" THEN "white+man.jpg"
+          ELSE "hispanic+man.jpg" END)
+      WHEN p.gender = "FEMALE" THEN
+        (CASE WHEN p.race = "BLACK" THEN "black+woman.jpg"
+          WHEN p.race = "WHITE" THEN "white+woman.jpg"
+          ELSE "hispanic+woman.jpg" END)
+      END) AS pictureName
+
+    WITH *//,
+      //apoc.text.format('%s%s', [$_context.variables.pictures_bucket_prefix, pictureName]) AS picture
+
+    RETURN fullName AS Name, birthDate AS `Birth Date`, Id , Status//,
+      //'<img src="' + picture + '" alt="" border="0" style="width: 100%; width:200px; object-fit: contain;"></div>' AS Picture
+
+    ORDER BY fullName
+  returnType: TABLE
+  scope: GLOBAL
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

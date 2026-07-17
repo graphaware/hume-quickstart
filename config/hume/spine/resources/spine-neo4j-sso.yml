@@ -1,0 +1,19 @@
+kind: EcosystemResource
+metadata:
+  name: spine-neo4j-sso
+spec:
+  fqn: "#Hume.Orchestra.Resource.Neo4jSSO"
+  parameters:
+  - name: database
+    value: spine
+  - name: host
+    value: $$SPINE_NEO4J_HOST
+  - name: port
+    value: 7687
+  - name: read_only
+    value: true
+  access:
+  - role: SPINE_ANALYST
+    permissionGroup: RESOURCE_USE
+  - role: SPINE_OFFICER
+    permissionGroup: RESOURCE_USE

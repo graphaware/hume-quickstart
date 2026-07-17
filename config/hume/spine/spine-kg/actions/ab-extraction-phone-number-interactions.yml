@@ -1,0 +1,67 @@
+kind: Action
+metadata:
+  name: ab-extraction-phone-number-interactions
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-phone-number-interactions
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS NULL THEN NULL ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN NULL ELSE date($dateTo) END AS dateTo
+
+    MATCH pathInteraction = (n:DeviceExtraction)-[:HAS_CALL|HAS_MESSAGE]->(c)<-[:PARTY_IN_MESSAGE|PARTY_IN_CALL]-(ci:ContactIdentifier)-[:IS_PHONE_NUMBER]->(ph)
+      WHERE n.id = $device
+      AND ci.id = $contactIdentifier
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE c.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+      AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE c.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+
+    OPTIONAL MATCH pathContact = (ci)<-[:WITH_CONTACT_IDENTIFIER]-(contact)
+    RETURN pathInteraction, pathContact
+  returnType: GRAPH
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  - name: contactIdentifier
+    label: Contact Identifier
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

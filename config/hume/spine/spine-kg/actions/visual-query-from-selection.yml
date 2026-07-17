@@ -1,0 +1,23 @@
+kind: Action
+metadata:
+  name: visual-query-from-selection
+  knowledge-graph: SPINE
+spec:
+  label: Visual Query from selection
+  query: |-
+    WITH [x IN $_selection.nodes | apoc.text.format('"%s"', [x.values.id]) ] AS pks
+    WITH '[' + apoc.text.join(pks, ',') + ']' AS pks, $_selection.nodes[0].class AS class,
+    '{ "limit": 100, "rankResult": false, "navigationPath": [ { "relationship": null, "direction": null, "optional": false, "left": { "fqn": "<CLASS>", "id": "ede688a6-a077-42d3-96ff-1b4c0e087f6c", "filters": { "logicalOperator": "OR", "groups": [ { "logicalOperator": "AND", "rules": [ { "visTZ": null, "value": <VALUE>, "kgTZ": null, "attribute": "id", "uuid": null, "type": "STRING", "operator": "IN" } ] } ] } }, "right": null, "matchAnyRelationship": false } ] }' AS object
+    WITH replace(object, '<VALUE>', pks) AS object, class
+    WITH replace(object, '<CLASS>', class) AS object
+    RETURN apoc.convert.toJson({navigationPath: object}) AS pattern
+  returnType: PATTERN
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

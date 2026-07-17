@@ -1,0 +1,94 @@
+kind: Action
+metadata:
+  name: ab-patterns-life-phone-activity-heatmap
+  knowledge-graph: SPINE
+spec:
+  label: ab-patterns-life-phone-activity-heatmap
+  description: "Displays a heatmap of the phone activity (calls and messages), grouped by hour of the day and day of the week."
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_MESSAGE|HAS_CALL]->(l)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE l.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE l.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      ) AND l.timestamp IS NOT NULL
+
+    ORDER BY l.timestamp
+    WITH datetime(l.timestamp) AS timestamp
+
+    WITH
+        apoc.temporal.format(timestamp, "EEEE") AS dayOfWeek,
+        timestamp.hour AS hourOfDay
+    WITH
+        dayOfWeek,
+        hourOfDay,
+        count(*) AS frequency
+    RETURN
+    collect({
+        dayOfWeek: dayOfWeek,
+        hourOfDay: hourOfDay,
+        count: frequency
+    }) AS values,
+    'rect' AS chartType,
+    {
+        x: {
+            field: "hourOfDay",
+            type: "ordinal",
+            title: "Hour of the Day",
+            axis: {
+                labelAngle: 0,
+                title: "Hour"
+            },
+            scale: {domain: range(0, 23)}
+        },
+        y: {
+            field: "dayOfWeek",
+            type: "ordinal",
+            title: "Day of Week",
+            sort: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        },
+        color: {
+            field: "count",
+            type: "quantitative",
+            title: "Calls and Messages",
+            scale: {
+                scheme: "blues"
+            }
+        },
+        tooltip: [
+            {
+                field: "dayOfWeek",
+                type: "ordinal",
+                title: "Day of Week"
+            },
+            {
+                field: "hourOfDay",
+                type: "ordinal",
+                title: "Hour of the Day"
+            },
+            {
+                field: "count",
+                type: "quantitative",
+                title: "Number of Calls and Messages"
+            }
+        ]
+    } AS options
+  returnType: CHART
+  scope: UTILITY
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

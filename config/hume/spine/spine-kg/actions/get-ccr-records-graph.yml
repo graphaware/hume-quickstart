@@ -1,0 +1,32 @@
+kind: Action
+metadata:
+  name: get-ccr-records-graph
+  knowledge-graph: SPINE
+spec:
+  label: Get CCR records graph
+  description: |-
+    Import a selected CCR records file into the canvas, without persisting this information into the database.
+
+    <br>
+
+    **Parameters:**
+
+    *   **File (CSV)**: Select the name of the file to import (start typing the name to get the proper file).
+  returnType: GRAPH
+  scope: GLOBAL
+  inclusions: {}
+  inputParameters:
+  - name: file
+    label: File (CSV)
+    type: MEDIA_OBJECT
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: false
+  actionType: API
+  httpApiResource: spine-http-api
+  endpoint: Spine - get CCR data
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

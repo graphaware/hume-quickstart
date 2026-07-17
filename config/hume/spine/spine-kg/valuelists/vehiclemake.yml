@@ -1,0 +1,34 @@
+kind: ValueList
+metadata:
+  name: Vehicle_make
+  knowledge-graph: SPINE
+spec:
+  label: Vehicle_make
+  type: STRING
+  data:
+  - value: AUDI
+    label: AUDI
+  - value: BMW
+    label: BMW
+  - value: FORD
+    label: FORD
+  - value: HONDA
+    label: HONDA
+  - value: HYUNDAI
+    label: HYUNDAI
+  - value: KIA
+    label: KIA
+  - value: MERCEDES
+    label: MERCEDES
+  - value: NISSAN
+    label: NISSAN
+  - value: PEUGEOT
+    label: PEUGEOT
+  - value: RENAULT
+    label: RENAULT
+  - value: TOYOTA
+    label: TOYOTA
+  - value: VAUXHALL
+    label: VAUXHALL
+  - value: VOLKSWAGEN
+    label: VOLKSWAGEN

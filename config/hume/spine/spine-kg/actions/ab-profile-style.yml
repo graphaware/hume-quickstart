@@ -1,0 +1,36 @@
+kind: Action
+metadata:
+  name: ab-profile-style
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-style
+  query: |-
+    RETURN '<div><style>
+    .entity-info {
+                margin-left: 2px;
+                border-collapse: collapse;
+                width: 99%;
+            }
+
+    .entity-info th, .entity-info td {
+                padding: 6px;
+                text-align: left;
+                font-size: 12px;
+            }
+
+    .entity-info th {
+                background-color: #f2f2f2;
+            }
+
+    .entity-info tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+    </style></div>' AS html
+  returnType: HTML
+  scope: UTILITY
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

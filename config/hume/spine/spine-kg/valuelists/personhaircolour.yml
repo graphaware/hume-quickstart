@@ -1,0 +1,28 @@
+kind: ValueList
+metadata:
+  name: Person_hairColour
+  knowledge-graph: SPINE
+spec:
+  label: Person_hairColour
+  type: STRING
+  data:
+  - value: RED OR AUBURN
+    label: RED OR AUBURN
+  - value: BLACK
+    label: BLACK
+  - value: UNKNOWN
+    label: UNKNOWN
+  - value: BROWN
+    label: BROWN
+  - value: BLONDE OR STRAWBERRY
+    label: BLONDE OR STRAWBERRY
+  - value: GRAY OR PARTIALLY GRAY
+    label: GRAY OR PARTIALLY GRAY
+  - value: BALD
+    label: BALD
+  - value: SALT AND PEPPER
+    label: SALT AND PEPPER
+  - value: WHITE
+    label: WHITE
+  - value: SANDY
+    label: SANDY

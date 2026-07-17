@@ -1,0 +1,7 @@
+kind: DataSource
+metadata:
+  name: ANPR
+spec:
+  name: ANPR
+  neo4jLabel: ANPR
+  color: "#B449CF"

@@ -1,0 +1,48 @@
+kind: Action
+metadata:
+  name: ab-profile-related-offences
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-related-offences
+  query: |-
+    MATCH path = (n:Person WHERE elementId(n) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH collect([n in nodes(path) WHERE n:Person | n.id]) AS paths
+
+    CALL(paths) {
+      UNWIND paths AS path
+      UNWIND path AS id
+      RETURN collect(distinct id) AS ids}
+
+    WITH ids
+    WITH COUNT{
+      MATCH (p:Person)-[:CHARGED_FOR]->(o)
+        WHERE p.id IN ids
+      RETURN distinct o
+      } AS offences
+
+    RETURN apoc.text.format(
+      '<div style="display:flex;justify-content:center;align-items:center;min-width:180px;height:180px;">
+          <div style="color:#D30000;font-size:70px;font-weight:bold;line-height:1;">
+            %s
+          </div>
+       </div>',
+      [offences]
+    ) AS html
+  returnType: HTML
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

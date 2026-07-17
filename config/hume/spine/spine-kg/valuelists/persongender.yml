@@ -1,0 +1,12 @@
+kind: ValueList
+metadata:
+  name: Person_gender
+  knowledge-graph: SPINE
+spec:
+  label: Person_gender
+  type: STRING
+  data:
+  - value: MALE
+    label: MALE
+  - value: FEMALE
+    label: FEMALE

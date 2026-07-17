@@ -1,0 +1,101 @@
+kind: Action
+metadata:
+  name: ab-extraction-info
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-info
+  query: |-
+    MATCH (n:DeviceExtraction)
+      WHERE n.id = $device
+
+    WITH n,
+      COLLECT{
+      MATCH (n)-[:ASSOCIATED_WITH]->(phone)
+      RETURN phone.phoneNumber
+      }[0] AS phoneNumber,
+      COUNT{
+      MATCH (n)-[:HAS_CALL]->(c)
+      RETURN distinct c
+      } AS calls,
+      COUNT{
+      MATCH (n)-[:HAS_MESSAGE]->(m)
+      WHERE m.body IS NOT NULL
+      AND EXISTS ( (m)-[:MESSAGE_BELONGS_TO]->(:Thread) )
+      RETURN distinct m} AS messages
+
+    WITH [{key: "Phone Number", value: phoneNumber}, {key: "Number of Calls", value: calls}, {key: "Number of Messages", value: messages}] AS values
+    WITH [x in values WHERE x.value IS NOT NULL | x] AS values
+    RETURN '<div><style>
+
+        .container {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .card {
+          flex: 1;
+          background: white;
+          padding: 12px;
+          border-radius: 16px;
+          text-align: center;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .title {
+          font-size: 1rem;
+          color: #666;
+          margin-bottom: 10px;
+        }
+
+        .number {
+          font-size: 1.7rem;
+          font-weight: bold;
+          color: #222;
+        }
+      </style></div>
+     <div class="container">' +
+      apoc.text.join([x in values | apoc.text.format('<div class="card">
+          <div class="title">%s</div>
+          <div class="number">%s</div>
+        </div>', [x.key, x.value]) ], "") +
+        '</div>' AS html
+  returnType: HTML
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: false
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: false
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: false
+  - name: text
+    label: Text
+    type: STRING
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: false
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

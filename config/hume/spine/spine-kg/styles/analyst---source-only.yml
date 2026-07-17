@@ -1,0 +1,21 @@
+kind: Style
+metadata:
+  name: Analyst - Source only
+  knowledge-graph: SPINE
+spec:
+  label: Analyst - Source only
+  classes:
+    __global__:
+      rules:
+      - type: CLASS_BADGE
+        config:
+          attributeCategory: SCHEMA
+          color: "#0C4E29"
+          textAttribute: source
+          animated: false
+          attributeName: source
+          position: nw
+          operator: EXISTS
+          textAttributeCategory: SCHEMA
+  default: false
+  isDefault: false

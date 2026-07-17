@@ -1,0 +1,51 @@
+kind: Action
+metadata:
+  name: expand-family-trees
+  knowledge-graph: SPINE
+spec:
+  label: Expand Family Trees
+  description: |-
+    Expand the family tree of selected individuals.
+
+    <br>
+
+    **Parameters:**
+
+    *   **Tree of Interest:** ancestors or descendants based on the individuals of interest
+    *   **Number of Generations:** levels to expand.
+  query: "UNWIND $_selection.nodeElementIds AS node_id\n\nMATCH resolvedPath = (q:Person WHERE elementId(q) = node_id)\n  ((:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-()) {0, 1}\n  (p)\n\nWITH resolvedPath, p, coalesce($level, 1) AS depth,\n  ( CASE\n    // Ancestors Tree\n    WHEN $tree = [\"Ancestors\"] THEN [\"<PARENT_OF\"]\n    // Descendants Tree\n    WHEN $tree = [\"Descendants\"] THEN [\"PARENT_OF>\"]\n    // Ancestors and Descendants\n    WHEN size($tree) = 2 THEN [\"<PARENT_OF\", \"PARENT_OF>\"]\n  END ) AS relationshipFilters\n\n//apoc.coll.min( [10, $expansion_level] ) AS depth\n\nUNWIND relationshipFilters as relationshipFilter\n  CALL apoc.path.expandConfig(p, {\n\t  relationshipFilter: relationshipFilter,\n    minLevel: 1,\n    maxLevel: depth\n  })\n  YIELD path\n\nWITH resolvedPath, p, path\n\nRETURN resolvedPath, path, collect(elementId(p)) AS __highlightNodes__"
+  returnType: GRAPH
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - Person
+  inputParameters:
+  - name: tree
+    label: Tree of Interest
+    type: SELECT
+    multiselect: true
+    list: false
+    required: false
+    selectOptions:
+    - value: Ancestors
+      label: Ancestors
+    - value: Descendants
+      label: Descendants
+    forgetValue: false
+  - name: level
+    label: Number of Generations
+    type: INTEGER
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: false
+  defaultValuesResolver:
+    type: CYPHER
+    params:
+      query: "RETURN [\"Ancestors\", \"Descendants\"] AS tree, 1 AS level"
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+    layout: SEQUENTIAL
+  httpActionIncludeCanvasInPayload: false

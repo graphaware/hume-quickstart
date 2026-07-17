@@ -1,0 +1,131 @@
+kind: Action
+metadata:
+  name: ab-extraction-threads-content
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-threads-content
+  description: "Displays the threads content, as they are aggregated by the source application."
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_MESSAGE]->(m:Message)-[:MESSAGE_BELONGS_TO]->(t)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE m.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE m.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+      AND m.body IS NOT NULL
+
+    WITH n, t, m
+
+    CALL (n, m) {
+      OPTIONAL MATCH (m)<-[r:PARTY_IN_MESSAGE]-(ci:ContactIdentifier)
+      OPTIONAL MATCH (ci)-[:IS_PHONE_NUMBER]->(phoneNum)
+      OPTIONAL MATCH (ci)<-[:WITH_CONTACT_IDENTIFIER]-(contact)
+
+      WITH distinct n, m, collect(distinct {
+          PhoneNumber: phoneNum.phoneNumber,
+          Contact: contact.name,
+          Identifier: coalesce(ci.identifier, ci.name),
+          InteractionType: r.type,
+          PhoneOwner: EXISTS {MATCH (n)-[:HAS_USER_IDENTIFIER]->(ci)}
+          }) AS Participants
+      RETURN
+      [p IN Participants | {Info:
+        apoc.text.join([
+          item IN
+            [ (CASE WHEN p.PhoneOwner = True
+                  THEN "Phone Owner"
+                ELSE null END),
+              (CASE WHEN p.PhoneNumber IS NOT NULL
+                  THEN p.PhoneNumber
+                ELSE p.Identifier END),
+              (CASE WHEN p.Contact IS NOT NULL AND p.Contact <> p.PhoneNumber
+                  THEN p.Contact
+                ELSE null END)]
+           WHERE item IS NOT NULL | item
+         ], " - "), InteractionType: p.InteractionType } ] AS messageParties
+      }
+    WITH n, t, m, messageParties, [x in messageParties WHERE x["InteractionType"] = "SENT MESSAGE"| x.Info][0] AS Sender
+
+
+    ORDER BY datetime(m.timestamp)
+    WITH t,
+      collect(distinct [p in messageParties| p.Info]) AS threadParticipants,
+      collect({body: m.body, timestamp: m.timestamp, sender: Sender}) AS messages
+
+    CALL (threadParticipants) {
+      UNWIND threadParticipants AS part
+        UNWIND part AS item
+      RETURN collect (distinct item) AS Participants
+    }
+
+    WITH t, Participants, size(messages) AS `Message Count`, messages, apoc.coll.max([m in messages WHERE m.timestamp IS NOT null | apoc.temporal.format( m.timestamp, 'YYYY-MM-dd HH:mm:ss Z')]) AS `Latest Message`
+
+    WITH *
+    WITH coalesce(t.appSource, "-") AS `Source App`,
+        t.id AS threadId,
+        apoc.text.join(Participants, "<br><br>") AS Participants,
+        `Message Count`,
+        `Latest Message`,
+        messages[0..5] AS Messages
+
+      WHERE size(Messages)> 0
+    RETURN  `Source App`, Participants, `Message Count`, `Latest Message`,
+      apoc.text.join(
+      [message IN Messages |
+        apoc.text.format(
+      '<div style="display:flex; margin-bottom:4px;">
+       <div style="display:inline-flex; flex-direction:column; font-size:13px; border-radius:5px; overflow:hidden; border:1px solid #007bff; margin-left:6px; line-height:normal;">
+         <div style="background:#007bff; color:#ffffff; font-size:11px; font-weight:bold; padding:2px 6px; flex-shrink:0;">From: %s</div>
+         <div style="background:#e7f3ff; padding:3px 6px; flex-shrink:0;">%s</div>
+       </div></div>',
+        [message.sender, message.body])
+        ], "") +
+      (CASE WHEN `Message Count` - size(Messages) > 0
+        THEN "...and other " + toString(`Message Count` - size(Messages)) + " messages in the chat"
+        ELSE ""
+      END) AS Messages,
+      threadId
+    ORDER BY `Latest Message` DESC
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

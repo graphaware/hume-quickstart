@@ -1,0 +1,16 @@
+kind: EcosystemResource
+metadata:
+  name: spine-neo4j-sa
+spec:
+  fqn: "#Hume.Orchestra.Resource.Neo4j"
+  parameters:
+  - name: database
+    value: spine
+  - name: host
+    value: $$SPINE_NEO4J_HOST
+  - name: password
+    value: $$SPINE_NEO4J_SA_PASSWORD
+  - name: port
+    value: 7687
+  - name: user
+    value: $$SPINE_NEO4J_SA_USER

@@ -1,0 +1,108 @@
+kind: Action
+metadata:
+  name: ab-patterns-life-wireless-events-bar
+  knowledge-graph: SPINE
+spec:
+  label: ab-patterns-life-wireless-events-bar
+  description: "Displays a bar chart of the top 10 wireless connections most frequently used by the device, based on the number of pings."
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_LOCATION_EVENT]->(l:LocationEvent)-[:AT_NETWORK]->(w:WirelessNetwork)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE l.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE l.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+      AND w.BSSId IS NOT NULL
+      AND l.timestamp IS NOT NULL
+    WITH *
+
+    ORDER BY l.timeStamp
+    WITH dateFrom, dateTo, w.BSSId AS network, collect(datetime(l.timestamp)) AS timestamps
+    ORDER BY size(timestamps) DESC
+      LIMIT 10 // pick the 10 Networks most used, otherwise we have a long list
+
+    UNWIND timestamps AS timestamp
+      WITH network, date(timestamp) AS date, count(*) AS count,
+      CASE
+        WHEN ( (dateFrom IS NULL OR dateTo IS NULL) OR (duration.inDays(dateFrom, dateTo).days > 1000))
+        THEN 'yearmonth'
+        WHEN ( 30 <= (duration.inDays(dateFrom, dateTo).days < 1000))
+          THEN 'yearmonthdate'
+        ELSE 'yearmonthdate'
+        END AS resolution
+
+      RETURN collect({
+            Network: network,
+            Date: date,
+            count: count
+          }) AS values,
+      'bar' AS chartType, //'circle' AS chartType
+      {
+        x: {
+            field: "Date",
+            type: "temporal",
+            title: "Date",
+            timeUnit: resolution
+        },
+        y: {
+            field: "count",
+            type: "quantitative",
+            title: "Ping Counts"
+        },
+        color: {
+            field: "Network",
+            type: "nominal",
+            title: "Wireless Network"
+        },
+        tooltip: [
+            {
+                field: "Network"
+            },
+            {
+                field: "count",
+                type: "quantitative",
+                title: "Ping Counts"
+            }
+        ]
+      } AS options
+  returnType: CHART
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

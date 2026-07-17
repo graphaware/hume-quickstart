@@ -1,0 +1,14 @@
+kind: ValueList
+metadata:
+  name: Knows_type
+  knowledge-graph: SPINE
+spec:
+  label: Knows_type
+  type: STRING
+  data:
+  - value: LIVES WITH
+    label: LIVES WITH
+  - value: LIVED WITH
+    label: LIVED WITH
+  - value: OTHER
+    label: OTHER

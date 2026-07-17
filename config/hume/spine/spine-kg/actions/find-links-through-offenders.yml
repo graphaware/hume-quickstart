@@ -1,0 +1,57 @@
+kind: Action
+metadata:
+  name: find-links-through-offenders
+  knowledge-graph: SPINE
+spec:
+  label: Find links through Offenders
+  description: |-
+    Given a set of Offences, this action identifies the shortest paths between them based on common offenders and their relations, if such paths exist.
+
+    <br>
+
+    **Selection:**
+
+    *   **Offences**: the offences among which to identify any possible connections.
+
+    <br>
+
+    **Parameters:**
+
+    *   **Return Type:** select the format of the results (GRAPH or PREVIEW).
+  query: |-
+    MATCH path = ALL SHORTEST (o:Offence)<-[:CHARGED_FOR]-(:Person)-[:CHARGED_FOR|RESOLVED_TO|KNOWS|FAMILY_MEMBER|PARENT_OF*0..8]-(:Person)-[:CHARGED_FOR]->(o1)
+
+      WHERE elementId(o) IN $_selection.nodeElementIds
+      AND elementId(o1) IN $_selection.nodeElementIds
+      AND o <> o1
+      AND all(n in nodes(path) WHERE (n:Person|EntityGroup|Offence))
+
+    WITH distinct path
+    RETURN distinct {path: path, __highlightNodes__: [n in nodes(path) | elementId(n)]} AS __content__, {returnType: $returnType} AS __metadata__
+  returnType: DYNAMIC
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - Offence
+  inputParameters:
+  - name: returnType
+    label: Return Type
+    type: SELECT
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - value: GRAPH
+      label: GRAPH
+    - value: PREVIEW
+      label: PREVIEW
+    forgetValue: true
+  defaultValuesResolver:
+    type: CYPHER
+    params:
+      query: RETURN "GRAPH" AS returnType
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

@@ -1,0 +1,96 @@
+kind: Action
+metadata:
+  name: ab-profile-input-params
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-input-params
+  query: //RETURN *
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Selected Person
+    type: SELECT_ASYNC
+    multiselect: false
+    list: false
+    required: true
+    query: |-
+      WHEN $person IS NULL OR size($person) = 0 THEN {
+        MATCH (node:Person)
+        RETURN elementId(node) AS id,
+        node.fullName AS label
+        LIMIT 100
+      }
+
+      ELSE {
+        CALL() {
+        CALL db.index.fulltext.queryNodes('Person', apoc.text.format('fullName:%s', [apoc.text.join([w in apoc.text.split($person, "\\s+") | apoc.text.clean(w) + "~0.85"], " AND ")]))
+          YIELD node, score
+        RETURN elementId(node) AS id,
+          node.fullName AS value,
+          score
+        LIMIT 100
+
+        UNION
+
+        CALL db.index.fulltext.queryNodes('Person', apoc.text.format('fullName:%s', [apoc.text.join([w in apoc.text.split($person, "\\s+") | apoc.text.clean(w) + "*"], " AND ")]))
+          YIELD node, score
+        RETURN elementId(node) AS id,
+          node.fullName AS value,
+          score
+        LIMIT 100
+        }
+
+        ORDER BY score DESC
+        RETURN id, value AS label
+      }
+    resolver:
+      type: CYPHER
+      params: {}
+      query: |-
+        WHEN $person IS NULL OR size($person) = 0 THEN {
+          MATCH (node:Person)
+          RETURN elementId(node) AS id,
+          node.fullName AS label
+          LIMIT 100
+        }
+
+        ELSE {
+          CALL() {
+          CALL db.index.fulltext.queryNodes('Person', apoc.text.format('fullName:%s', [apoc.text.join([w in apoc.text.split($person, "\\s+") | apoc.text.clean(w) + "~0.85"], " AND ")]))
+            YIELD node, score
+          RETURN elementId(node) AS id,
+            node.fullName AS value,
+            score
+          LIMIT 100
+
+          UNION
+
+          CALL db.index.fulltext.queryNodes('Person', apoc.text.format('fullName:%s', [apoc.text.join([w in apoc.text.split($person, "\\s+") | apoc.text.clean(w) + "*"], " AND ")]))
+            YIELD node, score
+          RETURN elementId(node) AS id,
+            node.fullName AS value,
+            score
+          LIMIT 100
+          }
+
+          ORDER BY score DESC
+          RETURN id, value AS label
+        }
+    forgetValue: true
+  defaultValuesResolver:
+    type: CYPHER
+    params:
+      query: |-
+        MATCH (node:Person)
+          WHERE elementId(node) = $_selection.nodeElementIds[0]
+        RETURN {
+          id: elementId(node),
+          label: node.fullName
+          } AS person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

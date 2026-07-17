@@ -1,0 +1,7 @@
+kind: DataSource
+metadata:
+  name: DFEX
+spec:
+  name: DFEX
+  neo4jLabel: DFEX
+  color: "#119433"

@@ -1,0 +1,23 @@
+kind: Action
+metadata:
+  name: ca-entity-group-id
+  knowledge-graph: SPINE
+spec:
+  label: CA-entity-group-id
+  query: |-
+    MATCH (n)
+    WHERE elementId(n) = $elementId
+    MATCH (n)-[:RESOLVED_TO]->(eg)
+    RETURN eg.id AS egId, $elementId AS id
+  returnType: GRAPH
+  scope: COMPUTED_ATTRIBUTE
+  inclusions:
+    labels:
+    - Person
+    - PhoneNumber
+    - EmailAddress
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

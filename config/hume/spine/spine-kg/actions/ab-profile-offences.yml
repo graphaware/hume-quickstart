@@ -1,0 +1,35 @@
+kind: Action
+metadata:
+  name: ab-profile-offences
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-offences
+  query: |-
+    MATCH path = (p:Person WHERE elementId(p) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH [n in nodes(path) WHERE n:Person] as linkedPeople
+    UNWIND linkedPeople AS person
+      MATCH (person)-[:CHARGED_FOR]->(o)
+      RETURN distinct o.caseNumber AS `Case Number`,
+        o.primaryType AS `Primary Type`,
+        coalesce(o.secondaryType, "-") AS `Secondary Type`,
+        o.occurredAt AS `Offence Date`,
+        apoc.text.format("<b>Street</b>: %s <br><b>Position</b>: %s, %s", [coalesce(o.locationDescription, "-"), o.location.latitude, o.location.longitude]) AS `Location`
+      ORDER BY o.occurredAt
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

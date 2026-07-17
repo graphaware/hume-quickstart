@@ -1,0 +1,31 @@
+kind: Action
+metadata:
+  name: ab-profile-custody-history
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-custody-history
+  query: |-
+    MATCH path = (p:Person WHERE elementId(p) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH [n in nodes(path) WHERE n:Person] as linkedPeople
+    UNWIND linkedPeople AS person
+      MATCH (person)-[:HAS_CUSTODY_STATUS]->(status)-[r:RELATED_TO_FACILITY]->(facility)
+      RETURN distinct facility.name AS Facility, r.dateFrom AS `Date From`, coalesce(r.dateTo, "-") AS `Date To`
+      ORDER BY `Date From`
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

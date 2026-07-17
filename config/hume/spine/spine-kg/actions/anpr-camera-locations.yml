@@ -1,0 +1,21 @@
+kind: Action
+metadata:
+  name: anpr-camera-locations
+  knowledge-graph: SPINE
+spec:
+  label: ANPR camera locations
+  description: ANPR camera locations in London
+  query: |-
+    MATCH (n:ANPRCamera)
+    RETURN {
+      pos: n.location,
+      name: n.name //n.locationDescription
+    } AS data
+  returnType: GEOSPATIAL_DATA
+  scope: GEOSPATIAL
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

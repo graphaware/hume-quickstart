@@ -1,0 +1,96 @@
+kind: Action
+metadata:
+  name: ab-patterns-life-events-barchart
+  knowledge-graph: SPINE
+spec:
+  label: ab-patterns-life-events-barchart
+  description: "Displays a heatmap of the top 10 most frequently visited locations, grouped by hour of the day."
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_LOCATION_EVENT]->(l)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE l.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE l.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+
+    ORDER BY l.timestamp
+    WITH round(l.position.latitude, 4) AS latitude, round(l.position.longitude, 4) AS longitude, datetime(l.timestamp) AS timestamp
+
+    WITH latitude, longitude, collect(timestamp) AS timestamps
+    ORDER BY size(timestamps) DESC
+    LIMIT 10 // pick the 10 Locations most visited, otherwise we have a long list
+    UNWIND timestamps AS timestamp
+    WITH
+        "(" + apoc.text.join([toString(latitude), toString(longitude)], ", ") + ")" AS Location,
+        timestamp.hour AS hourOfDay,
+        count(*) AS frequency
+    WITH
+      collect({
+        Location: Location,
+        hourOfDay: hourOfDay,
+        count: frequency
+      }) AS values
+
+    RETURN values,
+      'rect' AS chartType,
+      {
+        x: {
+            field: "hourOfDay",
+            type: "ordinal",
+            title: "Hour of the Day",
+            axis: {
+                labelAngle: 0,
+                title: "Hour"
+            },
+            scale: {domain: range(0, 23)}
+        },
+        y: {
+            field: "Location",
+            type: "ordinal",
+            title: "Location"
+        },
+        color: {
+            field: "count",
+            type: "quantitative",
+            title: "Pings per Hour",
+            scale: {
+                scheme: "blues"
+            }
+        },
+        tooltip: [
+            {
+                field: "Location", //field: "dayOfWeek",
+                type: "ordinal",
+                title: "Location"//title: "Day of the Week"
+            },
+            {
+                field: "hourOfDay",
+                type: "ordinal",
+                title: "Hour of the Day"
+            },
+            {
+                field: "count",
+                type: "quantitative",
+                title: "Pings per Hour"
+            }
+        ]
+      } AS options
+  returnType: CHART
+  scope: UTILITY
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

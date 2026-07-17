@@ -1,0 +1,26 @@
+kind: Action
+metadata:
+  name: shortest-path---through-wirelessnetworks
+  knowledge-graph: SPINE
+spec:
+  label: Shortest path - through WirelessNetworks
+  description: Identifies the shortest paths through WirelessNetwork between the two selected Devices.
+  query: |-
+    MATCH path = ALL SHORTEST (
+      (source {id:$_selection.nodes[0].values.id})
+      ((n)--()) {1, 3}
+      (target {id:$_selection.nodes[1].values.id})
+      WHERE all(node in n[1..] WHERE (node:WirelessNetwork))
+      )
+    RETURN path
+  returnType: PREVIEW
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - Person
+    - DeviceExtraction
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

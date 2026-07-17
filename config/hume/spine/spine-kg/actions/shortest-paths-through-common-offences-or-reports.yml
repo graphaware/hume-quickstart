@@ -1,0 +1,28 @@
+kind: Action
+metadata:
+  name: shortest-paths-through-common-offences-or-reports
+  knowledge-graph: SPINE
+spec:
+  label: Shortest paths through common Offences or Reports
+  description: |-
+    Return the **shortest path between two selected individuals**, based on either common **offences** or shared **reports**.
+
+    The path may include intermediate individuals. For example, the first selected node may be connected to an intermediate node through a co-offence, which is then connected to the second selected node through a different offence.
+  query: |-
+    MATCH path = ALL SHORTEST (p:Person WHERE elementId(p) = $_selection.nodeElementIds[0])
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+      ( (:Person)-[:CHARGED_FOR|MENTIONS]-()-[:CHARGED_FOR|MENTIONS]-() ) {1,3}
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+      (q:Person WHERE elementId(q) = $_selection.nodeElementIds[1])
+
+    RETURN distinct path
+  returnType: PREVIEW
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

@@ -1,0 +1,27 @@
+kind: AlertingPattern
+metadata:
+  name: OffenderStatus changes to "PAROLE"
+  knowledge-graph: SPINE
+spec:
+  label: OffenderStatus changes to "PAROLE"
+  query: |-
+    MATCH path = (n:Person WHERE n.id = $id)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0, 1}
+
+      WHERE any(n IN nodes(path) WHERE n:Person AND n.offenderStatus = "PAROLE")
+
+    RETURN $id AS key, collect(path) AS data
+  parameters:
+  - name: id
+    type: STRING
+  conditions:
+  - NEW_RECORDS
+  - DELETED_RECORDS
+  - DIFFERENT_RECORDS
+  resource: spine-neo4j-sa
+  perspective: Analyst Perspective - POL and HMPS
+  schedule:
+    repetitionType: FIXED
+    frequency: 2
+    frequencyUnit: MINUTES
+    timeZone: UTC

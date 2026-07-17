@@ -1,0 +1,32 @@
+kind: ValueList
+metadata:
+  name: MarkScarTattoo_featureType
+  knowledge-graph: SPINE
+spec:
+  label: MarkScarTattoo_featureType
+  type: STRING
+  data:
+  - value: BRANDING
+    label: BRANDING
+  - value: DEFORMITY
+    label: DEFORMITY
+  - value: GLASSES
+    label: GLASSES
+  - value: IMPLANT
+    label: IMPLANT
+  - value: MARK
+    label: MARK
+  - value: MISSING
+    label: MISSING
+  - value: PIERCING
+    label: PIERCING
+  - value: SCAR
+    label: SCAR
+  - value: TATTOO
+    label: TATTOO
+  - value: TRIBAL MARKING
+    label: TRIBAL MARKING
+  - value: UNKNOWN
+    label: UNKNOWN
+  - value: WEBBED
+    label: WEBBED

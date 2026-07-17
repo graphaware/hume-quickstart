@@ -1,0 +1,24 @@
+kind: ValueList
+metadata:
+  name: Person_eyeColour
+  knowledge-graph: SPINE
+spec:
+  label: Person_eyeColour
+  type: STRING
+  data:
+  - value: GREEN
+    label: GREEN
+  - value: BROWN
+    label: BROWN
+  - value: UNKNOWN
+    label: UNKNOWN
+  - value: BLUE
+    label: BLUE
+  - value: BLACK
+    label: BLACK
+  - value: HAZEL
+    label: HAZEL
+  - value: GRAY
+    label: GRAY
+  - value: MAROON
+    label: MAROON

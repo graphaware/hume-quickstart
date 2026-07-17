@@ -1,0 +1,26 @@
+kind: GroupingStrategy
+metadata:
+  name: Resolved Entities
+  knowledge-graph: SPINE
+spec:
+  label: Resolved Entities
+  active: true
+  inclusions:
+  - EmailAddress
+  - EntityGroup
+  - Person
+  - PhoneNumber
+  ruleGroups:
+    logicalOperator: OR
+    groups:
+    - logicalOperator: AND
+      rules:
+      - attributeName: egId
+        operator: SAME_VALUE
+  groupCaptioningMethod: CUSTOM_ATTRIBUTES
+  groupCaptioningAttributes:
+  - address
+  - birthDate
+  - birthYears
+  - fullName
+  - phoneNumber

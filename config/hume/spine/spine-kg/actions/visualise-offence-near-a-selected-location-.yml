@@ -1,0 +1,34 @@
+kind: Action
+metadata:
+  name: visualise-offence-near-a-selected-location-
+  knowledge-graph: SPINE
+spec:
+  label: 'Visualise Offence near a selected location '
+  description: |-
+    Selecting a point on the map, this action displays Offences occurred nearby.
+
+    It is possible to specify the radius (in kms) of the area to be considered, otherwise, a default value is used.
+  query: |-
+    WITH point({
+      latitude: $_context.contextMenu.mapCoords[0],
+      longitude: $_context.contextMenu.mapCoords[1]
+    }) AS center
+    MATCH (n:Offence)
+    WHERE point.distance(n.location, center) <= coalesce($radius * 1000, $_context.mapBounds.height / 2)
+    RETURN n
+  returnType: GRAPH
+  scope: MAP_CURSOR
+  inclusions: {}
+  inputParameters:
+  - name: radius
+    label: Radius to consider (in Kms)
+    type: FLOAT
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

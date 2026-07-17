@@ -1,0 +1,51 @@
+kind: Action
+metadata:
+  name: ab-profile-custody-status
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-custody-status
+  query: |-
+    WITH {offenderStatus: ["Offender Status", 1], parentInstitution: ["Parent Institution", 2], admissionDate: ["Admission Date", 3], projectedParoleDate: ["Projected Parole Date", 4], projectedDischargeDate: ["Projected Discharge Date", 5]} AS propsMapping
+    MATCH path = (p:Person WHERE elementId(p) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0, 1}
+
+    WITH propsMapping, [n in nodes(path) WHERE n:Person] as linkedPeople
+    UNWIND linkedPeople AS person
+      MATCH (person)-[:HAS_CUSTODY_STATUS]->(status)
+      WITH distinct propsMapping, status
+      WITH [k IN keys(status) WHERE k in keys(propsMapping) | [ propsMapping[k][0], status[k], propsMapping[k][1]] ] AS props
+      WITH COLLECT {
+        UNWIND props AS prop
+        RETURN prop ORDER BY prop[2] } AS props // this is to define an order in the properties
+
+      RETURN '<div>
+    <table class="entity-info">
+        <tr>
+            <th>Attribute</th>
+            <th>Value</th>
+        </tr>
+    ' + apoc.text.join([i IN range(0, size(props) - 1)
+    | apoc.text.format(
+        '<tr>
+            <td><strong>%s</strong></td>
+            <td>%s</td>
+        </tr>', [props[i][0], props[i][1]])
+    ], '') +
+    '</table>
+    </div>' AS html
+  returnType: HTML
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

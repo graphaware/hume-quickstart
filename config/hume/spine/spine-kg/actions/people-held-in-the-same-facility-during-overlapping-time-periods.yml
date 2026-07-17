@@ -1,0 +1,43 @@
+kind: Action
+metadata:
+  name: people-held-in-the-same-facility-during-overlapping-time-periods
+  knowledge-graph: SPINE
+spec:
+  label: People held in the same facility during overlapping time periods
+  description: "Shows individuals who were held in the same facility as the selected person(s), during a period that overlaps with theirs."
+  query: |-
+    MATCH (p:Person WHERE elementId(p) IN $_selection.nodeElementIds)
+      ((:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-(:Person)) {0, 1}
+      (offender)
+
+    MATCH (offender)-[:HAS_CUSTODY_STATUS]->()-[rel:RELATED_TO_FACILITY {offenderStatus: "IN CUSTODY"}]->(f)<-[rel2:RELATED_TO_FACILITY {offenderStatus: "IN CUSTODY"}]-()<-[:HAS_CUSTODY_STATUS]-(q:Person:HMPS)
+
+    WHERE offender <> q
+    AND ( rel2.dateFrom < rel.dateFrom < coalesce(rel2.dateTo, date("2099-12-31"))
+    OR rel2.dateFrom < rel.dateTo < coalesce(rel2.dateTo, date("2099-12-31")) )
+
+    WITH
+      offender.hmpsNumber AS `Offender HMPS Number`, offender.fullName AS `Offender Name`,
+      q.hmpsNumber AS `Co-detainee HMPS Number`, q.fullName AS `Co-detainee Name`,
+      f.name AS Facility,
+      coll.max([rel.dateFrom, rel2.dateFrom]) AS periodFrom,
+      coll.min([coalesce(rel.dateTo, date("2099-12-31")), coalesce(rel2.dateTo, date("2099-12-31")) ]) AS periodTo
+
+    ORDER BY offender, periodFrom
+
+    WITH `Offender HMPS Number`, `Offender Name`, `Co-detainee HMPS Number`, `Co-detainee Name`,
+      collect(distinct {Facility: Facility, period: apoc.text.format("[%s, %s]", [periodFrom, periodTo])}) AS items
+
+    RETURN `Offender HMPS Number`, `Offender Name`,
+      `Co-detainee HMPS Number`, `Co-detainee Name`,
+      apoc.text.join([i in items | apoc.text.format("%s - %s", [i.Facility, i.period])], "<br>") AS `Facilities and Time Periods`
+  returnType: TABLE
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

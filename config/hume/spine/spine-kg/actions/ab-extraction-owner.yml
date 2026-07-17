@@ -1,0 +1,43 @@
+kind: Action
+metadata:
+  name: ab-extraction-owner
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-owner
+  query: |-
+    MATCH path = (n:DeviceExtraction {id: $device})<-[:OWNS_DEVICE]-(p)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-(:Person) ) {0, 1}
+
+    RETURN path
+  returnType: GRAPH
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

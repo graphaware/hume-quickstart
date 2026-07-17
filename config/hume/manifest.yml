@@ -5,6 +5,7 @@ imports:
   - ./datasources
   - ./upload-configs
   - ./movies
+  - ./spine
 removeOtherRoles: false
 removeOtherResources: false
 removeOtherPermissionGroups: false
@@ -12,3 +13,4 @@ roles:
   - name: ANALYST
   - name: INVESTIGATOR
   - name: SPINE_ANALYST
+  - name: SPINE_OFFICER

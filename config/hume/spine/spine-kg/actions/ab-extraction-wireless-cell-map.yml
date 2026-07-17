@@ -1,0 +1,68 @@
+kind: Action
+metadata:
+  name: ab-extraction-wireless-cell-map
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-wireless-cell-map
+  description: Top wireless networks and cell towers to which the phone has connected.
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_LOCATION_EVENT]->(l:LocationEvent)-[:AT_NETWORK|AT_CELL_TOWER]->(networkCell)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE l.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE l.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+      AND l.position IS NOT NULL
+
+    WITH n, count(l) AS freq, networkCell,
+      (CASE WHEN networkCell:CellTower THEN "CellTower"
+        WHEN networkCell:WirelessNetwork THEN "WirelessNetwork"
+      END) AS type
+    ORDER BY freq DESC
+
+    WITH type, collect(networkCell)[0..100] AS items
+    RETURN items
+  returnType: GRAPH
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+    viewMode: MAP
+  httpActionIncludeCanvasInPayload: false

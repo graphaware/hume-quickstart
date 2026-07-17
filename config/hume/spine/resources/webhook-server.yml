@@ -1,0 +1,14 @@
+kind: EcosystemResource
+metadata:
+  name: webhook-server
+spec:
+  fqn: "#Hume.Orchestra.Resource.WebhookServer"
+  parameters:
+  - name: host
+    value: 0.0.0.0
+  - name: password
+    value: orchestra
+  - name: port
+    value: $$WEBHOOK_SERVER_PORT
+  - name: user
+    value: orchestra

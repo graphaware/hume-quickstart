@@ -1,0 +1,17 @@
+kind: Action
+metadata:
+  name: get-shortest-path
+  knowledge-graph: SPINE
+spec:
+  label: Get Shortest Path
+  query: "WITH $_canvas.relationships as relationships\nUNWIND relationships as relationship\nWITH collect(relationship.elementId) as ids\nCALL (ids) {\n  MATCH (source)-[r]-(target)\n  WHERE elementId(r) IN ids\n  RETURN source, target, r\n  UNION\n  MATCH (source)-[r]-(target)\n  WHERE elementId(r) IN ids\n  RETURN target, source, r\n}\nWITH source, target, r\nWITH gds.graph.project('prj', source, target) AS g\nWITH g\nMATCH (source), (target)\nWHERE elementId(source) = $_selection.nodes[0].elementId AND elementId(target) = $_selection.nodes[1].elementId\nWITH source, target\nCALL gds.shortestPath.dijkstra.stream('prj', {\n\_ \_ sourceNode: source,\n\_ \_ targetNode: target\n})\nYIELD index, sourceNode, targetNode, totalCost, nodeIds, costs, path\nWITH\n\_ \_ [nodeId IN nodeIds | elementId(gds.util.asNode(nodeId))] AS nodeNames,\n\_ \_ $_canvas.relationships as relationships\nORDER BY index\nCALL ()\n{\n  CALL gds.graph.drop('prj') YIELD graphName\n}\nRETURN nodeNames as __highlightNodes__, [x in range(0, size(nodeNames) - 2) | [rel in relationships WHERE (rel.startNodeElementId = nodeNames[x] AND rel.endNodeElementId = nodeNames[x+1]) OR (rel.startNodeElementId = nodeNames[x+1] AND rel.endNodeElementId = nodeNames[x])][0].elementId] as __highlightRels__\n\n\n\n  "
+  returnType: GRAPH
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

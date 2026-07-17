@@ -1,0 +1,12 @@
+kind: ValueList
+metadata:
+  name: PartyInMessage_type
+  knowledge-graph: SPINE
+spec:
+  label: PartyInMessage_type
+  type: STRING
+  data:
+  - value: RECEIVED MESSAGE
+    label: RECEIVED MESSAGE
+  - value: SENT MESSAGE
+    label: SENT MESSAGE

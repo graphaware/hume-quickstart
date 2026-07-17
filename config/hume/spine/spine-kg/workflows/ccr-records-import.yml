@@ -1,0 +1,240 @@
+kind: Workflow
+metadata:
+  name: CCR Records Import
+  knowledge-graph: SPINE
+spec:
+  label: CCR Records Import
+  autostart: true
+  skipUpdateIfRunning: true
+  startWorkflowAfterImport: true
+  restartWorkflowAfterUpdate: true
+  schedule: {}
+  components:
+  - name: Webhook
+    type: "#Hume.Orchestra.DataSource.WebHook"
+    disabled: false
+    resourceName: webhook-server
+    to:
+    - name: HTTP File Download
+      disabled: false
+    canvasPosition:
+      x: 580
+      "y": 220
+    config:
+      ResponseTimeout: 60
+      asyncProcessing: false
+      forwardHttpRequestHeaders: false
+      path: /spine/get-ccr-data
+      requestQueueSize: 100
+      returnResponse: true
+      store_error_content: true
+      store_message_content: true
+  - name: HTTP File Download
+    type: "#Hume.Orchestra.Http.DownloadFileViaHttp"
+    disabled: false
+    to:
+    - name: File - CSV Processor
+      disabled: false
+    canvasPosition:
+      x: 780
+      "y": 220
+    config:
+      always_redeliver: false
+      backoff_multiplier: 2
+      enable_retry: false
+      http_client_connect_timeout: 0
+      http_client_socket_timeout: 0
+      maximum_redeliveries: 5
+      redelivery_delay: 1000
+      requestParams:
+        id: $._data.file.id
+      request_headers:
+        x-api-key: $$ORCHESTRA_MEDIA_DOWNLOAD_KEY
+      store_error_content: true
+      store_message_content: true
+      uri: http://media:8008/v1/download
+      use_exponential_backoff: false
+  - name: File - CSV Processor
+    type: "#Hume.Orchestra.Processor.CSVFileProcessor"
+    disabled: false
+    to:
+    - name: Read the PhoneNumber nodes information
+      disabled: false
+    canvasPosition:
+      x: 980
+      "y": 220
+    config:
+      delimiter: ","
+      parallel: false
+      suffix: csv
+      use_headers: true
+  - name: Read the PhoneNumber nodes information
+    type: "#Hume.Orchestra.Persistence.Neo4jWriter"
+    disabled: false
+    resourceName: spine-neo4j-sa
+    to:
+    - name: Batch Processor
+      disabled: false
+    canvasPosition:
+      x: 1180
+      "y": 220
+    config:
+      cypher_query: |-
+        OPTIONAL MATCH (source:PhoneNumber)
+          WHERE source.id = "ELR_" + toString($source_number)
+
+        OPTIONAL MATCH (target:PhoneNumber)
+          WHERE target.id = "ELR_" + toString($target_number)
+
+        RETURN elementId(source) AS sourcePhoneId,
+          properties(source) AS sourcePhoneProps,
+          elementId(target) AS targetPhoneId,
+          properties(target) AS targetPhoneProps
+      delay: 0
+      max_retry: 0
+      store_error_content: true
+      store_message_content: true
+      stream_records: false
+      transactionTimeoutInSec: 0
+  - name: Batch Processor
+    type: "#Hume.Orchestra.Processor.Batch"
+    disabled: false
+    to:
+    - name: Observer 12
+      disabled: false
+    canvasPosition:
+      x: 1360
+      "y": 220
+    config:
+      batch_key: _batch
+      batch_size: 50
+      batch_timeout: 300
+      synchronous: true
+  - name: Observer 12
+    type: "#Hume.Orchestra.Monitor.Observer"
+    disabled: false
+    to:
+    - name: Prepare the final format
+      disabled: false
+    canvasPosition:
+      x: 1560
+      "y": 220
+    config:
+      store_error_content: true
+      store_message_content: true
+  - name: Prepare the final format
+    type: "#Hume.Orchestra.Processor.PythonTransformer"
+    disabled: false
+    to:
+    - name: Webhook Response
+      disabled: false
+    canvasPosition:
+      x: 1740
+      "y": 220
+    config:
+      store_error_content: true
+      store_message_content: true
+      transformer_script: |-
+        from orchestra.utils import graph
+        from datetime import datetime
+        from typing import Any, Dict, List, Tuple
+
+        def get_prev_next_call_pairs(__nodes__: List[Dict[str, Any]]) -> List[Tuple[str, str]]:
+            """
+            Extract Call nodes from __nodes__, sort them by their `timestamp`,
+            and return consecutive pairs as:
+
+                [(prev_call_id, next_call_id), ...]
+
+            Uses `__id` as the call identifier.
+            """
+
+            # Keep only nodes that have "Call" in __labels
+            call_nodes = [
+                node
+                for node in __nodes__
+                if "Call" in node.get("__labels", [])
+            ]
+
+            # Sort by ISO datetime in `timestamp`
+            call_nodes.sort(key=lambda node: datetime.fromisoformat(node["timestamp"]))
+
+            # Build consecutive pairs
+            return [
+                (call_nodes[i]["__id"], call_nodes[i + 1]["__id"])
+                for i in range(len(call_nodes) - 1)
+            ]
+
+        def phone_to_node(num):
+            return graph.managed_node(num, 'PhoneNumber', {'phoneNumber': num})
+
+
+        nodes = []
+        rels = []
+
+        batch = body.get('_batch', [body])
+
+        for el in batch:
+            records = el.get("_records", [])
+            source_phone = records[0].get("sourcePhoneId") if len(records) > 0 else None
+            target_phone = records[0].get("targetPhoneId") if len(records) > 0 else None
+            source_phone_props = records[0].get("sourcePhoneProps") if len(records) > 0 else None
+            target_phone_props = records[0].get("targetPhoneProps") if len(records) > 0 else None
+            src = source_phone if source_phone else el.get('source_number')
+            tgt = target_phone if target_phone else el.get('target_number')
+            rec_id = el.get('record_id')
+            lat = el.get('cell_tower_lat')
+            lng = el.get('cell_tower_long')
+            f_lat = float(lat)
+            f_lng = float(lng)
+            position = {"lng": f_lng, "lat": f_lat}
+            t_id = el.get('cell_tower_id')
+
+            # Create Phone Nodes
+            if src:
+              if source_phone:
+                nodes.append(graph.managed_node(src, 'PhoneNumber', source_phone_props))
+              else:
+                nodes.append(phone_to_node(src))
+            if tgt:
+              if target_phone:
+                nodes.append(graph.managed_node(tgt, 'PhoneNumber', target_phone_props))
+              else:
+                nodes.append(phone_to_node(tgt))
+
+
+            # Create Call Node with Tower Info
+            call_attr = {
+                'id': rec_id,
+                'timestamp': el.get('call_start_timestamp'),
+                'duration': int(el.get('call_duration_seconds', 0)),
+                'cellTowerPosition': position,
+                'cellTowerId': el.get('cell_tower_id', None)
+            }
+            call_node = graph.managed_node(rec_id, 'Call', call_attr)
+            nodes.append(call_node)
+
+            # Create Relationships (Phone <-> Call)
+            # Caller -> MADE_CALL -> Call
+            rels.append(graph.managed_relationship(f'{rec_id}_src', 'PARTY_IN_CALL', src, rec_id, {"type": "MADE CALL"}))
+
+            # Receiver -> RECEIVED_CALL -> Call
+            if tgt:
+                rels.append(graph.managed_relationship(f'{rec_id}_tgt', 'PARTY_IN_CALL', tgt, rec_id, {"type": "RECEIVED CALL"}))
+
+        call_pairs = get_prev_next_call_pairs(nodes)
+        for i in call_pairs:
+          rid = i[0] + '_' + i[1]
+          r = graph.managed_relationship(f'{rid}', 'NEXT', i[0], i[1], {})
+          rels.append(r)
+
+        return {'content': [{'__nodes__': nodes, '__rels__': rels}]}
+  - name: Webhook Response
+    type: "#Hume.Orchestra.Action.WebhookResponse"
+    disabled: false
+    canvasPosition:
+      x: 1960
+      "y": 220
+    config:
+      store_error_content: true
+      store_message_content: true

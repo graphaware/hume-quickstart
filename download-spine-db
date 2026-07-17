@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+URL="https://s3.eu-west-1.amazonaws.com/spine.dev.graphaware.io/spine-neo4j-backups/spine-latest.backup"
+DEST_DIR="data/neo4j/import"
+
+mkdir -p "$DEST_DIR"
+curl -fSL "$URL" -o "$DEST_DIR/spine-latest.backup"
+
+echo "Downloaded spine-latest.backup to $DEST_DIR"

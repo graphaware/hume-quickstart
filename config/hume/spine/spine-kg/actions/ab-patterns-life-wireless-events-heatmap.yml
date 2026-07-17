@@ -1,0 +1,98 @@
+kind: Action
+metadata:
+  name: ab-patterns-life-wireless-events-heatmap
+  knowledge-graph: SPINE
+spec:
+  label: ab-patterns-life-wireless-events-heatmap
+  description: "Displays a heatmap of the top 10 wireless connections most frequently used by the device, grouped by day of the week."
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_LOCATION_EVENT]->(l:LocationEvent)-[:AT_NETWORK]->(w:WirelessNetwork)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE l.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE l.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+      AND w.BSSId IS NOT NULL
+      AND l.timestamp IS NOT NULL
+    WITH *
+
+    ORDER BY l.timestamp
+    WITH w.BSSId AS network, collect(datetime(l.timestamp)) AS timestamps
+    ORDER BY size(timestamps) DESC
+      LIMIT 10 // pick the 10 Networks most used, otherwise we have a long list
+      UNWIND timestamps AS timestamp
+
+      WITH network, apoc.temporal.format(timestamp, "EEEE") AS dayOfWeek, count(*) AS connections
+      WITH collect({
+            Network: network,
+            dayOfWeek: dayOfWeek,
+            connections: connections
+          }) AS values
+
+      RETURN values,
+      'rect' AS chartType, //'circle' AS chartType
+      {
+        x: {
+            field: "dayOfWeek",
+            type: "ordinal",
+            title: "Day of Week",
+            scale: {
+            domain: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            },
+            axis: {
+                labelAngle: -30
+            }
+        },
+        y: {
+            field: "Network",
+            type: "ordinal",
+            title: "Network",
+            axis: {
+                labelAngle: -30
+            }
+        },
+        color: {
+            field: "connections",
+            type: "quantitative",
+            title: "Pings per Days",
+            scale: {
+              scheme: "blues"
+            }
+        },
+        tooltip: [
+            {
+                field: "dayOfWeek",
+                type: "ordinal",
+                title: "Day of Week"
+            },
+            {
+                field: "connections",
+                type: "quantitative",
+                title: "Number of Connections"
+            },
+            {
+                field: "Network",
+                type: "ordinal",
+                title: "Wireless Network"
+            }
+        ]
+      } AS options
+  returnType: CHART
+  scope: UTILITY
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

@@ -1,0 +1,7 @@
+kind: DataSource
+metadata:
+  name: ELR
+spec:
+  name: ELR
+  neo4jLabel: ELR
+  color: "#E5EE09"

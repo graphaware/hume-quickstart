@@ -1,0 +1,12 @@
+kind: ValueList
+metadata:
+  name: PartyInCall_type
+  knowledge-graph: SPINE
+spec:
+  label: PartyInCall_type
+  type: STRING
+  data:
+  - value: RECEIVED CALL
+    label: RECEIVED CALL
+  - value: MADE CALL
+    label: MADE CALL

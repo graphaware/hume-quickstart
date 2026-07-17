@@ -1,0 +1,13 @@
+kind: ActionBoard
+metadata:
+  name: Profile
+  knowledge-graph: SPINE
+spec:
+  label: Profile
+  template: file://profile-template.html
+  scope: MULTISELECT
+  perspective: Analyst Perspective
+  format: 2
+  inclusions:
+    labels:
+    - Person

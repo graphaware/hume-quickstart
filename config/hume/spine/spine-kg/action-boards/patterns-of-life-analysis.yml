@@ -1,0 +1,13 @@
+kind: ActionBoard
+metadata:
+  name: Patterns of Life Analysis
+  knowledge-graph: SPINE
+spec:
+  label: Patterns of Life Analysis
+  template: file://patterns-of-life-analysis-template.html
+  scope: MULTISELECT
+  perspective: Analyst Perspective
+  format: 2
+  inclusions:
+    labels:
+    - DeviceExtraction

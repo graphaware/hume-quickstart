@@ -1,0 +1,45 @@
+kind: Action
+metadata:
+  name: ab-extraction-owner-offences
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-owner-offences
+  query: |-
+    MATCH path = (n:DeviceExtraction {id: $device})<-[:OWNS_DEVICE]-(p)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-(:Person) ) {0, 1}
+      (q:Person:POL)
+
+    OPTIONAL MATCH offences = (q)-[:CHARGED_FOR]->(off)
+    RETURN off.id AS offenceId, off.caseNumber AS caseNumber, off.primaryType AS Offence, format(off.occurredAt, "yyyy/MM/dd HH:mm") AS Datetime
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - {}
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

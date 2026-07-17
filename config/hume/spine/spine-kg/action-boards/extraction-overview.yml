@@ -1,0 +1,13 @@
+kind: ActionBoard
+metadata:
+  name: Extraction Overview
+  knowledge-graph: SPINE
+spec:
+  label: Extraction Overview
+  template: file://extraction-overview-template.html
+  scope: MULTISELECT
+  perspective: Analyst Perspective
+  format: 2
+  inclusions:
+    labels:
+    - DeviceExtraction

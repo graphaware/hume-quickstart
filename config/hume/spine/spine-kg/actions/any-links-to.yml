@@ -1,0 +1,36 @@
+kind: Action
+metadata:
+  name: any-links-to
+  knowledge-graph: SPINE
+spec:
+  label: Any links to
+  query: |-
+    CALL () {
+      WITH $target AS target WHERE target = 'ANPR'
+      MATCH (n)
+      WHERE elementId(n) IN $_selection.nodeElementIds
+      MATCH path = ALL SHORTEST (n)-[]-+(:ANPRHit)
+      RETURN path LIMIT 1000
+    }
+    RETURN *
+  returnType: GRAPH
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - '*'
+  inputParameters:
+  - name: target
+    label: Target
+    type: SELECT
+    multiselect: false
+    list: false
+    required: false
+    selectOptions:
+    - value: ANPR
+      label: ANPR Hits
+    forgetValue: false
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

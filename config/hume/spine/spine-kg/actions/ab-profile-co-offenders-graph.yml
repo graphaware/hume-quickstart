@@ -1,0 +1,33 @@
+kind: Action
+metadata:
+  name: ab-profile-co-offenders-graph
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-co-offenders-graph
+  query: |-
+    MATCH path = (p:Person WHERE elementId(p) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH [n in nodes(path) WHERE n:Person] as linkedPeople
+    UNWIND linkedPeople AS person
+      MATCH path = (person)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+      (:Person)-[:CHARGED_FOR]->(offence)
+      ( (:Offence)<-[:CHARGED_FOR]-() ) {0, 1}
+      RETURN distinct path
+  returnType: GRAPH
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

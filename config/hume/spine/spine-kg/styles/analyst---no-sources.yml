@@ -1,0 +1,198 @@
+kind: Style
+metadata:
+  name: Analyst - No sources
+  knowledge-graph: SPINE
+spec:
+  label: Analyst - No sources
+  classes:
+    ANPRHit:
+      caption:
+      - cameraId
+      - direction
+      - occurredAt
+      captionMaxLength: 32
+    Call:
+      caption:
+      - appSource
+      - timestamp
+      - cellTowerId
+      captionMaxLength: 32
+    CellTower:
+      caption:
+      - __#label#__
+      - id
+      captionMaxLength: 32
+    CustodyStatus:
+      caption:
+      - __#label#__
+      - offenderStatus
+      - paroleDate
+      captionMaxLength: 32
+    DeviceExtraction:
+      caption:
+      - name
+      - __#label#__
+      captionMaxLength: 32
+    EmailAddress:
+      caption:
+      - address
+      captionMaxLength: 32
+    EntityGroup:
+      caption:
+      - __#label#__
+      captionMaxLength: 32
+      rules:
+      - type: CLASS_ICON_COLOR
+        config:
+          attributeCategory: SCHEMA
+          color: "#CF4900"
+          attributeValue: Person
+          icon: person
+          attributeName: entityGroupType
+          operator: EQUALS
+      - type: CLASS_ICON_COLOR
+        config:
+          attributeCategory: SCHEMA
+          color: "#CF4900"
+          attributeValue: EmailAddress
+          icon: mdi-email
+          attributeName: entityGroupType
+          operator: EQUALS
+      - type: CLASS_ICON_COLOR
+        config:
+          attributeCategory: SCHEMA
+          color: "#CF4900"
+          attributeValue: PhoneNumber
+          icon: mdi-cellphone-android
+          attributeName: entityGroupType
+          operator: EQUALS
+    Event:
+      caption:
+      - __#label#__
+      - caseNumber
+      - occurredAt
+      captionMaxLength: 32
+    Journey:
+      caption:
+      - name
+      - timestamp
+      captionMaxLength: 32
+    JudicialSentence:
+      caption:
+      - __#label#__
+      - offence
+      captionMaxLength: 32
+    LicencePlate:
+      caption:
+      - __#label#__
+      - id
+      captionMaxLength: 32
+    Location:
+      caption:
+      - __#label#__
+      - streetNumber
+      - streetName
+      - zip
+      captionMaxLength: 32
+    LocationEvent:
+      caption:
+      - type
+      - position
+      - timestamp
+      captionMaxLength: 32
+    MarkScarTattoo:
+      caption:
+      - featureType
+      - bodyLocation
+      - description
+      captionMaxLength: 32
+    Message:
+      caption:
+      - appSource
+      - timestamp
+      captionMaxLength: 32
+      rules:
+      - type: CLASS_ICON_COLOR
+        config:
+          attributeCategory: SCHEMA
+          color: "#279AC4"
+          icon: mdi-email-open-outline
+          attributeName: Email
+          operator: IS_TRUE
+    Offence:
+      caption:
+      - __#label#__
+      - primaryType
+      - secondaryType
+      - caseNumber
+      - occurredAt
+      captionMaxLength: 32
+    Person:
+      caption:
+      - fullName
+      - birthDate
+      - birthYears
+      captionMaxLength: 32
+      rules:
+      - type: CLASS_DONUT
+        config:
+          attributeCategory: SCHEMA
+          color: "#B21D38"
+          domainMax: 5
+          attributeName: riskScore
+      - type: CLASS_BADGE
+        config:
+          attributeCategory: SCHEMA
+          color: "#FD4496"
+          attributeValue: IN CUSTODY
+          icon: mdi-handcuffs
+          animated: false
+          attributeName: offenderStatus
+          position: se
+          operator: EQUALS
+    PhoneNumber:
+      caption:
+      - __#label#__
+      - phoneNumber
+      captionMaxLength: 32
+    Vehicle:
+      caption:
+      - make
+      - model
+      - colour
+      captionMaxLength: 32
+    WirelessNetwork:
+      caption:
+      - id
+      captionMaxLength: 32
+  relationships:
+    Contact-PARTY_IN_CALL->Call:
+      caption:
+      - type
+      captionMaxLength: 32
+    Contact-PARTY_IN_MESSAGE->Message:
+      caption:
+      - type
+      captionMaxLength: 32
+    ContactIdentifier-PARTY_IN_CALL->Call:
+      caption:
+      - type
+      captionMaxLength: 32
+    ContactIdentifier-PARTY_IN_MESSAGE->Message:
+      caption:
+      - type
+      captionMaxLength: 32
+    EmailAddress-PARTY_IN_MESSAGE->Message:
+      caption:
+      - type
+      captionMaxLength: 32
+    PhoneNumber-PARTY_IN_CALL->Call:
+      caption:
+      - type
+      captionMaxLength: 32
+    PhoneNumber-PARTY_IN_MESSAGE->Message:
+      caption:
+      - type
+      captionMaxLength: 32
+  default: false
+  isDefault: false

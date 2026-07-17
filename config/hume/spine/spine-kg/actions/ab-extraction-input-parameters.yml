@@ -1,0 +1,68 @@
+kind: Action
+metadata:
+  name: ab-extraction-input-parameters
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-input-parameters
+  description: |-
+    Specifies the input parameters for the action board.
+
+    **_Device_** is the only mandatory parameter and must correspond to the device name.
+
+    **_Date From_** and **_Date To_** define the time range applied across the entire action board; all data (including messages, calls, and location information) is filtered based on this time range.
+  query: //
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Device
+    type: SELECT_ASYNC
+    multiselect: false
+    list: false
+    required: true
+    query: |-
+      MATCH (de:DeviceExtraction)
+      RETURN de.id as id, coalesce(de.name, de.id) as label
+      ORDER BY label
+    resolver:
+      type: CYPHER
+      params: {}
+      query: |-
+        MATCH (de:DeviceExtraction)
+        RETURN de.id as id, coalesce(de.name, de.id) as label
+        ORDER BY label
+    forgetValue: false
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: false
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: false
+  defaultValuesResolver:
+    type: CYPHER
+    params:
+      query: |-
+        MATCH (n:DeviceExtraction)
+          WHERE elementId(n) = $_selection.nodeElementIds[0]
+
+        OPTIONAL MATCH (n)--(n2:Call|Message|LocationEvent|Thread)
+          WHERE n2.timestamp IS NOT NULL
+
+        RETURN
+         { id: n.id, label: coalesce(n.name, n.id) } AS device,
+         coalesce(toString(date(min(n2.timestamp))), NULL) AS dateFrom,
+         coalesce(toString(date(max(n2.timestamp))), NULL) AS dateTo
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

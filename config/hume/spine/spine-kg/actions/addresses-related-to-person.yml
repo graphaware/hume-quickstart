@@ -1,0 +1,20 @@
+kind: Action
+metadata:
+  name: addresses-related-to-person
+  knowledge-graph: SPINE
+spec:
+  label: addresses related to person
+  query: |-
+    MATCH (n)
+    WHERE elementId(n) IN $_selection.nodeElementIds
+    MATCH (n)--(e:Event|Offence)
+    RETURN distinct(e.locationDescription) AS address
+    ORDER BY address ASC
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

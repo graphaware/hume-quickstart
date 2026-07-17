@@ -1,0 +1,34 @@
+kind: Action
+metadata:
+  name: ab-profile-mark-scar-tattooo
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-mark-scar-tattooo
+  query: |-
+    MATCH path = (n:Person WHERE elementId(n) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH [n in nodes(path) WHERE n:Person] as linkedPeople
+    UNWIND linkedPeople AS person
+      MATCH (person)-[:HAS_MARK_SCAR_TATTOO]->(m)
+      RETURN distinct
+        coalesce(m.featureType, "-") AS `Feature Type`,
+        coalesce(m.bodyPosition, "-") AS `Body Position`,
+        coalesce(m.bodyLocation, "-") AS `Body Location`,
+        coalesce(m.description, "-") AS `Description`
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

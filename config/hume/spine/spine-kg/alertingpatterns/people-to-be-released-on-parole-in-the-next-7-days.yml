@@ -1,0 +1,20 @@
+kind: AlertingPattern
+metadata:
+  name: People to be released on Parole in the next 7 days
+  knowledge-graph: SPINE
+spec:
+  label: People to be released on Parole in the next 7 days
+  query: |-
+    MATCH (n:Person)-[:HAS_CUSTODY_STATUS]->(s)
+    WHERE s.projectedParoleDate < date() + duration({days: 14})
+    AND s.projectedParoleDate >= date()
+    WITH n.id AS key, n, count(*) AS break
+    RETURN key, n AS data
+  conditions:
+  - NEW_RECORDS
+  resource: spine-neo4j-sa
+  perspective: Analyst Perspective - POL and HMPS
+  schedule:
+    repetitionType: DAILY
+    executionTime: 21:00
+    timeZone: UTC

@@ -1,0 +1,1681 @@
+kind: Perspective
+metadata:
+  name: Analyst Perspective
+  knowledge-graph: SPINE
+spec:
+  access:
+  - role: SPINE_ANALYST
+    permissionGroup: PERSPECTIVE_USE
+  - role: SPINE_OFFICER
+    permissionGroup: PERSPECTIVE_USE
+  visibility:
+    classes:
+      defaultVisibility: hidden
+      show:
+      - ANPRHit
+      - ANPRHit$$alertFlag
+      - ANPRHit$$cameraId
+      - ANPRHit$$cameraLocation
+      - ANPRHit$$direction
+      - ANPRHit$$id
+      - ANPRHit$$occurredAt
+      - ANPRHit$$position
+      - ANPRHit$$source
+      - Call
+      - Call$$appSource
+      - Call$$cellTowerId
+      - Call$$cellTowerPosition
+      - Call$$countryCode
+      - Call$$deviceId
+      - Call$$duration
+      - Call$$extractSource
+      - Call$$id
+      - Call$$networkName
+      - Call$$serviceIdentifier
+      - Call$$source
+      - Call$$status
+      - Call$$timestamp
+      - Call$$videoCall
+      - CellTower
+      - CellTower$$CID
+      - CellTower$$LAC
+      - CellTower$$MCC
+      - CellTower$$MNC
+      - CellTower$$id
+      - CellTower$$position
+      - CellTower$$source
+      - Contact
+      - Contact$$account
+      - Contact$$appSource
+      - Contact$$city
+      - Contact$$country
+      - Contact$$deviceId
+      - Contact$$id
+      - Contact$$interactionStatuses
+      - Contact$$name
+      - Contact$$organization
+      - Contact$$source
+      - Contact$$state
+      - Contact$$streetAddress
+      - Contact$$timeCreated
+      - Contact$$timeModified
+      - Contact$$webAddress
+      - Contact$$zipCode
+      - ContactIdentifier
+      - ContactIdentifier$$appSource
+      - ContactIdentifier$$category
+      - ContactIdentifier$$deviceId
+      - ContactIdentifier$$id
+      - ContactIdentifier$$identifier
+      - ContactIdentifier$$isPhoneOwner
+      - ContactIdentifier$$name
+      - ContactIdentifier$$source
+      - ContactIdentifier$$type
+      - CorrectionalFacility
+      - CorrectionalFacility$$id
+      - CorrectionalFacility$$name
+      - CorrectionalFacility$$source
+      - CustodyStatus
+      - CustodyStatus$$admissionDate
+      - CustodyStatus$$currentFacility
+      - CustodyStatus$$id
+      - CustodyStatus$$offenderStatus
+      - CustodyStatus$$paroleDate
+      - CustodyStatus$$projectedDischargeDate
+      - CustodyStatus$$projectedParoleDate
+      - CustodyStatus$$source
+      - DeviceExtraction
+      - DeviceExtraction$$deviceId
+      - DeviceExtraction$$id
+      - DeviceExtraction$$name
+      - DeviceExtraction$$source
+      - EmailAddress
+      - EmailAddress$$address
+      - EmailAddress$$deviceId
+      - EmailAddress$$egId
+      - EmailAddress$$id
+      - EmailAddress$$identifier
+      - EmailAddress$$name
+      - EmailAddress$$source
+      - EntityGroup
+      - EntityGroup$$egId
+      - EntityGroup$$entityGroupType
+      - EntityGroup$$id
+      - Event
+      - Event$$Arrest
+      - Event$$caseNumber
+      - Event$$id
+      - Event$$occurredAt
+      - Event$$source
+      - File
+      - File$$contentType
+      - File$$deviceId
+      - File$$fileName
+      - File$$filePath
+      - File$$id
+      - File$$pathOnDevice
+      - File$$source
+      - File$$title
+      - File$$type
+      - File$$url
+      - Journey
+      - Journey$$account
+      - Journey$$appSource
+      - Journey$$deviceId
+      - Journey$$elevation
+      - Journey$$endTime
+      - Journey$$id
+      - Journey$$name
+      - Journey$$position
+      - Journey$$source
+      - Journey$$startTime
+      - Journey$$timestamp
+      - Journey$$type
+      - JudicialSentence
+      - JudicialSentence$$custodyDate
+      - JudicialSentence$$id
+      - JudicialSentence$$offence
+      - JudicialSentence$$sentence
+      - JudicialSentence$$source
+      - LicencePlate
+      - LicencePlate$$id
+      - LicencePlate$$source
+      - Location
+      - Location$$city
+      - Location$$id
+      - Location$$name
+      - Location$$position
+      - Location$$source
+      - Location$$state
+      - Location$$streetName
+      - Location$$streetNumber
+      - Location$$zip
+      - LocationEvent
+      - LocationEvent$$account
+      - LocationEvent$$address
+      - LocationEvent$$appSource
+      - LocationEvent$$category
+      - LocationEvent$$description
+      - LocationEvent$$deviceId
+      - LocationEvent$$id
+      - LocationEvent$$name
+      - LocationEvent$$position
+      - LocationEvent$$source
+      - LocationEvent$$timestamp
+      - LocationEvent$$type
+      - MarkScarTattoo
+      - MarkScarTattoo$$bodyLocation
+      - MarkScarTattoo$$bodyPosition
+      - MarkScarTattoo$$description
+      - MarkScarTattoo$$featureType
+      - MarkScarTattoo$$id
+      - MarkScarTattoo$$source
+      - Message
+      - Message$$Email
+      - Message$$InstantMessage
+      - Message$$account
+      - Message$$appSource
+      - Message$$body
+      - Message$$dateDelivered
+      - Message$$dateRead
+      - Message$$deviceId
+      - Message$$extractSource
+      - Message$$folder
+      - Message$$id
+      - Message$$snippet
+      - Message$$source
+      - Message$$sourceApplication
+      - Message$$status
+      - Message$$subject
+      - Message$$timestamp
+      - Message$$type
+      - Offence
+      - Offence$$caseNumber
+      - Offence$$id
+      - Offence$$location
+      - Offence$$locationDescription
+      - Offence$$occurredAt
+      - Offence$$primaryType
+      - Offence$$secondaryType
+      - Offence$$source
+      - Person
+      - Person$$birthDate
+      - Person$$birthYears
+      - Person$$currentFacility
+      - Person$$egId
+      - Person$$existsPicture
+      - Person$$eyeColour
+      - Person$$firstName
+      - Person$$fullName
+      - Person$$gender
+      - Person$$hairColour
+      - Person$$height
+      - Person$$hmpsNumber
+      - Person$$id
+      - Person$$lastName
+      - Person$$middleName
+      - Person$$nameAndBirthDate
+      - Person$$offenderStatus
+      - Person$$race
+      - Person$$riskScore
+      - Person$$source
+      - Person$$weight
+      - PhoneNumber
+      - PhoneNumber$$countryCode
+      - PhoneNumber$$deviceId
+      - PhoneNumber$$egId
+      - PhoneNumber$$id
+      - PhoneNumber$$isValidFormat
+      - PhoneNumber$$nationalNumber
+      - PhoneNumber$$phoneNumber
+      - PhoneNumber$$phoneNumberOriginal
+      - PhoneNumber$$source
+      - Report
+      - Report$$ChargeRelease
+      - Report$$id
+      - Report$$name
+      - Report$$narrative
+      - Report$$source
+      - SIMCard
+      - SIMCard$$ICCID
+      - SIMCard$$IMSI
+      - SIMCard$$MSISDN
+      - SIMCard$$deviceId
+      - SIMCard$$id
+      - SIMCard$$source
+      - Thread
+      - Thread$$appSource
+      - Thread$$deviceId
+      - Thread$$id
+      - Thread$$lastActivity
+      - Thread$$serviceIdentifier
+      - Thread$$source
+      - Thread$$startTime
+      - Vehicle
+      - Vehicle$$colour
+      - Vehicle$$id
+      - Vehicle$$make
+      - Vehicle$$model
+      - Vehicle$$source
+      - WirelessNetwork
+      - WirelessNetwork$$BSSId
+      - WirelessNetwork$$SSId
+      - WirelessNetwork$$id
+      - WirelessNetwork$$password
+      - WirelessNetwork$$position
+      - WirelessNetwork$$securityMode
+      - WirelessNetwork$$source
+    relationships:
+      defaultVisibility: hidden
+      show:
+      - ANPRHit-CAPTURED->LicencePlate
+      - Call-NEXT->Call
+      - Call-NEXT->Call$$id
+      - Contact-PARTY_IN_CALL->Call
+      - Contact-PARTY_IN_CALL->Call$$id
+      - Contact-PARTY_IN_CALL->Call$$type
+      - Contact-PARTY_IN_MESSAGE->Message
+      - Contact-PARTY_IN_MESSAGE->Message$$id
+      - Contact-PARTY_IN_MESSAGE->Message$$type
+      - Contact-PARTY_IN_THREAD->Thread
+      - Contact-PARTY_IN_THREAD->Thread$$id
+      - Contact-WITH_CONTACT_IDENTIFIER->ContactIdentifier
+      - Contact-WITH_CONTACT_IDENTIFIER->ContactIdentifier$$appSource
+      - Contact-WITH_CONTACT_IDENTIFIER->ContactIdentifier$$id
+      - Contact-WITH_EMAIL_ADDRESS->EmailAddress
+      - Contact-WITH_EMAIL_ADDRESS->EmailAddress$$id
+      - Contact-WITH_PHONE_NUMBER->PhoneNumber
+      - Contact-WITH_PHONE_NUMBER->PhoneNumber$$id
+      - ContactIdentifier-IS_EMAIL_ADDRESS->EmailAddress
+      - ContactIdentifier-IS_EMAIL_ADDRESS->EmailAddress$$id
+      - ContactIdentifier-IS_PHONE_NUMBER->PhoneNumber
+      - ContactIdentifier-IS_PHONE_NUMBER->PhoneNumber$$id
+      - ContactIdentifier-PARTY_IN_CALL->Call
+      - ContactIdentifier-PARTY_IN_CALL->Call$$id
+      - ContactIdentifier-PARTY_IN_CALL->Call$$type
+      - ContactIdentifier-PARTY_IN_MESSAGE->Message
+      - ContactIdentifier-PARTY_IN_MESSAGE->Message$$id
+      - ContactIdentifier-PARTY_IN_MESSAGE->Message$$type
+      - ContactIdentifier-PARTY_IN_THREAD->Thread
+      - ContactIdentifier-PARTY_IN_THREAD->Thread$$id
+      - CustodyStatus-CURRENT_FACILITY->CorrectionalFacility
+      - CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$dateFrom
+      - CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$dateTo
+      - CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$id
+      - CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$offenderStatus
+      - CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility
+      - CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$dateFrom
+      - CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$dateTo
+      - CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$id
+      - CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$offenderStatus
+      - DeviceExtraction-ASSOCIATED_WITH->PhoneNumber
+      - DeviceExtraction-ASSOCIATED_WITH->PhoneNumber$$id
+      - DeviceExtraction-CONNECTED_TO->WirelessNetwork
+      - DeviceExtraction-CONNECTED_TO->WirelessNetwork$$id
+      - DeviceExtraction-CONNECTED_TO->WirelessNetwork$$lastAutoConnection
+      - DeviceExtraction-CONNECTED_TO->WirelessNetwork$$lastConnection
+      - DeviceExtraction-CONNECTED_TO->WirelessNetwork$$networkSource
+      - DeviceExtraction-HAS_CALL->Call
+      - DeviceExtraction-HAS_CALL->Call$$id
+      - DeviceExtraction-HAS_CONTACT->Contact
+      - DeviceExtraction-HAS_CONTACT->Contact$$id
+      - DeviceExtraction-HAS_FILE->File
+      - DeviceExtraction-HAS_FILE->File$$id
+      - DeviceExtraction-HAS_LOCATION_EVENT->LocationEvent
+      - DeviceExtraction-HAS_LOCATION_EVENT->LocationEvent$$id
+      - DeviceExtraction-HAS_MESSAGE->Message
+      - DeviceExtraction-HAS_MESSAGE->Message$$id
+      - DeviceExtraction-HAS_SIM->SIMCard
+      - DeviceExtraction-HAS_SIM->SIMCard$$id
+      - DeviceExtraction-HAS_USER_IDENTIFIER->ContactIdentifier
+      - DeviceExtraction-HAS_USER_IDENTIFIER->ContactIdentifier$$appSource
+      - DeviceExtraction-HAS_USER_IDENTIFIER->ContactIdentifier$$id
+      - DeviceExtraction-INCLUDES_JOURNEY->Journey
+      - DeviceExtraction-INCLUDES_JOURNEY->Journey$$id
+      - DeviceExtraction-SEEN_AT_CELL_TOWER->CellTower
+      - DeviceExtraction-SEEN_AT_CELL_TOWER->CellTower$$id
+      - EmailAddress-PARTY_IN_MESSAGE->Message
+      - EmailAddress-PARTY_IN_MESSAGE->Message$$id
+      - EmailAddress-PARTY_IN_MESSAGE->Message$$type
+      - EmailAddress-RESOLVED_TO->EntityGroup
+      - EmailAddress-RESOLVED_TO->EntityGroup$$id
+      - Event-FOR_OFFENCE->Offence
+      - Event-FOR_OFFENCE->Offence$$id
+      - LocationEvent-AT_CELL_TOWER->CellTower
+      - LocationEvent-AT_CELL_TOWER->CellTower$$id
+      - LocationEvent-AT_NETWORK->WirelessNetwork
+      - LocationEvent-AT_NETWORK->WirelessNetwork$$id
+      - LocationEvent-IN_FILE->File
+      - LocationEvent-IN_FILE->File$$id
+      - LocationEvent-IN_JOURNEY->Journey
+      - LocationEvent-IN_JOURNEY->Journey$$id
+      - Message-HAS_ATTACHMENT->File
+      - Message-HAS_ATTACHMENT->File$$id
+      - Message-MESSAGE_BELONGS_TO->Thread
+      - Message-MESSAGE_BELONGS_TO->Thread$$id
+      - Person-CHARGED_FOR->Offence
+      - Person-CHARGED_FOR->Offence$$id
+      - Person-FAMILY_MEMBER->Person
+      - Person-FAMILY_MEMBER->Person$$id
+      - Person-HAS_ADDRESS->Location
+      - Person-HAS_ADDRESS->Location$$id
+      - Person-HAS_CUSTODY_STATUS->CustodyStatus
+      - Person-HAS_CUSTODY_STATUS->CustodyStatus$$id
+      - Person-HAS_MARK_SCAR_TATTOO->MarkScarTattoo
+      - Person-HAS_MARK_SCAR_TATTOO->MarkScarTattoo$$id
+      - Person-KNOWS->Person
+      - Person-KNOWS->Person$$id
+      - Person-KNOWS->Person$$type
+      - Person-OWNS_DEVICE->DeviceExtraction
+      - Person-OWNS_DEVICE->DeviceExtraction$$extractionDate
+      - Person-OWNS_DEVICE->DeviceExtraction$$id
+      - Person-OWNS_EMAIL_ADDRESS->EmailAddress
+      - Person-OWNS_EMAIL_ADDRESS->EmailAddress$$id
+      - Person-OWNS_PHONE_NUMBER->PhoneNumber
+      - Person-OWNS_PHONE_NUMBER->PhoneNumber$$id
+      - Person-OWNS_VEHICLE->Vehicle
+      - Person-PARENT_OF->Person
+      - Person-PARENT_OF->Person$$id
+      - Person-PARTY_IN->Event
+      - Person-PARTY_IN->Event$$ageAtOccurrence
+      - Person-PARTY_IN->Event$$id
+      - Person-RECEIVED->JudicialSentence
+      - Person-RECEIVED->JudicialSentence$$id
+      - Person-RESOLVED_TO->EntityGroup
+      - Person-RESOLVED_TO->EntityGroup$$id
+      - PhoneNumber-PARTY_IN_CALL->Call
+      - PhoneNumber-PARTY_IN_CALL->Call$$id
+      - PhoneNumber-PARTY_IN_CALL->Call$$type
+      - PhoneNumber-PARTY_IN_MESSAGE->Message
+      - PhoneNumber-PARTY_IN_MESSAGE->Message$$id
+      - PhoneNumber-PARTY_IN_MESSAGE->Message$$type
+      - PhoneNumber-PARTY_IN_THREAD->Thread
+      - PhoneNumber-PARTY_IN_THREAD->Thread$$id
+      - PhoneNumber-RESOLVED_TO->EntityGroup
+      - PhoneNumber-RESOLVED_TO->EntityGroup$$id
+      - Report-HAS_EVENT->Event
+      - Report-HAS_EVENT->Event$$id
+      - Report-HAS_OFFENCE->Offence
+      - Report-HAS_OFFENCE->Offence$$id
+      - Report-MENTIONS->Person
+      - Report-MENTIONS->Person$$id
+      - SIMCard-HAS_PHONE_NUMBER->PhoneNumber
+      - SIMCard-HAS_PHONE_NUMBER->PhoneNumber$$id
+      - Vehicle-LICENCED_TO->LicencePlate
+      - WirelessNetwork-HAS_SUBNET->WirelessNetwork
+      - WirelessNetwork-HAS_SUBNET->WirelessNetwork$$id
+    actions:
+    - ab-extraction-calls-graph
+    - ab-extraction-calls-information
+    - ab-extraction-info
+    - ab-extraction-input-parameters
+    - ab-extraction-locations-map
+    - ab-extraction-owner
+    - ab-extraction-owner-offence-graph
+    - ab-extraction-owner-offences
+    - ab-extraction-phone-number-interacted-with
+    - ab-extraction-phone-number-interactions
+    - ab-extraction-show-thread-content
+    - ab-extraction-thread-content-graph
+    - ab-extraction-threads-content
+    - ab-extraction-threads-timeline
+    - ab-extraction-wireless-cell-map
+    - ab-patterns-life-events-barchart
+    - ab-patterns-life-input-parameters
+    - ab-patterns-life-phone-activity-heatmap
+    - ab-patterns-life-wireless-events-bar
+    - ab-patterns-life-wireless-events-heatmap
+    - ab-profile-arrests
+    - ab-profile-co-offenders-graph
+    - ab-profile-custody-history
+    - ab-profile-custody-status
+    - ab-profile-input-params
+    - ab-profile-judicial-sentences
+    - ab-profile-linked-person
+    - ab-profile-mark-scar-tattooo
+    - ab-profile-offences
+    - ab-profile-offences-graph
+    - ab-profile-physical-details
+    - ab-profile-picture
+    - ab-profile-related-offences
+    - ab-profile-related-offences-chart
+    - ab-profile-risk-details
+    - ab-profile-style
+    - absconders-and-escapes
+    - anpr-camera-locations
+    - any-links-to
+    - ca-entity-group-id
+    - ca-person-existspicture
+    - ca-person-risk
+    - dev---selection-as-table
+    - distribution-of-offences-per-year
+    - expand-family-trees
+    - expand-info-about-ccr-imported-phone-numbers
+    - find-links-through-offenders
+    - get-ccr-records-graph
+    - individuals-at-risk-through-offender-associations
+    - list-of-cameras-in-bounding-box
+    - offences-around-the-selected-location
+    - offenders-who-operated-around-the-selected-location
+    - on-parole-in-the-next-two-weeks
+    - people-held-in-the-same-facility-during-overlapping-time-periods
+    - phone-and-email-identifiers
+    - reoffending-following-prison-release
+    - "shortest-path---through-calls,-messages-and-phonenumbers"
+    - shortest-path---through-wirelessnetworks
+    - shortest-path-between-two-nodes
+    - shortest-paths-through-common-offences-or-reports
+    - show-threads-between-selected-individuals
+    - visual-query-from-selection
+    - visualise-offence-near-a-selected-location-
+  resourceName: spine-neo4j-sso
+  default: true
+  synced: false
+  attributeConfigs:
+  - fqn: ANPRHit$$alertFlag
+    filterable: true
+  - fqn: ANPRHit$$cameraId
+    filterable: true
+  - fqn: ANPRHit$$cameraLocation
+    filterable: true
+  - fqn: ANPRHit$$direction
+    filterable: true
+  - fqn: ANPRHit$$id
+    filterable: true
+  - fqn: ANPRHit$$occurredAt
+    filterable: true
+  - fqn: ANPRHit$$position
+    filterable: true
+  - fqn: ANPRHit$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: ANPRHit-CAPTURED->LicencePlate$$confidencePct
+    filterable: true
+  - fqn: ANPRHit-CAPTURED->LicencePlate$$id
+    filterable: true
+  - fqn: ANPRHit-CAPTURED->LicencePlate$$pncStatus
+    filterable: true
+  - fqn: Call$$appSource
+    filterable: true
+  - fqn: Call$$cellTowerId
+    filterable: false
+  - fqn: Call$$cellTowerPosition
+    filterable: false
+  - fqn: Call$$countryCode
+    filterable: true
+  - fqn: Call$$deviceId
+    filterable: true
+  - fqn: Call$$duration
+    filterable: true
+  - fqn: Call$$extractSource
+    filterable: true
+  - fqn: Call$$id
+    filterable: true
+  - fqn: Call$$networkName
+    filterable: true
+  - fqn: Call$$serviceIdentifier
+    filterable: true
+  - fqn: Call$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Call$$status
+    filterable: true
+  - fqn: Call$$timestamp
+    filterable: true
+  - fqn: Call$$videoCall
+    filterable: true
+  - fqn: Call-NEXT->Call$$id
+    filterable: true
+  - fqn: CellTower$$CID
+    filterable: true
+  - fqn: CellTower$$LAC
+    filterable: true
+  - fqn: CellTower$$MCC
+    filterable: true
+  - fqn: CellTower$$MNC
+    filterable: true
+  - fqn: CellTower$$id
+    filterable: true
+  - fqn: CellTower$$position
+    filterable: true
+  - fqn: CellTower$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Contact$$account
+    filterable: true
+  - fqn: Contact$$appSource
+    filterable: true
+  - fqn: Contact$$city
+    filterable: true
+  - fqn: Contact$$country
+    filterable: true
+  - fqn: Contact$$deviceId
+    filterable: true
+  - fqn: Contact$$id
+    filterable: true
+  - fqn: Contact$$interactionStatuses
+    filterable: true
+  - fqn: Contact$$name
+    filterable: true
+  - fqn: Contact$$organization
+    filterable: true
+  - fqn: Contact$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Contact$$state
+    filterable: true
+  - fqn: Contact$$streetAddress
+    filterable: true
+  - fqn: Contact$$timeCreated
+    filterable: true
+  - fqn: Contact$$timeModified
+    filterable: true
+  - fqn: Contact$$webAddress
+    filterable: true
+  - fqn: Contact$$zipCode
+    filterable: true
+  - fqn: Contact-PARTY_IN_CALL->Call$$id
+    filterable: false
+  - fqn: Contact-PARTY_IN_CALL->Call$$type
+    filterable: true
+    valueList: PartyInCall_type
+  - fqn: Contact-PARTY_IN_MESSAGE->Message$$id
+    filterable: false
+  - fqn: Contact-PARTY_IN_MESSAGE->Message$$type
+    filterable: true
+    valueList: PartyInMessage_type
+  - fqn: Contact-PARTY_IN_THREAD->Thread$$id
+    filterable: false
+  - fqn: Contact-WITH_CONTACT_IDENTIFIER->ContactIdentifier$$appSource
+    filterable: true
+  - fqn: Contact-WITH_CONTACT_IDENTIFIER->ContactIdentifier$$id
+    filterable: false
+  - fqn: Contact-WITH_EMAIL_ADDRESS->EmailAddress$$id
+    filterable: false
+  - fqn: Contact-WITH_PHONE_NUMBER->PhoneNumber$$id
+    filterable: false
+  - fqn: ContactIdentifier$$appSource
+    filterable: true
+  - fqn: ContactIdentifier$$category
+    filterable: true
+  - fqn: ContactIdentifier$$deviceId
+    filterable: true
+  - fqn: ContactIdentifier$$id
+    filterable: true
+  - fqn: ContactIdentifier$$identifier
+    filterable: true
+  - fqn: ContactIdentifier$$isPhoneOwner
+    filterable: true
+  - fqn: ContactIdentifier$$name
+    filterable: true
+  - fqn: ContactIdentifier$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: ContactIdentifier$$type
+    filterable: true
+  - fqn: ContactIdentifier-IS_EMAIL_ADDRESS->EmailAddress$$id
+    filterable: false
+  - fqn: ContactIdentifier-IS_PHONE_NUMBER->PhoneNumber$$id
+    filterable: false
+  - fqn: ContactIdentifier-PARTY_IN_CALL->Call$$id
+    filterable: false
+  - fqn: ContactIdentifier-PARTY_IN_CALL->Call$$type
+    filterable: true
+    valueList: PartyInCall_type
+  - fqn: ContactIdentifier-PARTY_IN_MESSAGE->Message$$id
+    filterable: false
+  - fqn: ContactIdentifier-PARTY_IN_MESSAGE->Message$$type
+    filterable: true
+    valueList: PartyInMessage_type
+  - fqn: ContactIdentifier-PARTY_IN_THREAD->Thread$$id
+    filterable: false
+  - fqn: CorrectionalFacility$$id
+    filterable: false
+  - fqn: CorrectionalFacility$$name
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: CorrectionalFacility$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: CustodyStatus$$admissionDate
+    filterable: true
+  - fqn: CustodyStatus$$currentFacility
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: CustodyStatus$$id
+    filterable: true
+  - fqn: CustodyStatus$$offenderStatus
+    filterable: true
+    valueList: OffenderStatus
+  - fqn: CustodyStatus$$paroleDate
+    filterable: true
+  - fqn: CustodyStatus$$projectedDischargeDate
+    filterable: true
+  - fqn: CustodyStatus$$projectedParoleDate
+    filterable: true
+  - fqn: CustodyStatus$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$dateFrom
+    filterable: true
+  - fqn: CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$dateTo
+    filterable: true
+  - fqn: CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$id
+    filterable: false
+  - fqn: CustodyStatus-CURRENT_FACILITY->CorrectionalFacility$$offenderStatus
+    filterable: true
+    valueList: OffenderStatus
+  - fqn: CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$dateFrom
+    filterable: true
+  - fqn: CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$dateTo
+    filterable: true
+  - fqn: CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$id
+    filterable: false
+  - fqn: CustodyStatus-RELATED_TO_FACILITY->CorrectionalFacility$$offenderStatus
+    filterable: true
+    valueList: OffenderStatus
+  - fqn: DeviceExtraction$$deviceId
+    filterable: true
+  - fqn: DeviceExtraction$$id
+    filterable: true
+  - fqn: DeviceExtraction$$name
+    filterable: true
+  - fqn: DeviceExtraction$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: DeviceExtraction-ASSOCIATED_WITH->PhoneNumber$$id
+    filterable: false
+  - fqn: DeviceExtraction-CONNECTED_TO->WirelessNetwork$$id
+    filterable: false
+  - fqn: DeviceExtraction-CONNECTED_TO->WirelessNetwork$$lastAutoConnection
+    filterable: true
+  - fqn: DeviceExtraction-CONNECTED_TO->WirelessNetwork$$lastConnection
+    filterable: true
+  - fqn: DeviceExtraction-CONNECTED_TO->WirelessNetwork$$networkSource
+    filterable: true
+  - fqn: DeviceExtraction-HAS_CALL->Call$$id
+    filterable: true
+  - fqn: DeviceExtraction-HAS_CONTACT->Contact$$id
+    filterable: false
+  - fqn: DeviceExtraction-HAS_FILE->File$$id
+    filterable: false
+  - fqn: DeviceExtraction-HAS_LOCATION_EVENT->LocationEvent$$id
+    filterable: false
+  - fqn: DeviceExtraction-HAS_MESSAGE->Message$$id
+    filterable: true
+  - fqn: DeviceExtraction-HAS_SIM->SIMCard$$id
+    filterable: false
+  - fqn: DeviceExtraction-HAS_USER_IDENTIFIER->ContactIdentifier$$appSource
+    filterable: true
+  - fqn: DeviceExtraction-HAS_USER_IDENTIFIER->ContactIdentifier$$id
+    filterable: false
+  - fqn: DeviceExtraction-INCLUDES_JOURNEY->Journey$$id
+    filterable: false
+  - fqn: DeviceExtraction-SEEN_AT_CELL_TOWER->CellTower$$id
+    filterable: false
+  - fqn: EmailAddress$$address
+    filterable: true
+  - fqn: EmailAddress$$deviceId
+    filterable: true
+  - fqn: EmailAddress$$egId
+    filterable: false
+  - fqn: EmailAddress$$id
+    filterable: true
+  - fqn: EmailAddress$$identifier
+    filterable: true
+  - fqn: EmailAddress$$name
+    filterable: true
+  - fqn: EmailAddress$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: EmailAddress-PARTY_IN_MESSAGE->Message$$id
+    filterable: false
+  - fqn: EmailAddress-PARTY_IN_MESSAGE->Message$$type
+    filterable: true
+    valueList: PartyInMessage_type
+  - fqn: EmailAddress-RESOLVED_TO->EntityGroup$$id
+    filterable: false
+  - fqn: EntityGroup$$egId
+    filterable: true
+  - fqn: EntityGroup$$entityGroupType
+    filterable: true
+  - fqn: EntityGroup$$id
+    filterable: true
+  - fqn: Event$$Arrest
+    filterable: true
+  - fqn: Event$$caseNumber
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Event$$id
+    filterable: true
+  - fqn: Event$$occurredAt
+    filterable: true
+  - fqn: Event$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Event-FOR_OFFENCE->Offence$$id
+    filterable: false
+  - fqn: File$$contentType
+    filterable: true
+  - fqn: File$$deviceId
+    filterable: true
+  - fqn: File$$fileName
+    filterable: true
+  - fqn: File$$filePath
+    filterable: true
+  - fqn: File$$id
+    filterable: true
+  - fqn: File$$pathOnDevice
+    filterable: true
+  - fqn: File$$source
+    filterable: true
+  - fqn: File$$title
+    filterable: true
+  - fqn: File$$type
+    filterable: true
+  - fqn: File$$url
+    filterable: true
+  - fqn: Journey$$account
+    filterable: true
+  - fqn: Journey$$appSource
+    filterable: true
+  - fqn: Journey$$deviceId
+    filterable: true
+  - fqn: Journey$$elevation
+    filterable: true
+  - fqn: Journey$$endTime
+    filterable: true
+  - fqn: Journey$$id
+    filterable: true
+  - fqn: Journey$$name
+    filterable: true
+  - fqn: Journey$$position
+    filterable: true
+  - fqn: Journey$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Journey$$startTime
+    filterable: true
+  - fqn: Journey$$timestamp
+    filterable: true
+  - fqn: Journey$$type
+    filterable: true
+  - fqn: JudicialSentence$$custodyDate
+    filterable: true
+  - fqn: JudicialSentence$$id
+    filterable: true
+  - fqn: JudicialSentence$$offence
+    filterable: true
+  - fqn: JudicialSentence$$sentence
+    filterable: true
+  - fqn: JudicialSentence$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: LicencePlate$$id
+    filterable: true
+  - fqn: LicencePlate$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Location$$city
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Location$$id
+    filterable: true
+  - fqn: Location$$name
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Location$$position
+    filterable: true
+  - fqn: Location$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Location$$state
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Location$$streetName
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Location$$streetNumber
+    filterable: true
+  - fqn: Location$$zip
+    filterable: true
+  - fqn: LocationEvent$$account
+    filterable: true
+  - fqn: LocationEvent$$address
+    filterable: true
+  - fqn: LocationEvent$$appSource
+    filterable: true
+  - fqn: LocationEvent$$category
+    filterable: true
+  - fqn: LocationEvent$$description
+    filterable: true
+  - fqn: LocationEvent$$deviceId
+    filterable: true
+  - fqn: LocationEvent$$id
+    filterable: true
+  - fqn: LocationEvent$$name
+    filterable: true
+  - fqn: LocationEvent$$position
+    filterable: true
+  - fqn: LocationEvent$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: LocationEvent$$timestamp
+    filterable: true
+  - fqn: LocationEvent$$type
+    filterable: true
+  - fqn: LocationEvent-AT_CELL_TOWER->CellTower$$id
+    filterable: false
+  - fqn: LocationEvent-AT_NETWORK->WirelessNetwork$$id
+    filterable: false
+  - fqn: LocationEvent-IN_FILE->File$$id
+    filterable: true
+  - fqn: LocationEvent-IN_JOURNEY->Journey$$id
+    filterable: false
+  - fqn: MarkScarTattoo$$bodyLocation
+    filterable: true
+    valueList: MarkScarTattoo_bodyLocation
+  - fqn: MarkScarTattoo$$bodyPosition
+    filterable: true
+    valueList: MarkScarTattoo_bodyPosition
+  - fqn: MarkScarTattoo$$description
+    filterable: true
+  - fqn: MarkScarTattoo$$featureType
+    filterable: true
+    valueList: MarkScarTattoo_featureType
+  - fqn: MarkScarTattoo$$id
+    filterable: true
+  - fqn: MarkScarTattoo$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Message$$Email
+    filterable: true
+  - fqn: Message$$InstantMessage
+    filterable: true
+  - fqn: Message$$account
+    filterable: true
+  - fqn: Message$$appSource
+    filterable: true
+  - fqn: Message$$body
+    filterable: true
+  - fqn: Message$$dateDelivered
+    filterable: true
+  - fqn: Message$$dateRead
+    filterable: true
+  - fqn: Message$$deviceId
+    filterable: true
+  - fqn: Message$$extractSource
+    filterable: true
+  - fqn: Message$$folder
+    filterable: true
+  - fqn: Message$$id
+    filterable: true
+  - fqn: Message$$snippet
+    filterable: true
+  - fqn: Message$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Message$$sourceApplication
+    filterable: true
+  - fqn: Message$$status
+    filterable: true
+  - fqn: Message$$subject
+    filterable: true
+  - fqn: Message$$timestamp
+    filterable: true
+  - fqn: Message$$type
+    filterable: true
+  - fqn: Message-HAS_ATTACHMENT->File$$id
+    filterable: true
+  - fqn: Message-MESSAGE_BELONGS_TO->Thread$$id
+    filterable: false
+  - fqn: Offence$$caseNumber
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Offence$$id
+    filterable: true
+  - fqn: Offence$$location
+    filterable: true
+  - fqn: Offence$$locationDescription
+    filterable: true
+  - fqn: Offence$$occurredAt
+    filterable: true
+  - fqn: Offence$$primaryType
+    filterable: true
+    valueList: Offence_primaryType
+  - fqn: Offence$$secondaryType
+    filterable: true
+  - fqn: Offence$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Person$$birthDate
+    filterable: true
+  - fqn: Person$$birthYears
+    filterable: true
+  - fqn: Person$$currentFacility
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Person$$egId
+    filterable: false
+  - fqn: Person$$existsPicture
+    filterable: false
+  - fqn: Person$$eyeColour
+    filterable: true
+    valueList: Person_eyeColour
+  - fqn: Person$$firstName
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Person$$fullName
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Person$$gender
+    filterable: true
+    valueList: Person_gender
+  - fqn: Person$$hairColour
+    filterable: true
+    valueList: Person_hairColour
+  - fqn: Person$$height
+    filterable: true
+  - fqn: Person$$hmpsNumber
+    filterable: true
+  - fqn: Person$$id
+    filterable: true
+  - fqn: Person$$lastName
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Person$$middleName
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Person$$nameAndBirthDate
+    filterable: false
+  - fqn: Person$$offenderStatus
+    filterable: true
+    inputTransformer: NONE
+    valueList: OffenderStatus
+  - fqn: Person$$race
+    filterable: true
+    valueList: Person_race
+  - fqn: Person$$riskScore
+    filterable: false
+  - fqn: Person$$source
+    filterable: true
+    inputTransformer: NONE
+    valueList: DataSource
+  - fqn: Person$$weight
+    filterable: true
+  - fqn: Person-CHARGED_FOR->Offence$$id
+    filterable: false
+  - fqn: Person-FAMILY_MEMBER->Person$$id
+    filterable: false
+  - fqn: Person-HAS_ADDRESS->Location$$id
+    filterable: true
+  - fqn: Person-HAS_CUSTODY_STATUS->CustodyStatus$$id
+    filterable: false
+  - fqn: Person-HAS_MARK_SCAR_TATTOO->MarkScarTattoo$$id
+    filterable: false
+  - fqn: Person-KNOWS->Person$$id
+    filterable: false
+  - fqn: Person-KNOWS->Person$$type
+    filterable: true
+    valueList: Knows_type
+  - fqn: Person-OWNS_DEVICE->DeviceExtraction$$extractionDate
+    filterable: true
+  - fqn: Person-OWNS_DEVICE->DeviceExtraction$$id
+    filterable: false
+  - fqn: Person-OWNS_EMAIL_ADDRESS->EmailAddress$$id
+    filterable: false
+  - fqn: Person-OWNS_PHONE_NUMBER->PhoneNumber$$id
+    filterable: false
+  - fqn: Person-PARENT_OF->Person$$id
+    filterable: true
+  - fqn: Person-PARTY_IN->Event$$ageAtOccurrence
+    filterable: true
+  - fqn: Person-PARTY_IN->Event$$id
+    filterable: false
+  - fqn: Person-RECEIVED->JudicialSentence$$id
+    filterable: false
+  - fqn: Person-RESOLVED_TO->EntityGroup$$id
+    filterable: false
+  - fqn: PhoneNumber$$countryCode
+    filterable: true
+  - fqn: PhoneNumber$$deviceId
+    filterable: true
+  - fqn: PhoneNumber$$egId
+    filterable: false
+  - fqn: PhoneNumber$$id
+    filterable: true
+  - fqn: PhoneNumber$$isValidFormat
+    filterable: true
+  - fqn: PhoneNumber$$nationalNumber
+    filterable: true
+  - fqn: PhoneNumber$$phoneNumber
+    filterable: true
+  - fqn: PhoneNumber$$phoneNumberOriginal
+    filterable: true
+  - fqn: PhoneNumber$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: PhoneNumber-PARTY_IN_CALL->Call$$id
+    filterable: false
+  - fqn: PhoneNumber-PARTY_IN_CALL->Call$$type
+    filterable: true
+    valueList: PartyInCall_type
+  - fqn: PhoneNumber-PARTY_IN_MESSAGE->Message$$id
+    filterable: false
+  - fqn: PhoneNumber-PARTY_IN_MESSAGE->Message$$type
+    filterable: true
+    valueList: PartyInMessage_type
+  - fqn: PhoneNumber-PARTY_IN_THREAD->Thread$$id
+    filterable: true
+  - fqn: PhoneNumber-RESOLVED_TO->EntityGroup$$id
+    filterable: false
+  - fqn: Report$$ChargeRelease
+    filterable: true
+  - fqn: Report$$id
+    filterable: true
+  - fqn: Report$$name
+    filterable: true
+  - fqn: Report$$narrative
+    filterable: true
+  - fqn: Report$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Report-HAS_EVENT->Event$$id
+    filterable: false
+  - fqn: Report-HAS_OFFENCE->Offence$$id
+    filterable: false
+  - fqn: Report-MENTIONS->Person$$id
+    filterable: false
+  - fqn: SIMCard$$ICCID
+    filterable: true
+  - fqn: SIMCard$$IMSI
+    filterable: true
+  - fqn: SIMCard$$MSISDN
+    filterable: true
+  - fqn: SIMCard$$deviceId
+    filterable: true
+  - fqn: SIMCard$$id
+    filterable: true
+  - fqn: SIMCard$$source
+    filterable: true
+  - fqn: SIMCard-HAS_PHONE_NUMBER->PhoneNumber$$id
+    filterable: false
+  - fqn: Thread$$appSource
+    filterable: true
+  - fqn: Thread$$deviceId
+    filterable: true
+  - fqn: Thread$$id
+    filterable: true
+  - fqn: Thread$$lastActivity
+    filterable: true
+  - fqn: Thread$$serviceIdentifier
+    filterable: true
+  - fqn: Thread$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Thread$$startTime
+    filterable: true
+  - fqn: Vehicle$$colour
+    filterable: true
+    inputTransformer: UPPER_CASE
+    valueList: Vehicle_colour
+  - fqn: Vehicle$$id
+    filterable: true
+  - fqn: Vehicle$$make
+    filterable: true
+    inputTransformer: UPPER_CASE
+    valueList: Vehicle_make
+  - fqn: Vehicle$$model
+    filterable: true
+    inputTransformer: UPPER_CASE
+  - fqn: Vehicle$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: Vehicle-LICENCED_TO->LicencePlate$$id
+    filterable: true
+  - fqn: WirelessNetwork$$BSSId
+    filterable: true
+  - fqn: WirelessNetwork$$SSId
+    filterable: true
+  - fqn: WirelessNetwork$$id
+    filterable: true
+  - fqn: WirelessNetwork$$password
+    filterable: true
+  - fqn: WirelessNetwork$$position
+    filterable: true
+  - fqn: WirelessNetwork$$securityMode
+    filterable: true
+  - fqn: WirelessNetwork$$source
+    filterable: true
+    valueList: DataSource
+  - fqn: WirelessNetwork-HAS_SUBNET->WirelessNetwork$$id
+    filterable: false
+  searchRelevance:
+    classes:
+    - label: ANPRHit
+      relevance: 0
+      attributes:
+      - label: alertFlag
+        relevance: 1
+      - label: cameraId
+        relevance: 1
+      - label: cameraLocation
+        relevance: 1
+      - label: direction
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: position
+        relevance: 1
+      - label: occurredAt
+        relevance: 1
+    - label: Call
+      relevance: 0
+      attributes:
+      - label: appSource
+        relevance: 1
+      - label: cellTowerId
+        relevance: 1
+      - label: cellTowerPosition
+        relevance: 1
+      - label: countryCode
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: duration
+        relevance: 1
+      - label: extractSource
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: networkName
+        relevance: 1
+      - label: serviceIdentifier
+        relevance: 1
+      - label: source
+        relevance: 1
+      - label: status
+        relevance: 1
+      - label: timestamp
+        relevance: 1
+      - label: videoCall
+        relevance: 1
+    - label: CellTower
+      relevance: 0
+      attributes:
+      - label: CID
+        relevance: 1
+      - label: LAC
+        relevance: 1
+      - label: MCC
+        relevance: 1
+      - label: MNC
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: position
+        relevance: 1
+      - label: source
+        relevance: 1
+    - label: Contact
+      relevance: 1
+      attributes:
+      - label: account
+        relevance: 1
+      - label: appSource
+        relevance: 0
+      - label: city
+        relevance: 0
+      - label: country
+        relevance: 0
+      - label: deviceId
+        relevance: 0
+      - label: id
+        relevance: 0
+      - label: interactionStatuses
+        relevance: 0
+      - label: name
+        relevance: 1
+      - label: organization
+        relevance: 1
+      - label: source
+        relevance: 0
+      - label: state
+        relevance: 0
+      - label: streetAddress
+        relevance: 1
+      - label: timeCreated
+        relevance: 0
+      - label: timeModified
+        relevance: 0
+      - label: webAddress
+        relevance: 1
+      - label: zipCode
+        relevance: 0
+    - label: ContactIdentifier
+      relevance: 0
+      attributes:
+      - label: appSource
+        relevance: 1
+      - label: category
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: identifier
+        relevance: 1
+      - label: isPhoneOwner
+        relevance: 1
+      - label: name
+        relevance: 1
+      - label: source
+        relevance: 1
+      - label: type
+        relevance: 1
+    - label: CorrectionalFacility
+      relevance: 1
+      attributes:
+      - label: id
+        relevance: 0
+      - label: name
+        relevance: 1
+      - label: source
+        relevance: 0
+    - label: CustodyStatus
+      relevance: 0
+      attributes:
+      - label: admissionDate
+        relevance: 1
+      - label: currentFacility
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: offenderStatus
+        relevance: 1
+      - label: paroleDate
+        relevance: 1
+      - label: projectedDischargeDate
+        relevance: 1
+      - label: projectedParoleDate
+        relevance: 1
+      - label: source
+        relevance: 1
+    - label: DeviceExtraction
+      relevance: 0
+      attributes:
+      - label: deviceId
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: name
+        relevance: 1
+      - label: source
+        relevance: 1
+    - label: EmailAddress
+      relevance: 1
+      attributes:
+      - label: address
+        relevance: 1
+      - label: deviceId
+        relevance: 0
+      - label: egId
+        relevance: 0
+      - label: id
+        relevance: 0
+      - label: identifier
+        relevance: 0
+      - label: name
+        relevance: 1
+      - label: source
+        relevance: 0
+    - label: EntityGroup
+      relevance: 0
+      attributes:
+      - label: egId
+        relevance: 1
+      - label: entityGroupType
+        relevance: 1
+      - label: id
+        relevance: 1
+    - label: Event
+      relevance: 1
+      attributes:
+      - label: Arrest
+        relevance: 0
+      - label: caseNumber
+        relevance: 1
+      - label: id
+        relevance: 0
+      - label: occurredAt
+        relevance: 1
+      - label: source
+        relevance: 0
+    - label: File
+      relevance: 0
+      attributes:
+      - label: contentType
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: fileName
+        relevance: 1
+      - label: filePath
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: pathOnDevice
+        relevance: 1
+      - label: source
+        relevance: 1
+      - label: title
+        relevance: 1
+      - label: type
+        relevance: 1
+      - label: url
+        relevance: 1
+    - label: Journey
+      relevance: 0
+      attributes:
+      - label: account
+        relevance: 1
+      - label: appSource
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: elevation
+        relevance: 1
+      - label: endTime
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: name
+        relevance: 1
+      - label: position
+        relevance: 1
+      - label: source
+        relevance: 1
+      - label: startTime
+        relevance: 1
+      - label: timestamp
+        relevance: 1
+      - label: type
+        relevance: 1
+    - label: JudicialSentence
+      relevance: 0
+      attributes:
+      - label: custodyDate
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: offence
+        relevance: 1
+      - label: sentence
+        relevance: 1
+      - label: source
+        relevance: 1
+    - label: LicencePlate
+      relevance: 1
+      attributes:
+      - label: id
+        relevance: 1
+    - label: Location
+      relevance: 1
+      attributes:
+      - label: city
+        relevance: 1
+      - label: id
+        relevance: 0
+      - label: name
+        relevance: 1
+      - label: position
+        relevance: 0
+      - label: source
+        relevance: 0
+      - label: state
+        relevance: 1
+      - label: streetName
+        relevance: 1
+      - label: streetNumber
+        relevance: 0
+      - label: zip
+        relevance: 1
+    - label: LocationEvent
+      relevance: 0
+      attributes:
+      - label: account
+        relevance: 1
+      - label: address
+        relevance: 1
+      - label: appSource
+        relevance: 1
+      - label: category
+        relevance: 1
+      - label: description
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: name
+        relevance: 1
+      - label: position
+        relevance: 1
+      - label: source
+        relevance: 1
+      - label: timestamp
+        relevance: 1
+      - label: type
+        relevance: 1
+    - label: MarkScarTattoo
+      relevance: 0
+      attributes:
+      - label: bodyLocation
+        relevance: 1
+      - label: bodyPosition
+        relevance: 1
+      - label: description
+        relevance: 1
+      - label: featureType
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: source
+        relevance: 1
+    - label: Message
+      relevance: 0
+      attributes:
+      - label: Email
+        relevance: 1
+      - label: InstantMessage
+        relevance: 1
+      - label: account
+        relevance: 1
+      - label: appSource
+        relevance: 1
+      - label: body
+        relevance: 1
+      - label: dateDelivered
+        relevance: 1
+      - label: dateRead
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: extractSource
+        relevance: 1
+      - label: folder
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: snippet
+        relevance: 1
+      - label: source
+        relevance: 1
+      - label: sourceApplication
+        relevance: 1
+      - label: status
+        relevance: 1
+      - label: subject
+        relevance: 1
+      - label: timestamp
+        relevance: 1
+      - label: type
+        relevance: 1
+    - label: Offence
+      relevance: 1
+      attributes:
+      - label: caseNumber
+        relevance: 1
+      - label: id
+        relevance: 0
+      - label: location
+        relevance: 0
+      - label: locationDescription
+        relevance: 0
+      - label: occurredAt
+        relevance: 1
+      - label: primaryType
+        relevance: 0
+      - label: secondaryType
+        relevance: 0
+      - label: source
+        relevance: 0
+    - label: Person
+      relevance: 1
+      attributes:
+      - label: birthDate
+        relevance: 1
+      - label: birthYears
+        relevance: 0
+      - label: currentFacility
+        relevance: 0
+      - label: egId
+        relevance: 0
+      - label: existsPicture
+        relevance: 0
+      - label: eyeColour
+        relevance: 0
+      - label: firstName
+        relevance: 1
+      - label: fullName
+        relevance: 1
+      - label: gender
+        relevance: 0
+      - label: hairColour
+        relevance: 0
+      - label: height
+        relevance: 0
+      - label: hmpsNumber
+        relevance: 1
+      - label: id
+        relevance: 0
+      - label: lastName
+        relevance: 1
+      - label: middleName
+        relevance: 0
+      - label: nameAndBirthDate
+        relevance: 1
+      - label: offenderStatus
+        relevance: 0
+      - label: race
+        relevance: 0
+      - label: riskScore
+        relevance: 0
+      - label: source
+        relevance: 0
+      - label: weight
+        relevance: 0
+    - label: PhoneNumber
+      relevance: 1
+      attributes:
+      - label: countryCode
+        relevance: 0
+      - label: deviceId
+        relevance: 0
+      - label: egId
+        relevance: 0
+      - label: id
+        relevance: 0
+      - label: isValidFormat
+        relevance: 0
+      - label: nationalNumber
+        relevance: 1
+      - label: phoneNumber
+        relevance: 1
+      - label: phoneNumberOriginal
+        relevance: 1
+      - label: source
+        relevance: 0
+    - label: Report
+      relevance: 1
+      attributes:
+      - label: ChargeRelease
+        relevance: 0
+      - label: id
+        relevance: 0
+      - label: name
+        relevance: 1
+      - label: narrative
+        relevance: 1
+      - label: source
+        relevance: 0
+    - label: SIMCard
+      relevance: 0
+      attributes:
+      - label: ICCID
+        relevance: 1
+      - label: IMSI
+        relevance: 1
+      - label: MSISDN
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: source
+        relevance: 1
+    - label: Thread
+      relevance: 0
+      attributes:
+      - label: appSource
+        relevance: 1
+      - label: deviceId
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: lastActivity
+        relevance: 1
+      - label: serviceIdentifier
+        relevance: 1
+      - label: source
+        relevance: 1
+      - label: startTime
+        relevance: 1
+    - label: Vehicle
+      relevance: 1
+      attributes:
+      - label: colour
+        relevance: 0
+      - label: id
+        relevance: 0
+      - label: make
+        relevance: 1
+      - label: model
+        relevance: 1
+    - label: WirelessNetwork
+      relevance: 0
+      attributes:
+      - label: BSSId
+        relevance: 1
+      - label: SSId
+        relevance: 1
+      - label: id
+        relevance: 1
+      - label: password
+        relevance: 1
+      - label: position
+        relevance: 1
+      - label: securityMode
+        relevance: 1
+      - label: source
+        relevance: 1

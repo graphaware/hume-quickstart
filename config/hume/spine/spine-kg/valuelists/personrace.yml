@@ -1,0 +1,22 @@
+kind: ValueList
+metadata:
+  name: Person_race
+  knowledge-graph: SPINE
+spec:
+  label: Person_race
+  type: STRING
+  data:
+  - value: AMER INDIAN
+    label: AMER INDIAN
+  - value: ASIAN
+    label: ASIAN
+  - value: HISPANIC
+    label: HISPANIC
+  - value: BI-RACIAL
+    label: BI-RACIAL
+  - value: BLACK
+    label: BLACK
+  - value: WHITE
+    label: WHITE
+  - value: UNKNOWN
+    label: UNKNOWN

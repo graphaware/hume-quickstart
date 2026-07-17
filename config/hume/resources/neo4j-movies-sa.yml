@@ -6,8 +6,6 @@ spec:
   access:
     - role: ANALYST
       permissionGroup: RESOURCE_USE
-    - role: DRONE_TEAM
-      permissionGroup: RESOURCE_USE
   fqn: Hume.Orchestra.Resource.Neo4j
   parameters:
     - name: host

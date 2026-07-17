@@ -1,0 +1,23 @@
+kind: Action
+metadata:
+  name: ca-person-existspicture
+  knowledge-graph: SPINE
+spec:
+  label: CA-person-existsPicture
+  query: |-
+    MATCH (n:Person)
+      WHERE elementId(n) = $elementId
+
+    WITH n, (CASE WHEN size(n.pictures) > 0 THEN True ELSE False END) AS existsPicture
+
+    RETURN elementId(n) AS id, existsPicture AS existsPicture
+  returnType: GRAPH
+  scope: COMPUTED_ATTRIBUTE
+  inclusions:
+    labels:
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

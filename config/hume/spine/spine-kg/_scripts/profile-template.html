@@ -1,0 +1,33 @@
+<!--
+$person: ASYNC_SELECT
+-->
+<hc-action-board title="$person.value" scrollable="true">
+  <hc-row height="0px" size="0"> 
+    <hc-widget-html size="0" action="ab-profile-style"/>
+  </hc-row>
+  <hc-row height="250px">
+  		<hc-action-board-input-params size="1" action="ab-profile-input-params" title="Person"/>
+    	<hc-widget-html size="0.5" height="250px" title="Related Offences" action="ab-profile-related-offences"/>
+    	<hc-widget-chart size="1.2" title="Related Offence Types" action="ab-profile-related-offences-chart"/>
+    	<hc-widget-graph size="1.2" action="ab-profile-linked-person" title="Involved Entities"/>
+  </hc-row>
+  <hc-row height="320px">
+    <hc-widget-html size="1" title="Physical Details" action="ab-profile-physical-details"/>
+    <hc-widget-html size="1" title="Custody Status" action="ab-profile-custody-status"/> 
+    <hc-widget-html size="2" title="Pictures" action="ab-profile-picture"/>
+  </hc-row>
+  <hc-row height="240px">
+    <hc-widget-table size="3" title="Marks Scars and Tattoos" action="ab-profile-mark-scar-tattooo"/>
+ 	</hc-row>
+  <hc-row height="300px">
+    <hc-widget-table size="2.5" title="Offences" action="ab-profile-offences"/>
+    <hc-widget-graph size="1.5" title="Offences Location" action="ab-profile-offences-graph" action-params="person:$person"/>
+  </hc-row>
+  <hc-row>
+    <hc-widget-table title="Judicial Sentences" action="ab-profile-judicial-sentences"/>
+    <hc-widget-table title="Detention History" action="ab-profile-custody-history"/>
+  </hc-row>
+  <hc-row>
+    <hc-widget-graph title="Related Offences and Co-Offenders" action="ab-profile-co-offenders-graph"/>
+  </hc-row>
+</hc-action-board>

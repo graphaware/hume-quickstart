@@ -1,0 +1,29 @@
+kind: Action
+metadata:
+  name: "shortest-path---through-calls,-messages-and-phonenumbers"
+  knowledge-graph: SPINE
+spec:
+  label: "Shortest path - through Calls, Messages and PhoneNumbers"
+  description: |-
+    Identifies the shortest paths through Calls, Messages and PhoneNumbers between the two selected Devices.
+
+    This action requires the PhoneNumbers to be resolved into EntityGroups.
+  query: |-
+    MATCH path = ALL SHORTEST (
+      (source {id:$_selection.nodes[0].values.id})-[:OWNS_DEVICE*0..1]->(sourceDevice)
+      -[:HAS_CALL|HAS_MESSAGE|ASSOCIATED_WITH]->()<-[:PARTY_IN_CALL|PARTY_IN_MESSAGE*0..1]-(:PhoneNumber)
+      -[:RESOLVED_TO]->(eg)<-[:RESOLVED_TO]-(pn2)-[:PARTY_IN_CALL|PARTY_IN_MESSAGE*0..1]->()<-[:HAS_CALL|HAS_MESSAGE|ASSOCIATED_WITH]-
+      (targetDevice)<-[:OWNS_DEVICE*0..1]-(target {id:$_selection.nodes[1].values.id})
+      )
+    RETURN path
+  returnType: PREVIEW
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - DeviceExtraction
+    - Person
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

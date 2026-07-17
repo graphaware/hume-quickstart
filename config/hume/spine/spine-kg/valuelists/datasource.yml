@@ -1,0 +1,18 @@
+kind: ValueList
+metadata:
+  name: DataSource
+  knowledge-graph: SPINE
+spec:
+  label: DataSource
+  type: STRING
+  data:
+  - value: POL
+    label: London Police Department
+  - value: HMPS
+    label: His Majesty's Prison Service
+  - value: DFEX
+    label: Digital Forensic Extraction
+  - value: ELR
+    label: Electoral Register
+  - value: ANPR
+    label: Automatic Number Plate Recognition

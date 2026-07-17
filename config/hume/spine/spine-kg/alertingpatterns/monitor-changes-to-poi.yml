@@ -1,0 +1,23 @@
+kind: AlertingPattern
+metadata:
+  name: Monitor changes to POI
+  knowledge-graph: SPINE
+spec:
+  label: Monitor changes to POI
+  query: |-
+    MATCH path = (n:Person WHERE n.id = $id)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0, 1}
+
+    RETURN $id AS key, collect(path) AS data
+  parameters:
+  - name: id
+    type: STRING
+  conditions:
+  - DIFFERENT_RECORDS
+  resource: spine-neo4j-sa
+  perspective: Analyst Perspective - POL and HMPS
+  schedule:
+    repetitionType: FIXED
+    frequency: 30
+    frequencyUnit: SECONDS
+    timeZone: UTC

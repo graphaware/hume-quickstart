@@ -1,0 +1,140 @@
+kind: ValueList
+metadata:
+  name: MarkScarTattoo_bodyLocation
+  knowledge-graph: SPINE
+spec:
+  label: MarkScarTattoo_bodyLocation
+  type: STRING
+  data:
+  - value: ABDOMEN
+    label: ABDOMEN
+  - value: ANKLE
+    label: ANKLE
+  - value: ARM
+    label: ARM
+  - value: ARMPIT
+    label: ARMPIT
+  - value: BACK
+    label: BACK
+  - value: BICEP
+    label: BICEP
+  - value: BUTTOCK
+    label: BUTTOCK
+  - value: CALF
+    label: CALF
+  - value: CHEEK
+    label: CHEEK
+  - value: CHEST / BREAST
+    label: CHEST / BREAST
+  - value: CHIN
+    label: CHIN
+  - value: EAR
+    label: EAR
+  - value: ELBOW
+    label: ELBOW
+  - value: EYE
+    label: EYE
+  - value: EYEBROW
+    label: EYEBROW
+  - value: FACE
+    label: FACE
+  - value: FINGER - INDEX
+    label: FINGER - INDEX
+  - value: FINGER - LITTLE
+    label: FINGER - LITTLE
+  - value: FINGER - MIDDLE
+    label: FINGER - MIDDLE
+  - value: FINGER - RING
+    label: FINGER - RING
+  - value: FINGER - WEBBING
+    label: FINGER - WEBBING
+  - value: FINGERNAIL
+    label: FINGERNAIL
+  - value: FINGERS
+    label: FINGERS
+  - value: FOOT
+    label: FOOT
+  - value: FOOT - SOLE
+    label: FOOT - SOLE
+  - value: FOREARM
+    label: FOREARM
+  - value: FOREHEAD
+    label: FOREHEAD
+  - value: GENITALS
+    label: GENITALS
+  - value: GROIN
+    label: GROIN
+  - value: HAND
+    label: HAND
+  - value: HEAD / SKULL
+    label: HEAD / SKULL
+  - value: HEEL
+    label: HEEL
+  - value: HIP
+    label: HIP
+  - value: KNEE
+    label: KNEE
+  - value: KNUCKLE
+    label: KNUCKLE
+  - value: LEFT FRONT
+    label: LEFT FRONT
+  - value: LEFT REAR
+    label: LEFT REAR
+  - value: LEG
+    label: LEG
+  - value: LIP-BOTTOM
+    label: LIP-BOTTOM
+  - value: LIP-TOP
+    label: LIP-TOP
+  - value: MID-SECTION
+    label: MID-SECTION
+  - value: MOUTH
+    label: MOUTH
+  - value: NAVEL
+    label: NAVEL
+  - value: NECK
+    label: NECK
+  - value: NIPPLE
+    label: NIPPLE
+  - value: NOSE
+    label: NOSE
+  - value: OTHER (SEE DESCRIPTION)
+    label: OTHER (SEE DESCRIPTION)
+  - value: PALM
+    label: PALM
+  - value: RIGHT FRONT
+    label: RIGHT FRONT
+  - value: RIGHT REAR
+    label: RIGHT REAR
+  - value: SHIN
+    label: SHIN
+  - value: SHOULDER
+    label: SHOULDER
+  - value: STOMACH
+    label: STOMACH
+  - value: THIGH
+    label: THIGH
+  - value: THUMB
+    label: THUMB
+  - value: TOE - BIG
+    label: TOE - BIG
+  - value: TOE - FOURTH
+    label: TOE - FOURTH
+  - value: TOE - LITTLE
+    label: TOE - LITTLE
+  - value: TOE - SECOND
+    label: TOE - SECOND
+  - value: TOE - THIRD
+    label: TOE - THIRD
+  - value: TOENAIL
+    label: TOENAIL
+  - value: TOES
+    label: TOES
+  - value: TONGUE
+    label: TONGUE
+  - value: UNKNOWN
+    label: UNKNOWN
+  - value: UPPER ARM
+    label: UPPER ARM
+  - value: WRIST
+    label: WRIST

@@ -1,0 +1,15 @@
+kind: Action
+metadata:
+  name: return-selected-point-coordinates
+  knowledge-graph: SPINE
+spec:
+  label: Return selected point coordinates
+  query: RETURN $_context.contextMenu
+  returnType: TABLE
+  scope: MAP_CURSOR
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

@@ -1,0 +1,61 @@
+kind: Style
+metadata:
+  name: Analyst - Entity demo style
+  knowledge-graph: SPINE
+spec:
+  label: Analyst - Entity demo style
+  classes:
+    ANPRHit:
+      caption:
+      - occurredAt
+      captionMaxLength: 32
+    Call:
+      caption:
+      - timestamp
+      captionMaxLength: 32
+    CellTower:
+      caption:
+      - id
+      captionMaxLength: 32
+    CustodyStatus:
+      caption:
+      - offenderStatus
+      captionMaxLength: 32
+    DeviceExtraction:
+      caption:
+      - name
+      captionMaxLength: 32
+    EmailAddress:
+      caption:
+      - address
+      captionMaxLength: 32
+    Event:
+      caption:
+      - caseNumber
+      captionMaxLength: 32
+    LicencePlate:
+      caption:
+      - id
+      captionMaxLength: 32
+    MarkScarTattoo:
+      caption:
+      - featureType
+      captionMaxLength: 32
+    Offence:
+      caption:
+      - primaryType
+      captionMaxLength: 32
+    Person:
+      caption:
+      - fullName
+      captionMaxLength: 32
+    PhoneNumber:
+      caption:
+      - phoneNumber
+      captionMaxLength: 32
+    Vehicle:
+      caption:
+      - make
+      captionMaxLength: 32
+  default: false
+  isDefault: false

@@ -1,0 +1,39 @@
+kind: Action
+metadata:
+  name: ab-extraction-owner-offence-graph
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-owner-offence-graph
+  query: |-
+    MATCH offence = (n:DeviceExtraction {id: $device})<-[:OWNS_DEVICE]-(p)
+      ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-(:Person) ) {0, 1}
+      (q:Person:POL)-[:CHARGED_FOR]->(off)
+      WHERE off.id = $offenceId
+
+    OPTIONAL MATCH arrest = (off)-[:FOR_OFFENCE]-(a)<-[:PARTY_IN]-(otherOffenders)-[:CHARGED_FOR]->(off)
+    RETURN offence, arrest
+  returnType: GRAPH
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: offence
+    label: Offence Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    selectOptions:
+    - {}
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

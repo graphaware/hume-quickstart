@@ -1,0 +1,90 @@
+<!--
+$device: SELECT_ASYNC
+$dateFrom: DATE
+$dateTo: DATE
+-->
+<hc-action-board scrollable="true" title="Extraction Overview">
+<hc-row>
+  <hc-col size="1.2">
+  	<hc-action-board-input-params height="340px" title="Filters" description=true
+      action="ab-extraction-input-parameters">
+    </hc-action-board-input-params>
+  </hc-col>
+  <hc-col size="1.2">
+    <hc-widget-html height="340px" title="Device Overview" 
+       action="ab-extraction-info">
+    </hc-widget-html>
+  </hc-col>
+  <hc-col size="2.6">
+    <hc-widget-table height="340px" title="Phone Numbers involved in Interactions" description=true
+      columns="Contact;messages:Message Count;phoneCalls:Call Count;callTime:Call Time;contactIdentifierId:Open Interactions"
+      action="ab-extraction-phone-number-interacted-with">
+      <hc-widget-table-cell col-name="contactIdentifierId">
+        <div class="d-flex justify-center">
+          <hc-btn icon="eye" text="Interaction Graph" variant="tonal" color="primary" variant="outlined" size="x-small"
+            on-click="runAction(ab-extraction-phone-number-interactions,device:$device;dateFrom:$dateFrom;dateTo:$dateTo;contactIdentifier:__row__.contactIdentifierId)">
+          </hc-btn>  
+        </div>
+      </hc-widget-table-cell>
+    </hc-widget-table>
+  </hc-col>
+</hc-row>
+<hc-row height="360px">
+  <hc-col size="1.6">
+  	<hc-widget-graph height="130px" title="Owner - Resolved Entities" description=true
+      action="ab-extraction-owner">
+    </hc-widget-graph>
+  	<hc-widget-table height="190px" title="Offences associated to the Owner" description=true
+    	action="ab-extraction-owner-offences"
+    	columns="caseNumber:Case Number;Offence;Datetime">
+    	<hc-widget-table-cell col-name="caseNumber">
+      	<div class="d-flex justify-center">
+        	<hc-btn icon="play" text=__row__.caseNumber color="primary" variant="outlined" size="x-small"
+          	on-click="runAction(ab-extraction-owner-offence-graph,device:$device;offenceId:__row__.offenceId)">
+        	</hc-btn> 
+      	</div>
+    	</hc-widget-table-cell>
+  	</hc-widget-table>
+  </hc-col>
+  <hc-col size="3.4" height="360px">
+  <hc-widget-table title="Calls Information" description=true
+    columns="Sender;Recipients;Source App;Number of Calls;callIds:Open Calls;Latest Call;Call Time"
+    action="ab-extraction-calls-information">
+    <hc-widget-table-cell col-name="callIds">
+      <div class="d-flex justify-center">
+        <hc-btn icon="play" text="Open Graph" color="primary" variant="outlined" size="x-small"
+          on-click="runAction(ab-extraction-calls-graph,device:$device;dateFrom:$dateFrom;dateTo:$dateTo;callIds: __row__.callIds)">
+        </hc-btn> 
+      </div>
+    </hc-widget-table-cell>
+  </hc-widget-table>
+  </hc-col>
+</hc-row>
+<hc-row>
+  <hc-widget-table height="360px" size="2.5" title="Threads Content" description=true
+    columns="Source App;Participants;Messages;threadId:Open Thread;Message Count;Latest Message;participantIds"
+    action="ab-extraction-threads-content"
+    action-params = "*">
+    <hc-widget-table-cell col-name="threadId">
+      <div class="d-flex flex-column justify-center ga-2">
+        <hc-btn icon="play" text="Open Thread" color="primary" variant="outlined" size="x-small"
+          on-click="runAction(ab-extraction-show-thread-content,device:$device;dateFrom:$dateFrom;dateTo:$dateTo;threadId: __row__.threadId)">
+        </hc-btn> 
+        <hc-btn icon="play" color="warning" variant="tonal" size="x-small" text="Open Graph"
+          on-click="runAction(ab-extraction-thread-content-graph,device:$device;dateFrom:$dateFrom;dateTo:$dateTo;threadId:__row__.threadId,participantIds:__row__.participantIds)" />
+      </div>
+    </hc-widget-table-cell>
+  </hc-widget-table>
+  <hc-widget-chart height="360px" size="1.5" title="Threads Timeline" description=true
+    action="ab-extraction-threads-timeline">
+  </hc-widget-chart>
+</hc-row>
+<hc-row height="280px">
+  <hc-widget-graph size="2" title="Top Wireless Network and Cell Tower" description=true
+    action="ab-extraction-wireless-cell-map">
+  </hc-widget-graph>
+  <hc-widget-graph size="2" title="Other visited Locations" description=true
+    action="ab-extraction-locations-map">
+  </hc-widget-graph>
+</hc-row>
+</hc-action-board>

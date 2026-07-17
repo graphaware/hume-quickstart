@@ -1,0 +1,20 @@
+kind: Action
+metadata:
+  name: dev---selection-as-table
+  knowledge-graph: SPINE
+spec:
+  label: dev - selection as table
+  query: |-
+    MATCH (n)
+    WHERE elementId(n) IN $_selection.nodeElementIds
+    RETURN elementId(n), n.occurredAt AS t ORDER BY t DESC
+  returnType: TABLE
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - '*'
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

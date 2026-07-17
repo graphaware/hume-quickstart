@@ -1,0 +1,96 @@
+kind: Action
+metadata:
+  name: ab-extraction-threads-timeline
+  knowledge-graph: SPINE
+spec:
+  label: ab-extraction-threads-timeline
+  description: "Shows the timeline of threads, based on the application source."
+  query: |-
+    WITH
+      CASE WHEN $dateFrom IS null THEN null ELSE date($dateFrom) END AS dateFrom,
+      CASE WHEN $dateTo IS NULL THEN null ELSE date($dateTo) END AS dateTo
+
+    MATCH (n:DeviceExtraction)-[:HAS_MESSAGE]->(m:Message)-[:MESSAGE_BELONGS_TO]->(t)
+      WHERE n.id = $device
+      AND (
+          (CASE WHEN $dateFrom IS NULL
+                THEN true
+                ELSE m.timestamp >= datetime({year: dateFrom.year, month: dateFrom.month, day: dateFrom.day, hour: 0, minute: 0})
+          END)
+          AND
+          (CASE WHEN $dateTo IS NULL
+                THEN true
+                ELSE m.timestamp <= datetime({year: dateTo.year, month: dateTo.month, day: dateTo.day, hour: 23, minute: 59})
+          END)
+      )
+      AND m.body IS NOT NULL
+      AND m.timestamp IS NOT NULL
+      AND t.appSource IS NOT NULL
+
+    WITH
+      t.appSource AS Application,
+      apoc.temporal.format(m.timestamp, 'dd LLL YYYY') AS date,
+      count(*) AS count,
+      CASE
+        WHEN ( (dateFrom IS NULL OR dateTo IS NULL) OR (duration.inDays(dateFrom, dateTo).days > 1000))
+        THEN 'yearmonth'
+        WHEN ( 30 <= (duration.inDays(dateFrom, dateTo).days < 1000))
+          THEN 'yearmonthdate'
+        ELSE 'yearmonthdate'
+        END AS resolution
+
+    RETURN collect({
+        Application: Application,
+        Date: date,
+        `Message Count`: count
+      }) AS values,
+      {type: "bar", cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3} AS chartType,
+      {
+        x: {
+          field: "Date",
+          type: "temporal",
+          timeUnit: resolution
+        },
+        y: {
+          field: "Message Count",
+          type: "quantitative"
+        },
+        color: {
+          field: "Application",
+          type: "nominal"
+        },
+        tooltip: [
+          {field: "Application"},
+          {field: "Message Count"}
+        ]
+      } AS options
+  returnType: CHART
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: device
+    label: Extraction Id
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  - name: dateFrom
+    label: Date From
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  - name: dateTo
+    label: Date To
+    type: DATE
+    multiselect: false
+    list: false
+    required: false
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

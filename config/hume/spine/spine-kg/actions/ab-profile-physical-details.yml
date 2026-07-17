@@ -1,0 +1,55 @@
+kind: Action
+metadata:
+  name: ab-profile-physical-details
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-physical-details
+  query: |
+    WITH {fullName: ["Full Name", 1], birthDate: ["Birth Date", 2], gender:["Gender", 3], race:["Race", 4], eyeColour: ["Eye Colour", 5], hairColour: ["Hair Colour", 6], weight: ["Weight", 7], height: ["Height", 8]} AS propsMapping
+    MATCH path = (n:Person WHERE elementId(n) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH propsMapping, apoc.coll.toSet(apoc.coll.flatten(collect([n in nodes(path) WHERE n:Person | n]))) AS nodes
+    WITH propsMapping, COLLECT{
+      UNWIND nodes AS n
+      RETURN n
+      ORDER BY size(keys(n)) DESC
+      }[0] AS person //choose the person node that has more details
+
+    WITH [k in keys(person) WHERE k IN keys(propsMapping)| [propsMapping[k][0], person[k], propsMapping[k][1]] ] AS props
+    WITH COLLECT{
+      UNWIND props AS prop
+      RETURN prop ORDER BY prop[2]
+      } AS props //to assign a kind of order to the attributes
+
+    RETURN '<div>
+    <table class="entity-info">
+        <tr>
+            <th>Attribute</th>
+            <th>Value</th>
+        </tr>
+    ' + apoc.text.join([i IN range(0, size(props)-1)
+    | apoc.text.format(
+        '<tr>
+            <td><strong>%s</strong></td>
+            <td>%s</td>
+        </tr>', [props[i][0], props[i][1] ])
+    ], '') +
+    '</table>
+    </div>' AS html
+  returnType: HTML
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: false
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

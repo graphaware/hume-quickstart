@@ -1,0 +1,56 @@
+<!--
+$device: SELECT_ASYNC
+$dateFrom: DATE
+$dateTo: DATE
+-->
+<hc-action-board scrollable="true">
+  <hc-row height="360px">
+  <hc-col size="1">
+      <hc-action-board-input-params title="Filters" height="auto" description=true
+        action="ab-patterns-life-input-parameters">
+      </hc-action-board-input-params>
+  </hc-col>
+  <hc-col size="4">
+    <hc-row>
+        <hc-widget-graph size="2"
+          title="Top Wireless Network and Cell Tower" 
+          description=true
+          action="ab-extraction-wireless-cell-map">
+        </hc-widget-graph>
+      	<hc-widget-graph size="2"
+          title="Other visited Locations" 
+          description=true
+          action="ab-extraction-locations-map">
+        </hc-widget-graph>
+    </hc-row>
+  </hc-col>
+  </hc-row>
+  <hc-row height="360px">
+  	<hc-col size="4">
+    	<hc-widget-chart
+      	action="ab-patterns-life-events-barchart"
+      	title="Locations" description=true action-params="*">
+    	</hc-widget-chart>
+  	</hc-col>
+  	<hc-col size="4"> 
+      <hc-widget-chart
+        action="ab-patterns-life-phone-activity-heatmap"
+        title="Calls and Messages" description=true action-params="*">
+      </hc-widget-chart>
+  	</hc-col>	
+  </hc-row> 
+  <hc-row>
+    <hc-col size="2">
+    	<hc-widget-chart height="480px"
+      	action="ab-patterns-life-wireless-events-heatmap"
+      	title="Wireless Network" description=true action-params="*"
+    	></hc-widget-chart>
+    </hc-col>
+    <hc-col size="2">
+       <hc-widget-chart height="480px"
+      	action="ab-patterns-life-wireless-events-bar"
+        title="Wireless Network" description=true>
+      </hc-widget-chart>
+    </hc-col>
+  </hc-row>
+</hc-action-board>

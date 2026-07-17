@@ -1,0 +1,76 @@
+kind: ValueList
+metadata:
+  name: Offence_primaryType
+  knowledge-graph: SPINE
+spec:
+  label: Offence_primaryType
+  type: STRING
+  data:
+  - value: ARSON
+    label: ARSON
+  - value: ASSAULT
+    label: ASSAULT
+  - value: BATTERY
+    label: BATTERY
+  - value: BURGLARY
+    label: BURGLARY
+  - value: CONCEALED CARRY LICENSE VIOLATION
+    label: CONCEALED CARRY LICENSE VIOLATION
+  - value: CRIMINAL DAMAGE
+    label: CRIMINAL DAMAGE
+  - value: CRIMINAL SEXUAL ASSAULT
+    label: CRIMINAL SEXUAL ASSAULT
+  - value: CRIMINAL TRESPASS
+    label: CRIMINAL TRESPASS
+  - value: DECEPTIVE PRACTICE
+    label: DECEPTIVE PRACTICE
+  - value: DOMESTIC VIOLENCE
+    label: DOMESTIC VIOLENCE
+  - value: GAMBLING
+    label: GAMBLING
+  - value: HOMICIDE
+    label: HOMICIDE
+  - value: HUMAN TRAFFICKING
+    label: HUMAN TRAFFICKING
+  - value: INTERFERENCE WITH PUBLIC OFFICER
+    label: INTERFERENCE WITH PUBLIC OFFICER
+  - value: INTIMIDATION
+    label: INTIMIDATION
+  - value: KIDNAPPING
+    label: KIDNAPPING
+  - value: LIQUOR LAW VIOLATION
+    label: LIQUOR LAW VIOLATION
+  - value: MOTOR VEHICLE THEFT
+    label: MOTOR VEHICLE THEFT
+  - value: NARCOTICS
+    label: NARCOTICS
+  - value: NON-CRIMINAL
+    label: NON-CRIMINAL
+  - value: NON-CRIMINAL (SUBJECT SPECIFIED)
+    label: NON-CRIMINAL (SUBJECT SPECIFIED)
+  - value: OBSCENITY
+    label: OBSCENITY
+  - value: OFFENSE INVOLVING CHILDREN
+    label: OFFENSE INVOLVING CHILDREN
+  - value: OTHER NARCOTIC VIOLATION
+    label: OTHER NARCOTIC VIOLATION
+  - value: OTHER OFFENSE
+    label: OTHER OFFENSE
+  - value: PROSTITUTION
+    label: PROSTITUTION
+  - value: PUBLIC INDECENCY
+    label: PUBLIC INDECENCY
+  - value: PUBLIC PEACE VIOLATION
+    label: PUBLIC PEACE VIOLATION
+  - value: RITUALISM
+    label: RITUALISM
+  - value: ROBBERY
+    label: ROBBERY
+  - value: SEX OFFENSE
+    label: SEX OFFENSE
+  - value: STALKING
+    label: STALKING
+  - value: THEFT
+    label: THEFT
+  - value: WEAPONS VIOLATION
+    label: WEAPONS VIOLATION

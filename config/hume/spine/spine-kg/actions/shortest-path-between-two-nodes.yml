@@ -1,0 +1,23 @@
+kind: Action
+metadata:
+  name: shortest-path-between-two-nodes
+  knowledge-graph: SPINE
+spec:
+  label: Shortest Path between two nodes
+  description: Displays the shortest paths (up to 8 hops away) between two selected nodes.
+  query: |-
+    MATCH path = ALL SHORTEST (s)-[*1..10]-(t)
+      WHERE elementId(s) = $_selection.nodeElementIds[0]
+      AND elementId(t) = $_selection.nodeElementIds[1]
+
+    RETURN path
+  returnType: PREVIEW
+  scope: MULTISELECTION
+  inclusions:
+    labels:
+    - '*'
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

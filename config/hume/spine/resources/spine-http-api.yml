@@ -1,0 +1,20 @@
+kind: EcosystemResource
+metadata:
+  name: spine-http-api
+spec:
+  fqn: "#Hume.Orchestra.Resource.HttpApi"
+  parameters:
+  - name: base_url
+    value: $$ORCHESTRA_WEBHOOK_SERVER_URL
+  - name: endpoints
+    value:
+      Spine - get CCR data: /spine/get-ccr-data
+      Spine - get ANPR hits: /spine/get-anpr-hits
+  - name: request_headers
+    value:
+      Authorization: $$ORCHESTRA_WEBHOOK_AUTH_HEADER
+  access:
+  - role: SPINE_ANALYST
+    permissionGroup: RESOURCE_USE
+  - role: SPINE_OFFICER
+    permissionGroup: RESOURCE_USE

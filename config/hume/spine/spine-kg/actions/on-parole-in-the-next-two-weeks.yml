@@ -1,0 +1,50 @@
+kind: Action
+metadata:
+  name: on-parole-in-the-next-two-weeks
+  knowledge-graph: SPINE
+spec:
+  label: On Parole in the next two weeks
+  description: |-
+    Return people who will be released on parole in the next 14 days, held in the selected Correctional Facilities.
+
+    <br>
+
+    **Parameters:**
+
+    *   **Correctional Facility**: Select the Correctional Facilities of interest.
+  query: |-
+    MATCH (p:Person)-[:HAS_CUSTODY_STATUS]->(status)-[:CURRENT_FACILITY]->(facility)
+      WHERE date() <= status.projectedParoleDate <= date() + duration({days:14})
+      AND elementId(facility) IN $facility
+    WITH p, status, facility.name AS facility, apoc.text.format('{"person_ids":["%s"],"person_values":["%s"]}', [elementId(p), apoc.text.urlencode(p.fullName)]) AS inputParams
+
+    RETURN
+      apoc.text.format("<a href='%s/knowledgeGraphs/%s/actionBoards/%s?inputParameters=%s'>%s</a>", [$_context.variables.hume_url, $_context.knowledgeGraph.uuid, $_context.variables.profile_ab, inputParams, p.fullName]) AS Name, p.hmpsNumber AS `HMPS Number`, status.projectedParoleDate AS `Projected Parole Date`, facility AS `Correctional Facility`
+      ORDER BY `Projected Parole Date`
+  returnType: TABLE
+  scope: GLOBAL
+  inclusions: {}
+  inputParameters:
+  - name: facility
+    label: Correctional Facility
+    type: SELECT_ASYNC
+    multiselect: true
+    list: false
+    required: true
+    query: |-
+      MATCH (n:CorrectionalFacility)
+      RETURN elementId(n) AS id, n.name AS label
+      ORDER BY label
+    resolver:
+      type: CYPHER
+      params: {}
+      query: |-
+        MATCH (n:CorrectionalFacility)
+        RETURN elementId(n) AS id, n.name AS label
+        ORDER BY label
+    forgetValue: false
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

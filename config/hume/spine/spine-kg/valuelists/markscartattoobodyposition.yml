@@ -1,0 +1,68 @@
+kind: ValueList
+metadata:
+  name: MarkScarTattoo_bodyPosition
+  knowledge-graph: SPINE
+spec:
+  label: MarkScarTattoo_bodyPosition
+  type: STRING
+  data:
+  - value: ABDOMEN
+    label: ABDOMEN
+  - value: BACK
+    label: BACK
+  - value: BOTTOM
+    label: BOTTOM
+  - value: CENTRE
+    label: CENTRE
+  - value: FINGERS
+    label: FINGERS
+  - value: FRONT
+    label: FRONT
+  - value: INSIDE
+    label: INSIDE
+  - value: LEFT
+    label: LEFT
+  - value: LEFT FRONT
+    label: LEFT FRONT
+  - value: LEFT REAR
+    label: LEFT REAR
+  - value: LOWER
+    label: LOWER
+  - value: LOWER BACK
+    label: LOWER BACK
+  - value: LOWER FRONT
+    label: LOWER FRONT
+  - value: LOWER LEFT
+    label: LOWER LEFT
+  - value: LOWER RIGHT
+    label: LOWER RIGHT
+  - value: MID-SECTION
+    label: MID-SECTION
+  - value: OUTSIDE
+    label: OUTSIDE
+  - value: PALM
+    label: PALM
+  - value: RIGHT
+    label: RIGHT
+  - value: RIGHT FRONT
+    label: RIGHT FRONT
+  - value: RIGHT REAR
+    label: RIGHT REAR
+  - value: TOES
+    label: TOES
+  - value: TOP
+    label: TOP
+  - value: UNKNOWN
+    label: UNKNOWN
+  - value: UPPER
+    label: UPPER
+  - value: UPPER ARM
+    label: UPPER ARM
+  - value: UPPER BACK
+    label: UPPER BACK
+  - value: UPPER FRONT
+    label: UPPER FRONT
+  - value: UPPER LEFT
+    label: UPPER LEFT
+  - value: UPPER RIGHT
+    label: UPPER RIGHT

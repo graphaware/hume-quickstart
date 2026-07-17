@@ -1,0 +1,31 @@
+kind: Action
+metadata:
+  name: ab-profile-judicial-sentences
+  knowledge-graph: SPINE
+spec:
+  label: ab-profile-judicial-sentences
+  query: |-
+    MATCH path = (p:Person WHERE elementId(p) = $person)
+    ( (:Person)-[:RESOLVED_TO]->()<-[:RESOLVED_TO]-() ) {0,1}
+
+    WITH [n in nodes(path) WHERE n:Person] as linkedPeople
+    UNWIND linkedPeople AS person
+      MATCH (person)-[:RECEIVED]->(j)
+      RETURN distinct j.custodyDate AS `Custody Date`, j.sentence AS Sentence, j.offence AS Offence
+      ORDER BY `Custody Date`
+  returnType: TABLE
+  scope: UTILITY
+  inclusions: {}
+  inputParameters:
+  - name: person
+    label: Person
+    type: STRING
+    multiselect: false
+    list: false
+    required: true
+    forgetValue: true
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false

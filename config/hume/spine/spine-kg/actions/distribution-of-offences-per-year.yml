@@ -1,0 +1,16 @@
+kind: Action
+metadata:
+  name: distribution-of-offences-per-year
+  knowledge-graph: SPINE
+spec:
+  label: Distribution of offences per year
+  description: Represent the distribution of the main types of offence in recent years.
+  query: "MATCH (c:Offence)\nWHERE c.occurredAt >= datetime(\"2023-01-01T00:00:00.000000000Z\")\nAND c.primaryType IN [\n  \"THEFT\", \"BATTERY\", \"CRIMINAL DAMAGE\", \"ASSAULT\", \"NARCOTICS\",\n  \"DECEPTIVE PRACTICE\", \"CRIMINAL TRESPASS\",\n  \"ROBBERY\", \"WEAPONS VIOLATION\", \"PUBLIC PEACE VIOLATION\", \"HOMICIDE\"\n]\nWITH c.occurredAt.year AS year, c.primaryType AS crimeType, count(c) AS count\n\nORDER BY year ASC, count DESC\nWITH year, collect({Year:year, `Offence Type`:crimeType, `Number of Offences`:count}) AS values, apoc.coll.sum(collect(count)) AS selectedTypesPerYear\n\n/***\nCALL (year, selectedTypesPerYear) {\n\tMATCH (c:Offence)\n    WHERE c.occurredAt >= datetime(\"2023-01-01T00:00:00.000000000Z\")\n    AND c.primaryType IS NOT NULL\n  WITH year, c.occurredAt.year AS selectYear, count(c) AS totalPerYear, selectedTypesPerYear\n  WHERE year = selectYear\n\tWITH year, totalPerYear - selectedTypesPerYear AS otherTypesPerYear\n  RETURN {Year:year, `Offence Type`:\"OTHER TYPE OF OFFENCES\", `Number of Offences`: otherTypesPerYear} AS otherPerYear\n}\n***/\n//WITH year, values + otherPerYear AS valuePerYearWithOthers\n\nWITH year, values AS valuePerYearWithOthers\nWITH apoc.coll.flatten(collect(valuePerYearWithOthers)) AS values\n\nRETURN values, \"bar\" AS chartType,\n{\n  x: {\n    field: \"Year\",\n    type: \"nominal\"\n  },\n y: {\n   field: \"Number of Offences\",\n   type: \"quantitative\"\n  },\n tooltip: [\n   {field: \"Offence Type\", type: \"nominal\"},\n   {field: \"Number of Offences\", type: \"quantitative\"}\n ],\n color: {\n   field: \"Offence Type\",\n   type: \"nominal\",\n   legend: { title: \"Offence Type\" },\n   scale: { scheme: \"set2\" }\n  }\n} AS options\n"
+  returnType: CHART
+  scope: GLOBAL
+  inclusions: {}
+  actionType: CYPHER
+  canvasOptions:
+    clearCanvas: false
+    fitCanvas: false
+  httpActionIncludeCanvasInPayload: false
