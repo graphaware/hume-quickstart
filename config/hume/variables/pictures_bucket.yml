@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ContextVariable
+metadata:
+  name: hume-rest-api-uri
+spec:
+  scope: INSTANCE
+  key: pictures_bucket_prefix
+  value: 'https://s3.eu-west-1.amazonaws.com/spine.dev.graphaware.io/spine-uk-pictures/'
