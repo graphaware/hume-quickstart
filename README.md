@@ -78,11 +78,13 @@ Log in with `admin` / `hellopassword`.
 
 ### Keycloak users
 
-| Username      | Password       | Notes          |
-|---------------|----------------|----------------|
-| `admin`       | `hellopassword`| Admin role     |
-| `analyst`     | `hellopassword`| Analyst role   |
-| `investigator`| `hellopassword`| Investigator role |
+All users share the password `hellopassword`.
+
+| Username             | Name           | Hume roles                                     | Neo4j SSO roles                |
+|----------------------|----------------|------------------------------------------------|--------------------------------|
+| `admin`              | —              | `ROLE_ADMINISTRATOR`, `ROLE_WORKSPACES_SHARE`  | `admin`                        |
+| `tasha.l.moretti`    | Tasha Moretti  | `SPINE_ANALYST`, `SPINE_OFFICER`, `ROLE_WORKSPACES_SHARE` | `spine_analyst`, `spine_officer` |
+| `jordan.r.callahan`  | Jordan Callahan| `SPINE_ANALYST`, `ROLE_WORKSPACES_SHARE`       | `spine_analyst`                |
 
 ---
 
