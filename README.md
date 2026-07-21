@@ -131,7 +131,7 @@ Keycloak runs with a self-signed TLS certificate. If you open a **new browser pr
 ```bash
 sudo security add-trusted-cert -d -r trustRoot \
   -k /Library/Keychains/System.keychain \
-  certs/keycloak.pem
+  compose/certs/keycloak.pem
 ```
 
 Run this from the quickstart root directory. Restart Chrome after running it.
